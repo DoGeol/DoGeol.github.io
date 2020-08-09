@@ -1,0 +1,58 @@
+body {
+     text-align: center;
+     color: #FFF;
+     width: 900px;
+}
+div#handbook_wrapper {
+    width: 100%;
+    text-align: left;
+    min-height: 300px;
+    margin: 0 auto;
+}
+header, footer, aside, section {
+    border: 1px solid #999;
+    margin: 0px 5px;
+    padding: 10px;
+}
+header {
+    background-color: red;
+    position:fixed;
+    left:0px;
+    top:0px;
+    height:60px;
+    width:100%;
+    color: white;
+}
+section, aside {
+    margin-top: 88px;
+    float: left;
+    height: auto;
+}
+nav {
+    float: right;
+    background-color: goldenrod;
+    width: 100px;
+}
+section {
+    background-color: green;
+    width: 604px;
+}
+aside {
+    background-color: goldenrod;
+    width: 100px;
+}
+footer {
+    background-color: blue;
+    clear: both;
+    position:relative;
+    left:0px;
+    bottom:0px;
+    height:60px;
+    width:100%;
+    color: white;
+}
+article {
+    width: 90%;
+    margin: 20px;
+    background-color: #999;
+}
