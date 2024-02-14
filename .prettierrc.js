@@ -9,4 +9,5 @@ module.exports = {
   arrowParens: 'always',
   proseWrap: 'never',
   endOfLine: 'auto',
+  plugins: ['prettier-plugin-tailwindcss'],
 }
