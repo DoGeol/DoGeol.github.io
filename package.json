@@ -2,7 +2,7 @@
   "name": "pdg-playground",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://cgbogam.github.io/cgbogam-web",
+  "homepage": "https://dogeol.github.io",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
