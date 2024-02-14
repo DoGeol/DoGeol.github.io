@@ -1,13 +1,27 @@
 import React from 'react'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import localFont from 'next/font/local'
 
-const inter = Inter({ subsets: ['latin'] })
+const rootFont = localFont({
+  src: './fonts/Pretendard/PretendardVariable.woff2',
+  display: 'swap',
+  variable: '--font-pretendard',
+})
 
 export const metadata: Metadata = {
   title: "DoGeol's Playground",
   description: "DoGeol's Playground",
+  icons: {
+    icon: `/favicon.ico`,
+  },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 export default function RootLayout({
@@ -16,8 +30,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="ko">
+      <head>
+        <meta httpEquiv={'pragma'} content={'-1'} />
+        <meta httpEquiv={'expires'} content={'no-cache'} />
+      </head>
+      <body className={rootFont.variable}>{children}</body>
     </html>
   )
 }
