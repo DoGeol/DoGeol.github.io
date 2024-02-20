@@ -17,7 +17,7 @@ export default function GlobalNavigation(): React.JSX.Element {
           </div>
         </div>
         {/* contents */}
-        <ul className={'flex gap-[0.4rem] text-[1.2rem] font-medium [&>li]:transition-all'}>
+        <ul className={'flex gap-[0.4rem] text-[1.2rem] font-medium transition-all'}>
           <Link href={'/'}>
             <li
               className={

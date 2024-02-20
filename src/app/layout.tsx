@@ -36,7 +36,9 @@ export default function RootLayout({
         <meta httpEquiv={'pragma'} content={'-1'} />
         <meta httpEquiv={'expires'} content={'no-cache'} />
       </head>
-      <body className={rootFont.className}>
+      <body
+        className={`${rootFont.className} text-gray-700 dark:bg-neutral-900 dark:text-gray-300`}
+      >
         <DarkThemeProvider>
           <GlobalNavigation />
           {children}

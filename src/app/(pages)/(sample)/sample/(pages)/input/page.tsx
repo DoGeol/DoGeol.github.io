@@ -6,7 +6,7 @@ export default function InputPage() {
   const [val, setVal] = useState<any>('1231232')
   return (
     <>
-      <p className={'text-sample-desc mb-[4.0rem]'}>인풋 컴포넌트</p>
+      <p className={'text-sub-title mb-[4.0rem]'}>인풋 컴포넌트</p>
       <div className={'flex flex-col gap-[2.0rem]'}>
         <div>
           <h3 className={'mb-[0.8rem] text-[2.0rem] font-bold'}>SIZE</h3>

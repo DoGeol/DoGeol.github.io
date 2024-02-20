@@ -8,9 +8,5 @@ export default function SampleComponentPageTitle(): React.JSX.Element {
   const menuName = pathname.split('/').at(-1)
   const menu = menusData.filter((menu) => menu.src === `${menuName}`)
 
-  return (
-    <h2 className={'text-sample-title mb-[0.8rem] font-bold capitalize'}>
-      {menu[0]?.title || '-'}
-    </h2>
-  )
+  return <h2 className={'text-title mb-[0.8rem] font-bold capitalize'}>{menu[0]?.title || '-'}</h2>
 }

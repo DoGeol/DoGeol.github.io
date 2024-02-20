@@ -11,8 +11,9 @@ const config: Config = {
     },
     extend: {
       fontSize: {
-        'sample-title': 'clamp(2rem,4vw,3.6rem)',
-        'sample-desc': 'clamp(1.2rem,2vw,1.6rem)',
+        title: 'clamp(2rem,4vw,3.6rem)',
+        'sub-title': 'clamp(1.4rem,2vw,2rem)',
+        desc: 'clamp(1.2rem,2vw,1.6rem)',
       },
     },
   },

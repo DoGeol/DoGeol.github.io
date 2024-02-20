@@ -11,3 +11,30 @@
         min-width: 30rem;
     }
 }
+
+@layer utilities {
+    .transform-rotate-y-0 {
+        transform: rotateY(0deg);
+    }
+
+    .transform-rotate-y-90 {
+        transform: rotateY(90deg);
+    }
+
+    .transform-rotate-y-90-back {
+        transform: rotateY(-90deg);
+    }
+
+    .transform-rotate-y-180 {
+        transform: rotateY(180deg);
+    }
+
+    .transform-rotate-y-180-back {
+        transform: rotateY(-180deg);
+    }
+
+    .backface-visibility-hidden {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+}
