@@ -1,7 +1,9 @@
 export default function SamplePage() {
   return (
     <>
-      <h2 className={'text-[clamp(1.4rem,4vw,1.6rem)] font-bold'}>샘플 영역</h2>
+      <p className={'text-sample-desc'}>
+        직접 Form에 사용되는 엘리먼트 컴포넌트를 만들어보는 프로젝트
+      </p>
     </>
   )
 }
