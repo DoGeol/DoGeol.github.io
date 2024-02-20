@@ -18,7 +18,7 @@ export default function SampleComponentMenus({
       {menus.map((menu) => (
         <Link key={menu.id} href={`/sample/${menu.src}`}>
           <li
-            className={`text-[1.6rem] font-medium ${menu.src === `/${menuName}` ? 'text-sky-500' : ''} `}
+            className={`text-[1.6rem] font-medium ${menu.src === `${menuName}` ? 'text-sky-500' : ''} `}
           >
             {menu.title}
           </li>

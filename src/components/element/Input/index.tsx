@@ -6,7 +6,7 @@ import {
   IInputProps,
   passwordClasses,
   sizeClasses,
-} from '@/components/element/input/types'
+} from '@/components/element/Input/types'
 
 export default forwardRef<HTMLInputElement, IInputProps>(function DInput(
   {

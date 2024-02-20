@@ -3,6 +3,7 @@ import SampleComponentMenus from '@/app/(pages)/(sample)/sample/_components/Menu
 import Link from 'next/link'
 import SampleComponentPageTitle from '@/app/(pages)/(sample)/sample/_components/PageTitle'
 import { menusData } from '@/app/(pages)/(sample)/sample/_constant/menus'
+import ThemeModeButton from '@/app/(pages)/(sample)/sample/_components/ThemeModeButton'
 
 export default function SampleLayout({ children }: PropsWithChildren) {
   return (
@@ -37,8 +38,11 @@ export default function SampleLayout({ children }: PropsWithChildren) {
               <h1 className={'text-[clamp(1.4rem,4vw,2rem)] font-bold'}>Sample Preview Page</h1>
             </Link>
           </div>
-          <div className={'h-[3.2rem] w-[3.2rem] cursor-pointer overflow-hidden rounded-lg'}>
-            <img src={'/profile/pdg.png'} />
+          <div className={'flex items-center justify-end gap-[1.6rem]'}>
+            <ThemeModeButton />
+            <div className={'h-[3.2rem] w-[3.2rem] cursor-pointer overflow-hidden rounded-lg'}>
+              <img src={'/profile/pdg.png'} />
+            </div>
           </div>
         </div>
       </header>

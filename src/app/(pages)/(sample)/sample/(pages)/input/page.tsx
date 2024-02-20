@@ -1,5 +1,5 @@
 'use client'
-import Input from '@/components/element/input'
+import Input from '../../../../../../components/element/Input'
 import { useState } from 'react'
 
 export default function InputPage() {
