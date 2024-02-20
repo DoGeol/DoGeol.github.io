@@ -10,9 +10,6 @@ const config: Config = {
       pc: '1280px',
     },
     extend: {
-      fontFamily: {
-        pretendard: ['var(--font-pretendard)'],
-      },
       fontSize: {
         'sample-title': 'clamp(2rem,4vw,3.6rem)',
         'sample-desc': 'clamp(1.2rem,2vw,1.6rem)',

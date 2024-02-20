@@ -2,11 +2,11 @@ import React from 'react'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import localFont from 'next/font/local'
+import DarkThemeProvider from '@/app/DarkThemeProvider'
 
 const rootFont = localFont({
   src: './fonts/Pretendard/PretendardVariable.woff2',
   display: 'swap',
-  variable: '--font-pretendard',
 })
 
 export const metadata: Metadata = {
@@ -35,7 +35,9 @@ export default function RootLayout({
         <meta httpEquiv={'pragma'} content={'-1'} />
         <meta httpEquiv={'expires'} content={'no-cache'} />
       </head>
-      <body className={rootFont.variable}>{children}</body>
+      <body className={rootFont.className}>
+        <DarkThemeProvider>{children}</DarkThemeProvider>
+      </body>
     </html>
   )
 }
