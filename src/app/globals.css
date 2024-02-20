@@ -6,4 +6,8 @@
     html {
         font-size: 62.5%
     }
+
+    body {
+        min-width: 30rem;
+    }
 }

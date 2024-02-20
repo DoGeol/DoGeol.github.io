@@ -8,7 +8,7 @@ export default function SampleLayout({ children }: PropsWithChildren) {
   return (
     <div
       className={
-        'flex min-h-screen min-w-[30rem] flex-col text-[1.4rem] text-gray-700 dark:bg-neutral-900 dark:text-gray-300'
+        'flex min-h-screen flex-col text-[1.4rem] text-gray-700 dark:bg-neutral-900 dark:text-gray-300'
       }
     >
       <header
