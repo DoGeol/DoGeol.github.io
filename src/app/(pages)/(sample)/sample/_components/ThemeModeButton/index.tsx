@@ -1,14 +1,23 @@
 'use client'
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTheme } from 'next-themes'
 
 export default function ThemeModeButton(): React.JSX.Element {
   const { systemTheme, theme, setTheme } = useTheme()
   const currentTheme = theme === 'system' ? systemTheme : theme
+  const [mounted, setMounted] = useState(false)
 
   const handleClickButton = useCallback(() => {
     setTheme(currentTheme === 'dark' ? 'light' : 'dark')
   }, [currentTheme, setTheme])
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return <></>
+  }
 
   return (
     <button onClick={handleClickButton}>
