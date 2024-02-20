@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import localFont from 'next/font/local'
 import DarkThemeProvider from '@/components/theme/DarkThemeProvider'
+import GlobalNavigation from '@/components/nav'
 
 const rootFont = localFont({
   src: './fonts/Pretendard/PretendardVariable.woff2',
@@ -36,7 +37,10 @@ export default function RootLayout({
         <meta httpEquiv={'expires'} content={'no-cache'} />
       </head>
       <body className={rootFont.className}>
-        <DarkThemeProvider>{children}</DarkThemeProvider>
+        <DarkThemeProvider>
+          <GlobalNavigation />
+          {children}
+        </DarkThemeProvider>
       </body>
     </html>
   )

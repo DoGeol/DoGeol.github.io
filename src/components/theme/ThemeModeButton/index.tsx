@@ -27,7 +27,7 @@ export default function ThemeModeButton(): React.JSX.Element {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="h-[1.8rem] w-[1.8rem]"
+        className="h-[1.2rem] w-[1.2rem]"
       >
         <path
           strokeLinecap="round"
