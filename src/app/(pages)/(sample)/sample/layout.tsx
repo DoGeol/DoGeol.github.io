@@ -3,7 +3,7 @@ import SampleComponentMenus from '@/app/(pages)/(sample)/sample/_components/Menu
 import Link from 'next/link'
 import SampleComponentPageTitle from '@/app/(pages)/(sample)/sample/_components/PageTitle'
 import { menusData } from '@/app/(pages)/(sample)/sample/_constant/menus'
-import ThemeModeButton from '@/app/(pages)/(sample)/sample/_components/ThemeModeButton'
+import ThemeModeButton from '@/components/theme/ThemeModeButton'
 
 export default function SampleLayout({ children }: PropsWithChildren) {
   return (

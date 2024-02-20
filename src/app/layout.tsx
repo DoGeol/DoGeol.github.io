@@ -2,7 +2,7 @@ import React from 'react'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import localFont from 'next/font/local'
-import DarkThemeProvider from '@/app/DarkThemeProvider'
+import DarkThemeProvider from '@/components/theme/DarkThemeProvider'
 
 const rootFont = localFont({
   src: './fonts/Pretendard/PretendardVariable.woff2',
