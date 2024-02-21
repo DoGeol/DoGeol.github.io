@@ -8,12 +8,12 @@ export default function SampleLayout({ children }: PropsWithChildren) {
   return (
     <div
       className={
-        'flex min-h-screen flex-col text-[1.4rem] text-gray-700 dark:bg-neutral-900 dark:text-gray-300'
+        'flex min-h-[calc(100dvh_-_4rem)] flex-col text-[1.4rem] text-gray-700 dark:bg-neutral-900 dark:text-gray-300'
       }
     >
       <header
         className={
-          'sticky top-[3rem] z-[9999] border-b-[0.1rem] bg-sky-100/70 px-[2rem] py-[1.2rem] backdrop-blur-sm tablet:px-[3.2rem] tablet:py-[1.4rem] dark:border-b-neutral-600 dark:bg-neutral-800/70'
+          'sticky top-[4rem] z-[9999] border-b-[0.1rem] bg-sky-100/70 px-[2rem] py-[1.2rem] backdrop-blur-sm tablet:px-[3.2rem] tablet:py-[1.4rem] dark:border-b-neutral-600 dark:bg-neutral-800/70'
         }
       >
         <div className={'flex items-center justify-between'}>

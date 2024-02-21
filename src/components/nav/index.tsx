@@ -23,7 +23,7 @@ export default function GlobalNavigation(): React.JSX.Element {
   return (
     <nav
       className={
-        'sticky top-0 z-[9999] h-[3rem] bg-white/70 backdrop-blur-sm dark:bg-neutral-900/70'
+        'sticky top-0 z-[9999] h-[4rem] bg-white/70 backdrop-blur-sm dark:bg-neutral-900/70'
       }
     >
       <div className={'flex items-center justify-between px-[1.6rem]'}>
@@ -39,7 +39,7 @@ export default function GlobalNavigation(): React.JSX.Element {
             <Link href={'/'}>
               <li
                 className={
-                  'flex h-[3rem] cursor-pointer items-center justify-center rounded-xl px-[1.2rem] hover:bg-neutral-200 dark:hover:bg-neutral-800'
+                  'flex h-[4rem] cursor-pointer items-center justify-center rounded-xl px-[1.2rem] hover:bg-neutral-200 dark:hover:bg-neutral-800'
                 }
               >
                 <span>메인</span>
@@ -48,7 +48,7 @@ export default function GlobalNavigation(): React.JSX.Element {
             <Link href={'/sample'}>
               <li
                 className={
-                  'flex h-[3rem] cursor-pointer items-center justify-center rounded-xl px-[1.2rem] hover:bg-neutral-200 dark:hover:bg-neutral-800'
+                  'flex h-[4rem] cursor-pointer items-center justify-center rounded-xl px-[1.2rem] hover:bg-neutral-200 dark:hover:bg-neutral-800'
                 }
               >
                 <span>샘플</span>
