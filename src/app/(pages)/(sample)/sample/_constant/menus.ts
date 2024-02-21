@@ -10,11 +10,11 @@ export const menusData: IMenu[] = [
     title: 'Input',
     src: 'input',
   },
-  // {
-  //   id: 1,
-  //   title: 'Select',
-  //   src: 'select',
-  // },
+  {
+    id: 1,
+    title: 'Accordion',
+    src: 'accordion',
+  },
   // {
   //   id: 2,
   //   title: 'Checkbox',

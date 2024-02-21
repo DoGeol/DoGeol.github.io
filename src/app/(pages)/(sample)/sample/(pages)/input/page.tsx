@@ -1,12 +1,17 @@
 'use client'
-import Input from '../../../../../../components/element/Input'
-import { useState } from 'react'
+import Input from '@/components/element/Input'
+import React, { useState } from 'react'
+import { AccordionItem } from '@/components/element/Accordion/Item'
+import { AccordionTitle } from '@/components/element/Accordion/Title'
+import { AccordionContent } from '@/components/element/Accordion/Content'
+import { AccordionRoot } from '@/components/element/Accordion/Root'
 
-export default function InputPage() {
+export default function page() {
   const [val, setVal] = useState<any>('1231232')
+  const [accordion, setAccordion] = useState<string[]>(['2'])
   return (
     <>
-      <p className={'text-sub-title mb-[4.0rem]'}>인풋 컴포넌트</p>
+      <p className={'mb-[4.0rem] text-sub-title'}>인풋 컴포넌트</p>
       <div className={'flex flex-col gap-[2.0rem]'}>
         <div>
           <h3 className={'mb-[0.8rem] text-[2.0rem] font-bold'}>SIZE</h3>
@@ -49,6 +54,16 @@ export default function InputPage() {
             <Input type={'password'} />
           </div>
         </div>
+        <AccordionRoot multiple={true} values={accordion} onChange={setAccordion} rounded={true}>
+          <AccordionItem value={'1'}>
+            <AccordionTitle>11111</AccordionTitle>
+            <AccordionContent>22222</AccordionContent>
+          </AccordionItem>
+          <AccordionItem value={'2'}>
+            <AccordionTitle>33333</AccordionTitle>
+            <AccordionContent>222222</AccordionContent>
+          </AccordionItem>
+        </AccordionRoot>
       </div>
     </>
   )

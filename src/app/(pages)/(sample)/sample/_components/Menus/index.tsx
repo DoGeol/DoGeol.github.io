@@ -15,15 +15,17 @@ export default function SampleComponentMenus({
 
   return (
     <ul className={'flex flex-col gap-[0.4rem]'}>
-      {menus.map((menu) => (
-        <Link key={menu.id} href={`/sample/${menu.src}`}>
-          <li
-            className={`text-[1.6rem] font-medium ${menu.src === `${menuName}` ? 'text-sky-500' : ''} `}
-          >
-            {menu.title}
-          </li>
-        </Link>
-      ))}
+      {menus
+        ?.sort((a, b) => (a.title > b.title ? 1 : -1))
+        ?.map((menu) => (
+          <Link key={menu.id} href={`/sample/${menu.src}`}>
+            <li
+              className={`text-[1.6rem] font-medium ${menu.src === `${menuName}` ? 'text-sky-500' : ''} `}
+            >
+              {menu.title}
+            </li>
+          </Link>
+        ))}
     </ul>
   )
 }
