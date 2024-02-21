@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from 'react'
 import ThemeModeButton from '@/components/theme/ThemeModeButton'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function GlobalNavigation(): React.JSX.Element {
   const [scrollPercent, setScrollPercent] = useState<number>(0)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +21,10 @@ export default function GlobalNavigation(): React.JSX.Element {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
+  useEffect(() => {
+    setScrollPercent(0)
+  }, [pathname])
 
   return (
     <nav
