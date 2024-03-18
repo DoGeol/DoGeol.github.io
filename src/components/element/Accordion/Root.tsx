@@ -12,7 +12,7 @@ import {
 type AccordionRootProps = {
   multiple?: boolean
   values: string[]
-  onChange: (values: any[]) => void
+  onChange?: (values: any[]) => void
   rounded?: boolean
 }
 

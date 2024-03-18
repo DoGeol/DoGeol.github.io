@@ -3,7 +3,14 @@ import React, { PropsWithChildren } from 'react'
 import { useAccordionActions, useAccordionState } from '@/components/element/Accordion/Root'
 import { useAccordionItemState } from '@/components/element/Accordion/Item'
 
-export const AccordionTitle = ({ children }: PropsWithChildren): React.JSX.Element => {
+type TAccordionTitleProps = {
+  wrapperClass?: string
+}
+
+export const AccordionTitle = ({
+  children,
+  wrapperClass,
+}: PropsWithChildren<TAccordionTitleProps>): React.JSX.Element => {
   const { values } = useAccordionState()
   const { setter } = useAccordionActions()
   const itemValue = useAccordionItemState()
@@ -11,9 +18,7 @@ export const AccordionTitle = ({ children }: PropsWithChildren): React.JSX.Eleme
 
   return (
     <div
-      className={
-        'flex h-[4.8rem] cursor-pointer items-center justify-between px-[1.6rem] [&>span]:hover:underline'
-      }
+      className={`flex h-[4.8rem] cursor-pointer items-center justify-between px-[1.6rem] transition-all [&>span]:hover:underline [&>span]:hover:underline-offset-4 ${wrapperClass}`}
       onClick={() => {
         setter(itemValue)
       }}
