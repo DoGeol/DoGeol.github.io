@@ -27,12 +27,14 @@ export default function Information({ data }: TProps): React.JSX.Element {
       </div>
       <div className={'p-[0.8rem] mo:p-[1.6rem]'}>
         <h1
-          className={'text-title break-keep leading-[1.15] [&_strong]:text-sky-600'}
+          className={
+            'break-keep text-title leading-[1.15] [&_strong]:bg-gradient-to-r [&_strong]:from-blue-500 [&_strong]:to-blue-400 [&_strong]:bg-clip-text [&_strong]:text-transparent'
+          }
           dangerouslySetInnerHTML={{ __html: data.title }}
         />
         <ul
           className={
-            'mt-[1.2rem] flex items-center justify-start gap-[0.8rem] font-medium capitalize text-neutral-400 transition-all dark:text-neutral-400'
+            'mt-[1.2rem] flex gap-[0.8rem] font-medium text-neutral-400 transition-all dark:text-neutral-400 mo:flex-col mo:items-start mo:justify-center'
           }
         >
           {data?.contact?.map((item) => (
@@ -42,7 +44,7 @@ export default function Information({ data }: TProps): React.JSX.Element {
               target={item.target}
             >
               <li className={'cursor-pointer hover:text-neutral-500 dark:hover:text-neutral-300'}>
-                {item.name}
+                {item.name} <span className={'hidden mo:inline-block'}>: {item.url}</span>
               </li>
             </Link>
           ))}
