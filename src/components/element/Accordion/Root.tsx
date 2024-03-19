@@ -46,7 +46,7 @@ export const AccordionRoot = ({
       }
       setItems(Array.from(newItem))
     },
-    [items],
+    [items, multiple],
   )
 
   const memoizedItems = useMemo(() => items, [items])

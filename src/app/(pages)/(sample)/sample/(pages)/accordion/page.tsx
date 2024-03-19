@@ -6,7 +6,9 @@ import { AccordionContent } from '@/components/element/Accordion/Content'
 import { AccordionRoot } from '@/components/element/Accordion/Root'
 
 export default function page() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [accordion, setAccordion] = useState<string[]>([])
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [accordion2, setAccordion2] = useState<string[]>([])
   return (
     <>
