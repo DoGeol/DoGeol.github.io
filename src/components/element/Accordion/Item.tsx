@@ -16,7 +16,7 @@ export const AccordionItem = ({
 
   const itemClasses = [
     'accordion-item w-full border-x border-t border-solid border-neutral-300 last:border-b',
-    rounded ? 'first:rounded-t-2xl last:rounded-b-2xl' : '',
+    rounded ? 'first:rounded-t-xl last:rounded-b-xl' : '',
   ]
     .filter((c) => !!c)
     .join(' ')
