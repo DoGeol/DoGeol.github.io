@@ -41,3 +41,5 @@ export type TAboutMe = {
   title: TText
   descriptions: TText[]
 }
+
+export type TExperience = TCareer[]
