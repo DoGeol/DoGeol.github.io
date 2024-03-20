@@ -1,4 +1,3 @@
-'use client'
 import React, { PropsWithChildren } from 'react'
 import { useAccordionActions, useAccordionState } from '@/components/element/Accordion/Root'
 import { useAccordionItemState } from '@/components/element/Accordion/Item'
