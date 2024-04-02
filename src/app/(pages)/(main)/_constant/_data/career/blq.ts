@@ -17,7 +17,7 @@ export const CAREER_BLQ: TCareer = {
     'Github Action',
     'AWS CodeDeploy',
   ],
-  description: '테스트밸리',
+  description: '테스트밸리, 퀵셀 서비스의 웹, 웹앱, 백오피스 개발/운영을 담당했습니다.',
   summary: [
     'B2C 가전제품 판매, 체험, 중고판매 서비스, <strong>테스트밸리</strong>의 개발/운영',
     'B2B/B2C 중고거래 서비스, <strong>퀵셀</strong>의 개발/운영',

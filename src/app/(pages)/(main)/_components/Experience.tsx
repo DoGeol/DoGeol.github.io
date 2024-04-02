@@ -111,19 +111,19 @@ export default function Experience({ data }: TProps): React.JSX.Element {
                                 </li>
                               ))}
                             </ul>
+                            {/* 구분선 */}
+                            <div
+                              className={
+                                'col-span-3 my-[0.8rem] h-[0.1rem] w-full border border-dotted border-gray-200 dark:border-gray-200'
+                              }
+                            />
                           </>
                         )}
-                        {/* 구분선 */}
-                        <div
-                          className={
-                            'col-span-3 my-[0.8rem] h-[0.1rem] w-full border border-dotted border-gray-200 dark:border-gray-200'
-                          }
-                        />
                         {item.details.length > 0 && (
                           <>
                             <ul
                               className={
-                                'mo:text-sub-desc font-light text-gray-500 dark:text-gray-400'
+                                'font-light text-gray-500 dark:text-gray-400 mo:text-sub-desc'
                               }
                             >
                               {item.details?.map((detail, idx) => (
@@ -151,10 +151,9 @@ export default function Experience({ data }: TProps): React.JSX.Element {
                                 'col-span-3 my-[0.8rem] h-[0.1rem] w-full border border-dotted border-gray-200 dark:border-gray-200'
                               }
                             />
-
                             <ul
                               className={
-                                'mo:text-sub-desc font-light text-gray-500 dark:text-gray-400'
+                                'font-light text-gray-500 dark:text-gray-400 mo:text-sub-desc'
                               }
                             >
                               {item.roles?.map((role, idx) => (
