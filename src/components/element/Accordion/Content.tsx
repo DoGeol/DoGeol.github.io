@@ -9,7 +9,7 @@ export const AccordionContent = ({ children }: PropsWithChildren): React.JSX.Ele
 
   return (
     <div
-      className={`overflow-auto transition-[max-height] delay-0 ${isExpanded ? 'max-h-[1000px] duration-500 ease-in' : 'max-h-[0px] duration-300 ease-out'}`}
+      className={`overscroll-none transition-[max-height] delay-0 ${isExpanded ? 'max-h-[1000px] duration-500 ease-in' : 'max-h-[0px] duration-300 ease-out'}`}
     >
       <div className={'p-[1.6rem] pt-[0.8rem]'}>{children}</div>
     </div>
