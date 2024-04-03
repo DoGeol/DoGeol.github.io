@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import ThemeModeButton from '@/components/theme/ThemeModeButton'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation'
 export default function GlobalNavigation(): React.JSX.Element {
   const [scrollPercent, setScrollPercent] = useState<number>(0)
   const pathname = usePathname()
+  const menuName = useMemo(() => pathname.split('/').at(1), [pathname])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,7 +49,9 @@ export default function GlobalNavigation(): React.JSX.Element {
                   'flex h-[4rem] cursor-pointer items-center justify-center rounded-xl px-[1.2rem] hover:bg-neutral-200 dark:hover:bg-neutral-800'
                 }
               >
-                <span>메인</span>
+                <span className={menuName === '' ? 'text-blue-600 dark:text-blue-400' : ''}>
+                  메인
+                </span>
               </li>
             </Link>
             <Link href={'/sample'}>
@@ -57,7 +60,9 @@ export default function GlobalNavigation(): React.JSX.Element {
                   'flex h-[4rem] cursor-pointer items-center justify-center rounded-xl px-[1.2rem] hover:bg-neutral-200 dark:hover:bg-neutral-800'
                 }
               >
-                <span>컴포넌트</span>
+                <span className={menuName === 'sample' ? 'text-blue-600 dark:text-blue-400' : ''}>
+                  컴포넌트
+                </span>
               </li>
             </Link>
           </ul>
