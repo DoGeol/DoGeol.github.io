@@ -1,10 +1,6 @@
 'use client'
 import Input from '@/components/element/Input'
 import React, { useState } from 'react'
-import { AccordionItem } from '@/components/element/Accordion/Item'
-import { AccordionTitle } from '@/components/element/Accordion/Title'
-import { AccordionContent } from '@/components/element/Accordion/Content'
-import { AccordionRoot } from '@/components/element/Accordion/Root'
 
 export default function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -56,16 +52,6 @@ export default function page() {
             <Input type={'password'} />
           </div>
         </div>
-        <AccordionRoot multiple={true} values={accordion} onChange={setAccordion} rounded={true}>
-          <AccordionItem value={'1'}>
-            <AccordionTitle>11111</AccordionTitle>
-            <AccordionContent>22222</AccordionContent>
-          </AccordionItem>
-          <AccordionItem value={'2'}>
-            <AccordionTitle>33333</AccordionTitle>
-            <AccordionContent>222222</AccordionContent>
-          </AccordionItem>
-        </AccordionRoot>
       </div>
     </>
   )

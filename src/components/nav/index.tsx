@@ -57,7 +57,7 @@ export default function GlobalNavigation(): React.JSX.Element {
                   'flex h-[4rem] cursor-pointer items-center justify-center rounded-xl px-[1.2rem] hover:bg-neutral-200 dark:hover:bg-neutral-800'
                 }
               >
-                <span>샘플</span>
+                <span>컴포넌트</span>
               </li>
             </Link>
           </ul>
