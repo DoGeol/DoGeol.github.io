@@ -26,8 +26,10 @@ export type TProject = {
   period: [string, string]
   skills: string[]
   details: string[]
-  roles: string[]
+  roles: TProjectRoles[]
 }
+
+export type TProjectRoles = string | (string | string[])[]
 
 export type TSkill = {
   id: number

@@ -88,86 +88,94 @@ export default function Experience({ data }: TProps): React.JSX.Element {
                       </AccordionTitle>
                       <AccordionContent>
                         {item.summary && (
-                          <p className={'font-medium'}>
-                            {item.summary}{' '}
-                            <span className={'text-[1rem]'}>
-                              ({item.period[0]} ~ {item.period[1]})
-                            </span>
-                          </p>
-                        )}
-                        {item.skills.length > 0 && (
                           <>
-                            <ul
-                              className={
-                                'mt-[0.8rem] flex flex-wrap items-center justify-start gap-[0.2rem]'
-                              }
-                            >
-                              {item.skills?.map((skill, idx) => (
-                                <li
-                                  key={`${skill}_${idx}`}
-                                  className={`rounded-3xl bg-gray-200 px-[0.6rem] py-[0.2rem] text-[1rem] dark:bg-gray-500 dark:text-white [&>strong]:font-medium`}
-                                >
-                                  # {skill}
-                                </li>
-                              ))}
-                            </ul>
+                            <p className={'text-sub-desc font-medium'}>{item.summary}</p>
                             {/* 구분선 */}
                             <div
                               className={
-                                'col-span-3 my-[0.8rem] h-[0.1rem] w-full border border-dotted border-gray-200 dark:border-gray-200'
+                                'col-span-3 my-[1.4rem] h-[0.1rem] w-full border border-dotted border-gray-200 dark:border-gray-200'
                               }
                             />
                           </>
                         )}
                         {item.details.length > 0 && (
                           <>
-                            <ul
-                              className={
-                                'font-light text-gray-500 dark:text-gray-400 mo:text-sub-desc'
-                              }
-                            >
+                            <ul className={'font-light mo:text-sub-desc [&_strong]:font-bold'}>
                               {item.details?.map((detail, idx) => (
                                 <li
                                   key={`${detail}_${idx}`}
                                   className={`relative pl-[clamp(0.8rem,2vw,1.6rem)]`}
                                 >
                                   <span className={'absolute left-0 top-0'}>-</span>
-                                  <span
-                                    className={
-                                      '[&>span]:rounded-2xl [&>span]:bg-blue-400 [&>span]:px-[0.6rem] [&>span]:text-white [&>span]:dark:bg-blue-600'
-                                    }
-                                    dangerouslySetInnerHTML={{ __html: detail }}
-                                  />
+                                  <span dangerouslySetInnerHTML={{ __html: detail }} />
                                 </li>
                               ))}
+                              <li className={`relative pl-[clamp(0.8rem,2vw,1.6rem)]`}>
+                                <span className={'absolute left-0 top-0'}>-</span>
+                                <span className={'flex items-start justify-start gap-[0.4rem]'}>
+                                  <strong className={'flex-shrink-0'}>개발 기간 : </strong>
+                                  <span>
+                                    {item.period[0]} ~ {item.period[1]}
+                                  </span>
+                                </span>
+                              </li>
+                              <li className={`relative pl-[clamp(0.8rem,2vw,1.6rem)]`}>
+                                <span className={'absolute left-0 top-0'}>-</span>
+                                <span className={'flex items-start justify-start gap-[0.4rem]'}>
+                                  <strong className={'flex-shrink-0'}>기술 스택 : </strong>
+                                  <ul
+                                    className={
+                                      'mt-[0.2rem] inline-flex flex-wrap items-center justify-start gap-[0.2rem]'
+                                    }
+                                  >
+                                    {item.skills?.map((skill, idx) => (
+                                      <li
+                                        key={`${skill}_${idx}`}
+                                        className={`rounded-3xl bg-gray-200 px-[0.6rem] py-[0.2rem] text-[1rem] dark:bg-gray-500 dark:text-white`}
+                                      >
+                                        # {skill}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </span>
+                              </li>
                             </ul>
                           </>
                         )}
                         {item.roles.length > 0 && (
                           <>
                             {/* 구분선 */}
-                            <div
-                              className={
-                                'col-span-3 my-[0.8rem] h-[0.1rem] w-full border border-dotted border-gray-200 dark:border-gray-200'
-                              }
-                            />
-                            <ul
-                              className={
-                                'font-light text-gray-500 dark:text-gray-400 mo:text-sub-desc'
-                              }
-                            >
+                            {item.details.length > 0 && (
+                              <div
+                                className={
+                                  'col-span-3 my-[1.4rem] h-[0.1rem] w-full border border-dotted border-gray-200 dark:border-gray-200'
+                                }
+                              />
+                            )}
+                            <ul className={'font-light mo:text-sub-desc'}>
                               {item.roles?.map((role, idx) => (
                                 <li
                                   key={`${role}_${idx}`}
-                                  className={`relative pl-[clamp(0.8rem,2vw,1.6rem)]`}
+                                  className={`relative mt-[0.4rem] pl-[clamp(0.8rem,2vw,1.6rem)] [&_strong]:font-bold [&_strong]:dark:text-gray-200`}
                                 >
-                                  <span className={'absolute left-0 top-0'}>-</span>
-                                  <span
-                                    className={
-                                      '[&>span]:rounded-2xl [&>span]:bg-blue-400 [&>span]:px-[0.6rem] [&>span]:text-white [&>span]:dark:bg-blue-600 [&>strong]:font-medium'
-                                    }
-                                    dangerouslySetInnerHTML={{ __html: role }}
-                                  />
+                                  <span className={'absolute left-0 top-0'}>{idx + 1}.</span>
+                                  {typeof role === 'string' ? (
+                                    <div dangerouslySetInnerHTML={{ __html: role }} />
+                                  ) : (
+                                    <>
+                                      <div dangerouslySetInnerHTML={{ __html: role[0] }} />
+                                      {Array.isArray(role[1]) &&
+                                        role[1]?.map((detail) => (
+                                          <div
+                                            key={detail}
+                                            className={'relative pl-[clamp(0.8rem,2vw,1.6rem)]'}
+                                          >
+                                            <span className={'absolute left-0 top-0'}>-</span>
+                                            <p dangerouslySetInnerHTML={{ __html: detail }} />
+                                          </div>
+                                        ))}
+                                    </>
+                                  )}
                                 </li>
                               ))}
                             </ul>

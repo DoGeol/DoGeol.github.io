@@ -14,7 +14,7 @@ export const AccordionItem = ({
   const { rounded } = useAccordionState()
 
   const itemClasses = [
-    'accordion-item w-full border-x border-t border-solid border-neutral-300 last:border-b',
+    'accordion-item w-full border-x border-t border-solid border-neutral-300 last:border-b overflow-hidden',
     rounded ? 'first:rounded-t-xl last:rounded-b-xl' : '',
   ]
     .filter((c) => !!c)

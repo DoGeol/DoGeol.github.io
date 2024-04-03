@@ -19,7 +19,7 @@ export const AccordionTitle = ({
 
   return (
     <div
-      className={`flex h-[4.8rem] cursor-pointer items-center justify-between px-[1.6rem] transition-all [&>span]:hover:underline [&>span]:hover:underline-offset-4 ${wrapperClass}`}
+      className={`flex h-[4.8rem] cursor-pointer items-center justify-between px-[1.6rem] transition-all [&>span]:hover:underline [&>span]:hover:underline-offset-4 ${isExpanded ? 'bg-blue-100 dark:bg-blue-900' : ''} ${wrapperClass}`}
       onClick={() => {
         setter(itemValue)
       }}

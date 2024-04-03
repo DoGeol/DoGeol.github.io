@@ -12,7 +12,7 @@ export const INFORMATION: TInformation = {
       id: 0,
       type: 'email',
       name: 'Email',
-      url: 'pdg2491@naver.com',
+      url: 'pdg2491@gmail.com',
       target: '_self',
     },
     {
