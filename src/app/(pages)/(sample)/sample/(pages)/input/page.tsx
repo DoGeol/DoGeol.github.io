@@ -1,12 +1,17 @@
 'use client'
 import Input from '@/components/element/Input'
 import React, { useState } from 'react'
+import CustomInput from '@/components/element/CustomInput'
 
 export default function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [val, setVal] = useState<any>('1231232')
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [accordion, setAccordion] = useState<string[]>(['2'])
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [customInput, setCustomInput] = useState<string>('')
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [customInput2, setCustomInput2] = useState<string>('')
   return (
     <>
       <p className={'mb-[4.0rem] text-sub-title'}>인풋 컴포넌트</p>
@@ -50,6 +55,30 @@ export default function page() {
             <Input type={'tel'} />
             <p className={'font-medium capitalize'}>password</p>
             <Input type={'password'} />
+          </div>
+        </div>
+        <div>
+          <h3 className={'mb-[0.8rem] text-[2.0rem] font-bold'}>CUSTOM INPUT</h3>
+          <div
+            className={
+              'flex flex-col gap-[0.8rem] rounded-xl border border-solid border-gray-300 p-[1.8rem]'
+            }
+          >
+            <p className={'font-medium capitalize'}>number : {customInput}</p>
+            <CustomInput
+              inputType={'number'}
+              value={customInput}
+              onChange={(e) => setCustomInput(e.target.value)}
+            />
+            <p className={'font-medium capitalize'}>decimal :: {customInput2}</p>
+            <CustomInput
+              inputType={'number'}
+              value={customInput2}
+              isDecimalPoint
+              min={6}
+              max={100}
+              onChange={(e) => setCustomInput2(e.target.value)}
+            />
           </div>
         </div>
       </div>
