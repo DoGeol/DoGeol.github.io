@@ -8,6 +8,7 @@ import GlobalNavigation from '@/components/nav'
 const rootFont = localFont({
   src: './fonts/Pretendard/PretendardVariable.woff2',
   display: 'swap',
+  weight: '45 920',
 })
 
 export const metadata: Metadata = {
@@ -31,12 +32,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <head>
         <meta httpEquiv={'pragma'} content={'-1'} />
         <meta httpEquiv={'expires'} content={'no-cache'} />
       </head>
       <body
+        suppressHydrationWarning
         className={`${rootFont.className} text-gray-700 dark:bg-neutral-900 dark:text-gray-300`}
       >
         <DarkThemeProvider>

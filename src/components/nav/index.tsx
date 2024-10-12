@@ -5,10 +5,22 @@ import ThemeModeButton from '@/components/theme/ThemeModeButton'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+type TMenu = {
+  id: number
+  path: string
+  title: string
+}
+const MENUS: TMenu[] = [
+  { id: 0, path: '/', title: '메인' },
+  { id: 1, path: '/sample', title: '컴포넌트' },
+]
+
 export default function GlobalNavigation(): React.JSX.Element {
   const [scrollPercent, setScrollPercent] = useState<number>(0)
   const pathname = usePathname()
-  const menuName = useMemo(() => pathname.split('/').at(1), [pathname])
+  const isVisible = useMemo(() => {
+    return MENUS.some((menu) => menu.path === pathname)
+  }, [pathname])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,6 +39,10 @@ export default function GlobalNavigation(): React.JSX.Element {
     setScrollPercent(0)
   }, [pathname])
 
+  if (!isVisible) {
+    return <></>
+  }
+
   return (
     <nav
       className={
@@ -43,28 +59,21 @@ export default function GlobalNavigation(): React.JSX.Element {
           </div>
           {/* contents */}
           <ul className={'flex gap-[0.4rem] text-[1.2rem] font-medium transition-all'}>
-            <Link href={'/'}>
-              <li
-                className={
-                  'flex h-[4rem] cursor-pointer items-center justify-center rounded-xl px-[1.2rem] hover:bg-neutral-200 dark:hover:bg-neutral-800'
-                }
-              >
-                <span className={menuName === '' ? 'text-blue-600 dark:text-blue-400' : ''}>
-                  메인
-                </span>
-              </li>
-            </Link>
-            <Link href={'/sample'}>
-              <li
-                className={
-                  'flex h-[4rem] cursor-pointer items-center justify-center rounded-xl px-[1.2rem] hover:bg-neutral-200 dark:hover:bg-neutral-800'
-                }
-              >
-                <span className={menuName === 'sample' ? 'text-blue-600 dark:text-blue-400' : ''}>
-                  컴포넌트
-                </span>
-              </li>
-            </Link>
+            {MENUS.map((menu) => (
+              <Link href={menu.path} key={menu.id}>
+                <li
+                  className={
+                    'flex h-[4rem] cursor-pointer items-center justify-center rounded-xl px-[1.2rem] hover:bg-neutral-200 dark:hover:bg-neutral-800'
+                  }
+                >
+                  <span
+                    className={pathname === menu.path ? `text-blue-600 dark:text-blue-400` : ''}
+                  >
+                    {menu.title}
+                  </span>
+                </li>
+              </Link>
+            ))}
           </ul>
         </div>
         {/* settings */}
