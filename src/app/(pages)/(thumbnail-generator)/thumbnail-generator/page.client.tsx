@@ -13,7 +13,7 @@ export default function PageClient() {
         'flex h-screen w-screen flex-col items-center justify-center overflow-auto bg-gray-100 px-[20px]'
       }
     >
-      <h1 className="mb-[2.0rem] shrink-0 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-title font-semibold text-transparent">
+      <h1 className="mb-[2.0rem] shrink-0 bg-linear-to-r from-pink-500 via-red-500 to-yellow-500 bg-clip-text text-title font-semibold text-transparent">
         Thumbnail Generator
       </h1>
 

@@ -9,7 +9,7 @@ export default function AboutMe({ data }: TProps): React.JSX.Element {
     <div className={'flex flex-col justify-start'}>
       <h2
         className={
-          'bg-gradient-to-r from-blue-500 to-sky-100 bg-clip-text text-title font-bold text-transparent'
+          'bg-linear-to-r from-blue-500 to-sky-100 bg-clip-text text-title font-bold text-transparent'
         }
       >
         About Me
@@ -22,7 +22,7 @@ export default function AboutMe({ data }: TProps): React.JSX.Element {
             <span className={'absolute left-0 top-0'}>{idx + 1}.</span>
             <span
               className={
-                '[&>span]:rounded-2xl [&>span]:bg-blue-400 [&>span]:px-[0.6rem] [&>span]:text-white [&>span]:dark:bg-blue-600'
+                '[&>span]:rounded-2xl [&>span]:bg-blue-400 [&>span]:px-[0.6rem] [&>span]:text-white dark:[&>span]:bg-blue-600'
               }
               dangerouslySetInnerHTML={{ __html: desc }}
             />

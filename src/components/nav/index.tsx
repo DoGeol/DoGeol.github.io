@@ -46,7 +46,7 @@ export default function GlobalNavigation(): React.JSX.Element {
   return (
     <nav
       className={
-        'sticky top-0 z-[9999] h-[4rem] bg-white/70 backdrop-blur-sm dark:bg-neutral-900/70'
+        'sticky top-0 z-9999 h-[4rem] bg-white/70 backdrop-blur-xs dark:bg-neutral-900/70'
       }
     >
       <div className={'flex items-center justify-between px-[1.6rem]'}>

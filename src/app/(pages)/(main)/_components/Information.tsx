@@ -10,7 +10,7 @@ export default function Information({ data }: TProps): React.JSX.Element {
     <div className={'flex justify-start gap-[2.0rem]'}>
       <div
         className={
-          '[&_.front]:hover:transform-rotate-y-180 [&_.back]:hover:transform-rotate-y-0 relative h-[10rem] w-[10rem] shrink-0 mo:h-[16rem] mo:w-[16rem]'
+          'hover:[&_.front]:transform-rotate-y-180 hover:[&_.back]:transform-rotate-y-0 relative h-[10rem] w-[10rem] shrink-0 mo:h-[16rem] mo:w-[16rem]'
         }
         style={{ perspective: '500px' }}
       >
@@ -28,7 +28,7 @@ export default function Information({ data }: TProps): React.JSX.Element {
       <div className={'p-[0.8rem] mo:p-[1.6rem]'}>
         <h1
           className={
-            'break-keep text-title leading-[1.15] [&_strong]:bg-gradient-to-r [&_strong]:from-blue-500 [&_strong]:to-blue-400 [&_strong]:bg-clip-text [&_strong]:text-transparent'
+            'break-keep text-title leading-[1.15] [&_strong]:bg-linear-to-r [&_strong]:from-blue-500 [&_strong]:to-blue-400 [&_strong]:bg-clip-text [&_strong]:text-transparent'
           }
           dangerouslySetInnerHTML={{ __html: data.title }}
         />

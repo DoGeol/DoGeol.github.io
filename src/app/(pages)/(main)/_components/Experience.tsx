@@ -15,7 +15,7 @@ export default function Experience({ data }: TProps): React.JSX.Element {
     <div className={'flex flex-col justify-start'}>
       <h2
         className={
-          'bg-gradient-to-r from-blue-500 to-sky-100 bg-clip-text text-title font-bold text-transparent'
+          'bg-linear-to-r from-blue-500 to-sky-100 bg-clip-text text-title font-bold text-transparent'
         }
       >
         Experience
@@ -52,7 +52,7 @@ export default function Experience({ data }: TProps): React.JSX.Element {
               <div className={'flex flex-col items-start justify-start gap-[1.6rem]'}>
                 <div
                   className={
-                    'before:contents-[""] relative pl-[1rem] before:absolute before:left-0 before:top-0 before:h-full before:w-[0.3rem] before:bg-neutral-600 before:dark:bg-neutral-300'
+                    'before:contents-[""] relative pl-[1rem] before:absolute before:left-0 before:top-0 before:h-full before:w-[0.3rem] before:bg-neutral-600 dark:before:bg-neutral-300'
                   }
                 >
                   <p dangerouslySetInnerHTML={{ __html: company.description }}></p>
@@ -67,7 +67,7 @@ export default function Experience({ data }: TProps): React.JSX.Element {
                         <span className={'absolute left-0 top-0'}>-</span>
                         <span
                           className={
-                            '[&>span]:rounded-2xl [&>span]:bg-blue-400 [&>span]:px-[0.6rem] [&>span]:text-white [&>span]:dark:bg-blue-600'
+                            '[&>span]:rounded-2xl [&>span]:bg-blue-400 [&>span]:px-[0.6rem] [&>span]:text-white dark:[&>span]:bg-blue-600'
                           }
                           dangerouslySetInnerHTML={{ __html: item }}
                         />
@@ -113,7 +113,7 @@ export default function Experience({ data }: TProps): React.JSX.Element {
                               <li className={`relative pl-[clamp(0.8rem,2vw,1.6rem)]`}>
                                 <span className={'absolute left-0 top-0'}>-</span>
                                 <span className={'flex items-start justify-start gap-[0.4rem]'}>
-                                  <strong className={'flex-shrink-0'}>개발 기간 : </strong>
+                                  <strong className={'shrink-0'}>개발 기간 : </strong>
                                   <span>
                                     {item.period[0]} ~ {item.period[1]}
                                   </span>
@@ -122,7 +122,7 @@ export default function Experience({ data }: TProps): React.JSX.Element {
                               <li className={`relative pl-[clamp(0.8rem,2vw,1.6rem)]`}>
                                 <span className={'absolute left-0 top-0'}>-</span>
                                 <span className={'flex items-start justify-start gap-[0.4rem]'}>
-                                  <strong className={'flex-shrink-0'}>기술 스택 : </strong>
+                                  <strong className={'shrink-0'}>기술 스택 : </strong>
                                   <ul
                                     className={
                                       'mt-[0.2rem] inline-flex flex-wrap items-center justify-start gap-[0.2rem]'
@@ -156,7 +156,7 @@ export default function Experience({ data }: TProps): React.JSX.Element {
                               {item.roles?.map((role, idx) => (
                                 <li
                                   key={`${role}_${idx}`}
-                                  className={`relative mt-[0.4rem] pl-[clamp(0.8rem,2vw,1.6rem)] [&_strong]:font-bold [&_strong]:dark:text-gray-200`}
+                                  className={`relative mt-[0.4rem] pl-[clamp(0.8rem,2vw,1.6rem)] [&_strong]:font-bold dark:[&_strong]:text-gray-200`}
                                 >
                                   <span className={'absolute left-0 top-0'}>{idx + 1}.</span>
                                   {typeof role === 'string' ? (

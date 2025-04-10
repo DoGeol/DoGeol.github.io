@@ -13,7 +13,7 @@ export default function SampleLayout({ children }: PropsWithChildren) {
     >
       <header
         className={
-          'sticky top-[4rem] z-[9999] border-b-[0.1rem] bg-sky-100/70 px-[2rem] py-[1.2rem] backdrop-blur-sm dark:border-b-neutral-600 dark:bg-neutral-800/70 tablet:px-[3.2rem] tablet:py-[1.4rem]'
+          'sticky top-[4rem] z-9999 border-b-[0.1rem] bg-sky-100/70 px-[2rem] py-[1.2rem] backdrop-blur-xs dark:border-b-neutral-600 dark:bg-neutral-800/70 tablet:px-[3.2rem] tablet:py-[1.4rem]'
         }
       >
         <div className={'flex items-center justify-between'}>
@@ -47,7 +47,7 @@ export default function SampleLayout({ children }: PropsWithChildren) {
       <div className={'flex'}>
         <aside
           className={
-            'fixed hidden w-[30rem] flex-shrink-0 overflow-y-auto px-[2rem] py-[1.2rem] dark:border-r-neutral-600 tablet:block tablet:px-[3.2rem] tablet:py-[1.4rem]'
+            'fixed hidden w-[30rem] shrink-0 overflow-y-auto px-[2rem] py-[1.2rem] dark:border-r-neutral-600 tablet:block tablet:px-[3.2rem] tablet:py-[1.4rem]'
           }
         >
           <SampleComponentMenus menus={menusData} />
