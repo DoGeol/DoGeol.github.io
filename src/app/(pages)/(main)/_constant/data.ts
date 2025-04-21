@@ -4,6 +4,7 @@ import { CAREER_WEFUN } from '@/app/(pages)/(main)/_constant/_data/career/wefun'
 import { CAREER_WELLO } from '@/app/(pages)/(main)/_constant/_data/career/wello'
 import { CAREER_SLDT } from '@/app/(pages)/(main)/_constant/_data/career/sldt'
 import { CAREER_BLQ } from '@/app/(pages)/(main)/_constant/_data/career/blq'
+import { CAREER_LAUD } from '@/app/(pages)/(main)/_constant/_data/career/laud'
 
 export const INFORMATION: TInformation = {
   title: '안녕하세요.<br/>프론트엔드 개발자 <strong>편도걸</strong>입니다.',
@@ -85,6 +86,7 @@ export const getBadgeColor = (type: string) => {
 }
 
 export const CAREER: TCareer[] = [
+  CAREER_LAUD,
   CAREER_BLQ,
   CAREER_SLDT,
   CAREER_WELLO,
