@@ -19,7 +19,7 @@ export default function GlobalNavigation(): React.JSX.Element {
   const [scrollPercent, setScrollPercent] = useState<number>(0)
   const pathname = usePathname()
   const isVisible = useMemo(() => {
-    return MENUS.some((menu) => menu.path === pathname)
+    return MENUS.some((menu) => pathname.includes(menu.path))
   }, [pathname])
 
   useEffect(() => {
@@ -45,9 +45,7 @@ export default function GlobalNavigation(): React.JSX.Element {
 
   return (
     <nav
-      className={
-        'sticky top-0 z-9999 h-[4rem] bg-white/70 backdrop-blur-xs dark:bg-neutral-900/70'
-      }
+      className={'sticky top-0 z-9999 h-[4rem] bg-white/70 backdrop-blur-xs dark:bg-neutral-900/70'}
     >
       <div className={'flex items-center justify-between px-[1.6rem]'}>
         <div className={'flex items-center justify-start'}>
@@ -80,9 +78,7 @@ export default function GlobalNavigation(): React.JSX.Element {
         <ThemeModeButton />
       </div>
       {/* scroll progress bar */}
-      <div
-        className={'absolute bottom-0 left-0 h-[0.1rem] w-full bg-gray-200 dark:bg-neutral-600 '}
-      >
+      <div className={'absolute bottom-0 left-0 h-[0.1rem] w-full bg-gray-200 dark:bg-neutral-600'}>
         <div
           className={'h-[0.15rem] bg-sky-400 dark:bg-sky-500'}
           style={{ width: `${scrollPercent}%` }}
