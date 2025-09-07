@@ -1,12 +1,12 @@
 import React from 'react'
 import type { Metadata, Viewport } from 'next'
-import './globals.css'
+import '@/shared/styles/globals.css'
 import localFont from 'next/font/local'
 import DarkThemeProvider from '@/features/theme-provider'
 import SiteHeader from '@/widgets/SiteHeader'
 
 const rootFont = localFont({
-  src: './fonts/Pretendard/PretendardVariable.woff2',
+  src: '../shared/fonts/Pretendard/PretendardVariable.woff2',
   display: 'swap',
   weight: '45 920',
 })

@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { TInformation } from '@/app/(pages)/(main)/_constant/types'
+import { TInformation } from '@/app/(pages)/test/_constant/types'
 
 type TProps = {
   data: TInformation

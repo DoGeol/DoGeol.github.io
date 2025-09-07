@@ -1,4 +1,4 @@
-import { TCareer } from '@/app/(pages)/(main)/_constant/types'
+import { TCareer } from '@/app/(pages)/test/_constant/types'
 
 export const CAREER_HIVELAB: TCareer = {
   id: 1,

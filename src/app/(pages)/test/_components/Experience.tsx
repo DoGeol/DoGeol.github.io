@@ -1,5 +1,5 @@
 import React from 'react'
-import { TExperience } from '@/app/(pages)/(main)/_constant/types'
+import { TExperience } from '@/app/(pages)/test/_constant/types'
 import {
   AccordionContent,
   AccordionItem,

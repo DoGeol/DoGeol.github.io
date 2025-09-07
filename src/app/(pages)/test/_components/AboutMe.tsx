@@ -1,5 +1,5 @@
 import React from 'react'
-import { TAboutMe } from '@/app/(pages)/(main)/_constant/types'
+import { TAboutMe } from '@/app/(pages)/test/_constant/types'
 
 type TProps = {
   data: TAboutMe

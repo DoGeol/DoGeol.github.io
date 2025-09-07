@@ -1,8 +1,8 @@
 import React from 'react'
-import { ABOUT_ME, CAREER, INFORMATION } from '@/app/(pages)/(main)/_constant/data'
-import Information from '@/app/(pages)/(main)/_components/Information'
-import AboutMe from '@/app/(pages)/(main)/_components/AboutMe'
-import Experience from '@/app/(pages)/(main)/_components/Experience'
+import { ABOUT_ME, CAREER, INFORMATION } from '@/app/(pages)/test/_constant/data'
+import Information from '@/app/(pages)/test/_components/Information'
+import AboutMe from '@/app/(pages)/test/_components/AboutMe'
+import Experience from '@/app/(pages)/test/_components/Experience'
 
 export default function Home(): React.JSX.Element {
   return (
