@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useMemo, useState } from 'react'
-import ThemeModeButton from '@/components/theme/ThemeModeButton'
+import ThemeModeButton from '@/features/theme-toggle'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 

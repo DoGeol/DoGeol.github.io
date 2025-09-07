@@ -2,8 +2,8 @@ import React from 'react'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import localFont from 'next/font/local'
-import DarkThemeProvider from '@/components/theme/DarkThemeProvider'
-import GlobalNavigation from '@/components/nav'
+import DarkThemeProvider from '@/features/theme-provider'
+import SiteHeader from '@/widgets/SiteHeader'
 
 const rootFont = localFont({
   src: './fonts/Pretendard/PretendardVariable.woff2',
@@ -42,7 +42,7 @@ export default function RootLayout({
         className={`${rootFont.className} text-gray-700 dark:bg-neutral-900 dark:text-gray-300`}
       >
         <DarkThemeProvider>
-          <GlobalNavigation />
+          <SiteHeader />
           {children}
         </DarkThemeProvider>
       </body>

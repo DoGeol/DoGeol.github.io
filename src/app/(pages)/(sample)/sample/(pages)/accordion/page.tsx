@@ -1,9 +1,9 @@
 'use client'
 import React, { useState } from 'react'
-import { AccordionItem } from '@/components/element/Accordion/Item'
-import { AccordionTitle } from '@/components/element/Accordion/Title'
-import { AccordionContent } from '@/components/element/Accordion/Content'
-import { AccordionRoot } from '@/components/element/Accordion/Root'
+import { AccordionItem } from '@/shared/ui/Accordion/Item'
+import { AccordionTitle } from '@/shared/ui/Accordion/Title'
+import { AccordionContent } from '@/shared/ui/Accordion/Content'
+import { AccordionRoot } from '@/shared/ui/Accordion/Root'
 
 export default function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks

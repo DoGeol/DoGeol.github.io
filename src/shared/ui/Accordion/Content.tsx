@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react'
-import { useAccordionState } from '@/components/element/Accordion/Root'
-import { useAccordionItemState } from '@/components/element/Accordion/Item'
+import { useAccordionState } from '@/shared/ui/Accordion/Root'
+import { useAccordionItemState } from '@/shared/ui/Accordion/Item'
 
 export const AccordionContent = ({ children }: PropsWithChildren): React.JSX.Element => {
   const { values } = useAccordionState()

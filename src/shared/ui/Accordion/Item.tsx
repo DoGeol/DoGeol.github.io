@@ -1,5 +1,5 @@
 import React, { createContext, PropsWithChildren, useContext } from 'react'
-import { useAccordionState } from '@/components/element/Accordion/Root'
+import { useAccordionState } from '@/shared/ui/Accordion/Root'
 
 type TAccordionItemProps = {
   value: string

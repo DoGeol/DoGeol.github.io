@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionRoot,
   AccordionTitle,
-} from '@/components/element/Accordion'
+} from '@/shared/ui/Accordion'
 
 type TProps = {
   data: TExperience
