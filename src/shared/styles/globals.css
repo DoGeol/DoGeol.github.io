@@ -7,21 +7,8 @@
   --breakpoint-mo: 768px;
   --breakpoint-tablet: 1024px;
   --breakpoint-pc: 1280px;
-
-  --text-title: clamp(2rem, 4vw, 3.6rem);
-  --text-sub-title: clamp(1.4rem, 2vw, 2rem);
-  --text-desc: clamp(1.2rem, 2vw, 1.6rem);
-  --text-sub-desc: clamp(1rem, 2vw, 1.4rem);
 }
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
 @layer base {
   *,
   ::after,
@@ -57,12 +44,4 @@
   -webkit-backface-visibility: hidden;
 }
 
-@layer base {
-    html {
-        font-size: 62.5%
-    }
-
-    body {
-        min-width: 30rem;
-    }
-}
+@layer base {}

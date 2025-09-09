@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import '@/shared/styles/globals.css'
 import localFont from 'next/font/local'
 import DarkThemeProvider from '@/features/theme-provider'
-import SiteHeader from '@/widgets/SiteHeader'
+import SiteHeader from '@/features/SiteHeader'
 
 const rootFont = localFont({
   src: '../shared/fonts/Pretendard/PretendardVariable.woff2',
