@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "framer-motion": "^12.23.13",
     "immer": "^10.0.3",
     "next": "15.5.2",
     "next-themes": "^0.2.1",

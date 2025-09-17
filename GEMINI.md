@@ -7,7 +7,7 @@
 * **프레임워크:** Next.js 15 (App Router 사용)
 * **UI 라이브러리:** React
 * **타입스크립트:** TypeScript (엄격한 타입 체크 적용)
-* **CSS 프레임워크:** Tailwind CSS
+* **CSS 프레임워크:** Tailwind CSS v4
 * **코드 포매터:** Prettier (자동 포맷팅 규칙 준수)
 * **린터:** ESLint (정의된 린팅 규칙 준수)
 * **애니메이션:** Motion (Framer Motion 라이브러리)
@@ -23,6 +23,9 @@
 * **라우팅:** `next/navigation`의 `useRouter`, `useSearchParams`, `usePathname` 등을 사용하여 라우팅 관련 기능을 구현합니다.
 * **레이아웃 및 템플릿:** `layout.tsx`와 `template.tsx` 파일을 사용하여 UI 구조 및 재사용 가능한 레이아웃을 정의합니다.
 * **Metadata:** `metadata` 객체 또는 `generateMetadata` 함수를 사용하여 페이지 및 레이아웃의 메타데이터를 관리합니다.
+* **파일명:** `kebab-case`을 사용합니다. 
+* **폴더명:** `kebab-case`을 사용합니다. 
+* **이미지:**  next/image를 사용하지 않는다. 반드시 `img 태그`를 사용합니다.  
 
 ## 3. React 및 TypeScript 규칙
 
@@ -40,7 +43,7 @@
 ## 4. Tailwind CSS 규칙
 
 * **유틸리티 우선:** 인라인 유틸리티 클래스를 사용하여 스타일을 적용하는 것을 최우선으로 합니다.
-* **반응형 디자인:** `sm:`, `md:`, `lg:`, `xl:` 등의 접두사를 사용하여 반응형 디자인을 구현합니다. 모바일 퍼스트(mobile-first) 접근 방식을 기본으로 합니다.
+* **반응형 디자인:** `mo:`, `tablet:`, `pc:` 등의 접두사를 사용하여 반응형 디자인을 구현합니다. 모바일 퍼스트(mobile-first) 접근 방식을 기본으로 합니다.
 * **클래스 순서:** Tailwind CSS 클래스는 의미론적 순서(레이아웃, Flexbox, 그리드, 간격, 크기, 타이포그래피, 배경, 테두리, 이펙트, 인터랙티브, SVG)를 따르는 것이 가독성에 좋습니다. (예: `flex items-center justify-center p-4 bg-blue-500 text-white rounded-md hover:bg-blue-600`)
 * **재사용 가능한 컴포넌트:** 반복되는 복잡한 유틸리티 클래스 조합은 새로운 React 컴포넌트로 캡슐화합니다. `@apply` 지시어는 가능한 한 사용을 지양합니다.
 

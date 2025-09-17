@@ -1,0 +1,17 @@
+import React, { PropsWithChildren } from 'react'
+import { useAccordionState } from '@/shared/ui/Accordion/Root'
+import { useAccordionItemState } from '@/shared/ui/Accordion/Item'
+
+export const AccordionContent = ({ children }: PropsWithChildren): React.JSX.Element => {
+  const { values } = useAccordionState()
+  const itemValue = useAccordionItemState()
+  const isExpanded = values?.includes(itemValue)
+
+  return (
+    <div
+      className={`overscroll-none transition-[max-height] delay-0 ${isExpanded ? 'max-h-[1000px] duration-500 ease-in' : 'max-h-[0px] duration-300 ease-out'}`}
+    >
+      <div className={'p-6 pt-3'}>{children}</div>
+    </div>
+  )
+}

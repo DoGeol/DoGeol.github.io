@@ -3,45 +3,52 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --breakpoint-*: initial;
-  --breakpoint-mo: 768px;
-  --breakpoint-tablet: 1024px;
-  --breakpoint-pc: 1280px;
+    --breakpoint-*: initial;
+    --breakpoint-tablet: 768px;
+    --breakpoint-pc: 1024px;
+    --text-mobile-base: 14px;
+    --text-pc-base: 24px;
 }
 
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
+    html {
+        font-size: var(--text-mobile-base);
+
+        @screen pc {
+            font-size: var(--text-pc-base);
+        }
+    }
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentcolor);
+    }
 }
 
 @utility transform-rotate-y-0 {
-  transform: rotateY(0deg);
+    transform: rotateY(0deg);
 }
 
 @utility transform-rotate-y-90 {
-  transform: rotateY(90deg);
+    transform: rotateY(90deg);
 }
 
 @utility transform-rotate-y-90-back {
-  transform: rotateY(-90deg);
+    transform: rotateY(-90deg);
 }
 
 @utility transform-rotate-y-180 {
-  transform: rotateY(180deg);
+    transform: rotateY(180deg);
 }
 
 @utility transform-rotate-y-180-back {
-  transform: rotateY(-180deg);
+    transform: rotateY(-180deg);
 }
 
 @utility backface-visibility-hidden {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
-
-@layer base {}

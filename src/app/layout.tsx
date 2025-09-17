@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import '@/shared/styles/globals.css'
 import localFont from 'next/font/local'
 import DarkThemeProvider from '@/features/theme-provider'
-import SiteHeader from '@/features/SiteHeader'
+import GlobalHeader from '@/features/global-header'
 
 const rootFont = localFont({
   src: '../shared/fonts/Pretendard/PretendardVariable.woff2',
@@ -12,8 +12,8 @@ const rootFont = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "DoGeol's Playground",
-  description: "DoGeol's Playground",
+  title: "PDG Playground",
+  description: "PDG Playground",
   icons: {
     icon: `/favicon.ico`,
   },
@@ -33,16 +33,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <head>
-        <meta httpEquiv={'pragma'} content={'-1'} />
-        <meta httpEquiv={'expires'} content={'no-cache'} />
-      </head>
       <body
-        suppressHydrationWarning
         className={`${rootFont.className} text-gray-700 dark:bg-neutral-900 dark:text-gray-300`}
       >
         <DarkThemeProvider>
-          <SiteHeader />
+          <GlobalHeader />
           {children}
         </DarkThemeProvider>
       </body>
