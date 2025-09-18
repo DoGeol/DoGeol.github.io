@@ -12,11 +12,68 @@ const rootFont = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'PDG Playground',
-  description: 'PDG Playground',
-  icons: {
-    icon: `/favicon.ico`,
+  title: {
+    template: '%s | PDG',
+    default: 'Playground',
   },
+  description: '일 잘하고 싶은 개발자의 개인 공간',
+  keywords: ['developer', 'frontend', 'dev', 'portfolio', 'resume'],
+  authors: [{ name: 'PDG' }],
+  creator: 'PDG',
+  publisher: 'PDG',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    title: {
+      template: '%s | PDG',
+      default: 'Playground',
+    },
+    description: '일 잘하고 싶은 개발자의 개인 공간',
+    type: 'website',
+    url: 'https://dogeol.github.io',
+    siteName: 'Playground',
+    locale: 'en_US',
+    images: [
+      {
+        url: 'https://dogeol.github.io/logo.png',
+        width: 489,
+        height: 489,
+        alt: 'PDG Logo',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: {
+      template: '%s | PDG',
+      default: 'Playground',
+    },
+    description: '일 잘하고 싶은 개발자의 개인 공간',
+    images: ['https://dogeol.github.io/logo.png'],
+    creator: '@PDG',
+  },
+  alternates: {
+    canonical: 'https://dogeol.github.io',
+  },
+  category: 'technology',
 }
 
 export const viewport: Viewport = {
