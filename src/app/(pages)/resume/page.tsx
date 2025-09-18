@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const Page: NextPage = () => {
   return (
-    <section className={'mx-auto flex max-w-7xl min-w-xs flex-col space-y-6 py-8'}>
+    <section className={'mx-auto flex max-w-6xl min-w-xs flex-col space-y-6 py-8'}>
       <Information />
       <article className={'flex px-6 py-4'}>Introduce</article>
       <article className={'flex px-6 py-4'}>Skills</article>

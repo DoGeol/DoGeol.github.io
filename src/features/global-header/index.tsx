@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { MENUS } from '@/features/global-header/const'
 import { AnimatePresence, motion } from 'framer-motion'
+import { cn } from '@/shared/lib/tailwindcss'
 
 const HamburgerIcon = () => (
   <svg
@@ -49,7 +50,6 @@ export default function GlobalHeader(): React.JSX.Element {
     }
   }, [])
 
-
   useEffect(() => {
     return () => {
       setScrollPercent(0)
@@ -59,7 +59,11 @@ export default function GlobalHeader(): React.JSX.Element {
 
   return (
     <>
-      <nav className={'sticky top-0 z-9999 min-w-xs w-full left-0 right-0 bg-white/70 backdrop-blur-xs dark:bg-neutral-900/70'}>
+      <nav
+        className={
+          'sticky top-0 right-0 left-0 z-9999 w-full min-w-xs bg-white/70 backdrop-blur-xs dark:bg-neutral-900/70'
+        }
+      >
         <div className={'flex h-16 items-center justify-between px-6'}>
           <div className={'flex items-center justify-start'}>
             <Link href="/" className={'shrink-0 px-2'}>
@@ -90,7 +94,12 @@ export default function GlobalHeader(): React.JSX.Element {
             </button>
           </div>
         </div>
-        <div className={'absolute bottom-0 left-0 w-full bg-gray-200 dark:bg-neutral-600'}>
+        <div
+          className={cn(
+            scrollPercent === 0 ? 'opacity-0' : '',
+            'absolute bottom-0 left-0 w-full bg-gray-200 transition-opacity dark:bg-neutral-600',
+          )}
+        >
           <div
             className={'h-px bg-sky-400 dark:bg-sky-500'}
             style={{ width: `${scrollPercent}%` }}
