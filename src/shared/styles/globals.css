@@ -5,18 +5,12 @@
 @theme {
     --breakpoint-*: initial;
     --breakpoint-tablet: 768px;
-    --breakpoint-pc: 1024px;
-    --text-mobile-base: 14px;
-    --text-pc-base: 24px;
+    --breakpoint-pc: 1280px;
 }
 
 @layer base {
     html {
-        font-size: var(--text-mobile-base);
-
-        @screen pc {
-            font-size: var(--text-pc-base);
-        }
+        font-size: 16px;
     }
 
     *,

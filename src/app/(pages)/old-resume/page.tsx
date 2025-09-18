@@ -8,7 +8,7 @@ export default function Home(): React.JSX.Element {
   return (
     <div
       className={
-        'mx-auto flex min-h-[calc(100dvh-theme(spacing.16))] min-w-[30rem] max-w-[120rem] flex-col text-lg'
+        'mx-auto flex min-h-[calc(100dvh-theme(spacing.16))] min-w-xs max-w-7xl flex-col text-lg'
       }
     >
       <div className={'w-full p-12 mt-12 tablet:mt-24'}>

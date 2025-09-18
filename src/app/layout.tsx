@@ -12,8 +12,8 @@ const rootFont = localFont({
 })
 
 export const metadata: Metadata = {
-  title: "PDG Playground",
-  description: "PDG Playground",
+  title: 'PDG Playground',
+  description: 'PDG Playground',
   icons: {
     icon: `/favicon.ico`,
   },

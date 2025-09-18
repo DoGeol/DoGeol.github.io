@@ -59,13 +59,13 @@ export default function GlobalHeader(): React.JSX.Element {
 
   return (
     <>
-      <nav className={'sticky top-0 z-9999 bg-white/70 backdrop-blur-xs dark:bg-neutral-900/70'}>
+      <nav className={'sticky top-0 z-9999 min-w-xs w-full left-0 right-0 bg-white/70 backdrop-blur-xs dark:bg-neutral-900/70'}>
         <div className={'flex h-16 items-center justify-between px-6'}>
           <div className={'flex items-center justify-start'}>
             <Link href="/" className={'shrink-0 px-2'}>
               <img src={'/logo.png'} alt={'logo-pdg'} className={'h-6 w-6'} />
             </Link>
-            <ul className={'pc:flex hidden font-medium transition-all'}>
+            <ul className={'tablet:flex hidden font-medium transition-all'}>
               {MENUS.map((menu) => (
                 <Link href={menu.path} key={menu.id} scroll={true}>
                   <li
@@ -85,7 +85,7 @@ export default function GlobalHeader(): React.JSX.Element {
           </div>
           <div className="flex items-center space-x-2">
             <ThemeModeButton />
-            <button onClick={() => setIsMenuOpen(true)} className="pc:hidden">
+            <button onClick={() => setIsMenuOpen(true)} className="tablet:hidden">
               <HamburgerIcon />
             </button>
           </div>
