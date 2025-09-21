@@ -1,20 +1,12 @@
 export type SkillCategory = 'frontend' | 'app' | 'backend' | 'devops' | 'collaboration' | 'etc'
+
 export interface SkillDefinition {
   name: string
   iconUrl: string
   type: SkillCategory
 }
 
-export const SKILL_COLORS: Record<SkillCategory, string> = {
-  frontend: '#A7D8DE',
-  app: '#FFDAB9',
-  backend: '#D8BFD8',
-  devops: '#C1E1C1',
-  collaboration: '#F5F5DC',
-  etc: '#D3D3D3',
-} as const
-
-export const SKILLS: SkillDefinition[] = [
+export const SKILLS = [
   // Frontend
   { name: 'react.js', iconUrl: '', type: 'frontend' },
   { name: 'html/css', iconUrl: '', type: 'frontend' },
@@ -37,6 +29,10 @@ export const SKILLS: SkillDefinition[] = [
   { name: 'styled-components', iconUrl: '', type: 'frontend' },
   { name: 'sass', iconUrl: '', type: 'frontend' },
   { name: 'next.js', iconUrl: '', type: 'frontend' },
+  { name: 'next.js 15 app router', iconUrl: '', type: 'frontend' },
+  { name: 'next.js 14 app router', iconUrl: '', type: 'frontend' },
+  { name: 'next.js 13 app router', iconUrl: '', type: 'frontend' },
+  { name: 'next.js page router', iconUrl: '', type: 'frontend' },
   { name: 'nuxt.js', iconUrl: '', type: 'frontend' },
 
   // App
@@ -65,7 +61,10 @@ export const SKILLS: SkillDefinition[] = [
 
   // Collaboration
   { name: 'git', iconUrl: '', type: 'collaboration' },
+  { name: 'github', iconUrl: '', type: 'collaboration' },
   { name: 'gitlab', iconUrl: '', type: 'collaboration' },
   { name: 'jira', iconUrl: '', type: 'collaboration' },
   { name: 'confluence', iconUrl: '', type: 'collaboration' },
-]
+] as const
+
+export type SkillName = (typeof SKILLS)[number]['name']
