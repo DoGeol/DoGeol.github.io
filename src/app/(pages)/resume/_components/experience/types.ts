@@ -1,6 +1,6 @@
 import { SkillName } from '@/app/(pages)/resume/_components/common/skill'
 
-type History = {
+export type History = {
   department: string
   role: string
   period: [string, string?] // start, end
@@ -13,7 +13,6 @@ export type Experience = {
   summary?: string // markdown 강조 가능
   employmentStatus: 'retire' | 'employed' | 'recommended_retire'
   historyList: History[]
-  skillNameList?: SkillName[]
 }
 
 export declare interface IExperience {

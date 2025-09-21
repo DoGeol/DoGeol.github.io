@@ -33,19 +33,6 @@ const experience: IExperience = {
           ],
         },
       ],
-      skillNameList: [
-        'react.js',
-        'next.js',
-        'typescript',
-        'zustand',
-        'react-query',
-        'react-hook-form',
-        'tailwind-css',
-        'turborepo',
-        'flutter',
-        'github-actions',
-        'aws',
-      ],
     },
     {
       companyName: '주식회사 비엘큐',
@@ -61,7 +48,6 @@ const experience: IExperience = {
           skillNameList: [],
         },
       ],
-      skillNameList: ['flutter', 'github-actions', 'aws'],
     },
     {
       companyName: '주식회사 웰로',
@@ -77,7 +63,6 @@ const experience: IExperience = {
           skillNameList: [],
         },
       ],
-      skillNameList: ['flutter', 'github-actions', 'aws'],
     },
     {
       companyName: '(주)위펀',
@@ -93,7 +78,6 @@ const experience: IExperience = {
           skillNameList: [],
         },
       ],
-      skillNameList: ['flutter', 'github-actions', 'aws'],
     },
     {
       companyName: '주식회사 하이브랩',
@@ -109,7 +93,6 @@ const experience: IExperience = {
           skillNameList: [],
         },
       ],
-      skillNameList: ['flutter', 'github-actions', 'aws'],
     },
   ],
   isUsedTotalPeriod: true,
