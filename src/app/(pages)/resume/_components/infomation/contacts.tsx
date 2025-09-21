@@ -4,10 +4,10 @@ import { IInformation } from '@/app/(pages)/resume/_components/infomation/types'
 import { cn } from '@/shared/lib/tailwindcss'
 
 interface Props {
-  contacts: IInformation['contacts']
+  contactList: IInformation['contactList']
 }
 
-const RenderIcon = (type: IInformation['contacts'][number]['type']) => {
+const RenderIcon = (type: IInformation['contactList'][number]['type']) => {
   if (type === 'github') {
     return (
       <svg
@@ -50,17 +50,17 @@ const RenderIcon = (type: IInformation['contacts'][number]['type']) => {
   )
 }
 
-const Contacts = ({ contacts = [] }: Props) => {
+const Contacts = ({ contactList = [] }: Props) => {
   return (
     <>
-      {contacts && (
+      {contactList && (
         <ul
           className={cn(
             'mt-4 flex items-center justify-center gap-1.5 text-sm transition-colors',
             'tablet:items-start tablet:justify-center flex-col',
           )}
         >
-          {contacts.map((contact) => (
+          {contactList.map((contact) => (
             <Link
               href={contact.type === 'email' ? `mailto:${contact.url}` : contact.url}
               key={contact.id}

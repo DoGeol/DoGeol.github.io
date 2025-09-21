@@ -7,7 +7,7 @@ type Contact = {
   target: '_self' | '_blank'
 }
 
-export interface IInformation {
+export declare interface IInformation {
   introduceText: IntroduceText
-  contacts: Contact[]
+  contactList: Contact[]
 }

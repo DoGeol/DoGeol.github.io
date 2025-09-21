@@ -22,7 +22,7 @@ const Information = () => {
           )}
           dangerouslySetInnerHTML={{ __html: information.introduceText }}
         />
-        <Contacts contacts={information.contacts || []} />
+        <Contacts contactList={information.contactList || []} />
       </div>
     </article>
   )

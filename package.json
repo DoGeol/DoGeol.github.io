@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.18",
     "framer-motion": "^12.23.13",
     "immer": "^10.0.3",
     "next": "15.5.2",
