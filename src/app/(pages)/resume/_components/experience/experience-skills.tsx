@@ -13,7 +13,7 @@ const ExperienceSkills = ({ skillNameList }: Props) => {
   }
 
   return (
-    <li className={'space-y-1'}>
+    <li className={'space-y-2'}>
       <p>기술 키워드</p>
       <div className={'flex flex-wrap gap-1'}>
         {skillNameList.map((skillName) => {

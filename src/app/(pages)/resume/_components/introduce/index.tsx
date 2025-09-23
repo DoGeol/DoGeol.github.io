@@ -2,14 +2,17 @@ import React from 'react'
 import { cn } from '@/shared/lib/tailwindcss'
 import introduce from '@/app/(pages)/resume/_infos/introduce'
 import dayjs from 'dayjs'
+import HighlightedText from '@/features/highlighted-text'
 
 const Introduce = () => {
   return (
     <article className={cn('px-6 py-4', 'flex flex-col items-start justify-start gap-4')}>
-      <h2 className={'text-primary-600 text-3xl font-medium'}>Introduce</h2>
-      <div className={'h-full w-full space-y-2.5 px-3'}>
+      <h2 className={'text-primary-600 dark:text-primary-500 text-3xl font-medium'}>Introduce</h2>
+      <div className={'h-full w-full space-y-3.5 break-keep'}>
         {introduce.textList.map((s) => (
-          <p key={s}>{s}</p>
+          <p key={s} className={'leading-relaxed'}>
+            <HighlightedText text={s} useUnderline={false} />
+          </p>
         ))}
       </div>
       <div

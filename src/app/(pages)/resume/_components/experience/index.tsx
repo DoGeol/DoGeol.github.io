@@ -8,14 +8,16 @@ const Experience = () => {
   return (
     <article className={cn('px-6 py-4', 'flex flex-col items-start justify-start')}>
       <div className={'flex items-end justify-start gap-3'}>
-        <h2 className={'text-primary-600 text-3xl font-medium'}>Experience</h2>
+        <h2 className={'text-primary-600 dark:text-primary-500 text-3xl font-medium'}>
+          Experience
+        </h2>
         {experience.isUsedTotalPeriod && (
           <p className={'mb-1 text-sm text-neutral-500 dark:text-neutral-400'}>
             {calculateTotalExperience(experience)}
           </p>
         )}
       </div>
-      <ul className={'flex w-full flex-col pl-3'}>
+      <ul className={'flex w-full flex-col'}>
         {experience.experienceList.map((exp) => (
           <ExperienceItem key={exp.companyName} experience={exp} />
         ))}

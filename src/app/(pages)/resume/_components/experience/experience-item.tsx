@@ -26,12 +26,12 @@ const ExperienceItem = ({ experience }: Props) => {
       </div>
 
       {experience.summary && (
-        <p className="ml-2 rounded-md bg-gray-100 px-2.5 py-2 font-light whitespace-pre-wrap dark:bg-neutral-700">
+        <p className="rounded-md bg-gray-100 px-2.5 py-2 font-light whitespace-pre-wrap dark:bg-neutral-700">
           <HighlightedText text={experience.summary} useUnderline={true} />
         </p>
       )}
 
-      <ul className={'mt-2 ml-3 flex flex-col gap-4'}>
+      <ul className={'mt-2 flex flex-col gap-4'}>
         {experience.historyList.map((history, index) => (
           <ExperienceHistory key={index} history={history} />
         ))}
