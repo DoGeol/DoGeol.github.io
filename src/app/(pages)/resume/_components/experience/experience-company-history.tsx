@@ -1,18 +1,21 @@
 import React from 'react'
 import { History } from './types'
 import ExperienceSkills from './experience-skills'
+import HighlightedText from '@/features/highlighted-text'
 
 type Props = {
   history: History
 }
 
-const ExperienceHistory = ({ history }: Props) => {
+const ExperienceCompanyHistory = ({ history }: Props) => {
   const formatDate = (date: string) => date.substring(0, 7).replace('-', '.')
 
   return (
     <li className={'grid gap-1'}>
       <div className={'flex items-center gap-2 text-base'}>
-        <p className={'font-bold text-neutral-800 dark:text-neutral-200'}>{history.department}</p>
+        <p className={'font-semibold text-neutral-700 dark:text-neutral-200'}>
+          {history.department}
+        </p>
         <span className="text-neutral-500 dark:text-neutral-400">/</span>
         <p className="text-neutral-500 dark:text-neutral-400">{history.role}</p>
       </div>
@@ -31,4 +34,4 @@ const ExperienceHistory = ({ history }: Props) => {
   )
 }
 
-export default ExperienceHistory
+export default ExperienceCompanyHistory

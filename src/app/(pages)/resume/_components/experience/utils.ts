@@ -10,7 +10,7 @@ export const getEmploymentStatusText = (
     case 'retire':
       return '퇴사'
     case 'recommended_retire':
-      return '퇴사 (권고사직)'
+      return '*경영악화로 인한 권고사직 퇴사'
   }
 }
 

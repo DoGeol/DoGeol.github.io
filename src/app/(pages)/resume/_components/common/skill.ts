@@ -1,4 +1,11 @@
-export type SkillCategory = 'frontend' | 'app' | 'backend' | 'devops' | 'collaboration' | 'etc'
+export type SkillCategory =
+  | 'frontend'
+  | 'app'
+  | 'backend'
+  | 'devops'
+  | 'analysis'
+  | 'collaboration'
+  | 'etc'
 
 export interface SkillDefinition {
   name: string
@@ -34,6 +41,8 @@ export const SKILLS = [
   { name: 'next.js 13 app router', iconUrl: '', type: 'frontend' },
   { name: 'next.js page router', iconUrl: '', type: 'frontend' },
   { name: 'nuxt.js', iconUrl: '', type: 'frontend' },
+  { name: 'oauth2', iconUrl: '', type: 'frontend' },
+  { name: 'kakao map', iconUrl: '', type: 'frontend' },
 
   // App
   { name: 'dart', iconUrl: '', type: 'app' },
@@ -58,6 +67,14 @@ export const SKILLS = [
   { name: 'aws', iconUrl: '', type: 'devops' },
   { name: 'aws codeDeploy', iconUrl: '', type: 'devops' },
   { name: 'aws ec2', iconUrl: '', type: 'devops' },
+
+  // Analysis tools
+  { name: 'datadog', iconUrl: '', type: 'analysis' },
+  { name: 'sentry', iconUrl: '', type: 'analysis' },
+  { name: 'gtm', iconUrl: '', type: 'analysis' },
+  { name: 'ga', iconUrl: '', type: 'analysis' },
+  { name: 'hotjar', iconUrl: '', type: 'analysis' },
+  { name: 'hackle', iconUrl: '', type: 'analysis' },
 
   // Collaboration
   { name: 'git', iconUrl: '', type: 'collaboration' },

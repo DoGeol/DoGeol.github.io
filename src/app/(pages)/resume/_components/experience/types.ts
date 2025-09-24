@@ -10,7 +10,8 @@ export type History = {
 
 export type Experience = {
   companyName: string
-  summary?: string // markdown 강조 가능
+  logoName: string
+  summary?: string[] // markdown 강조 가능
   employmentStatus: 'retire' | 'employed' | 'recommended_retire'
   historyList: History[]
 }

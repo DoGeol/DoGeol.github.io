@@ -5,6 +5,7 @@ import { SkillCategory, SkillName } from '@/app/(pages)/resume/_components/commo
 interface Props {
   skillName: SkillName
   category: SkillCategory
+  className?: string
 }
 
 const getSkillColorClasses = (category: SkillCategory) => {
@@ -17,6 +18,8 @@ const getSkillColorClasses = (category: SkillCategory) => {
       return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300'
     case 'devops':
       return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+    case 'analysis':
+      return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
     case 'collaboration':
       return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'
     case 'etc':
@@ -26,12 +29,13 @@ const getSkillColorClasses = (category: SkillCategory) => {
   }
 }
 
-const SkillBadge = ({ skillName, category }: Props) => {
+const SkillBadge = ({ skillName, category, className }: Props) => {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-md px-1.5 py-0.5 text-sm font-medium',
+        'inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-medium capitalize',
         getSkillColorClasses(category),
+        className,
       )}
     >
       {skillName}
