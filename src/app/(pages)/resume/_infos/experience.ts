@@ -169,14 +169,22 @@ const experience: IExperience = {
     {
       companyName: '하이브랩',
       logoName: 'hivelab',
-      summary: [''],
+      summary: [
+        '삼성전자 글로벌 웹페이지 **CMS 솔루션 위젯** 개발, **사내 ERP** 개발',
+        'CMS 개발자로 삼성 프로젝트에 참여하며 자연스럽게 프론트엔드 개발에 흥미를 가지게 되었고, 동료 프론트엔드 개발자분과 스터디를 진행하며 프론트엔드 개발 역량을 키웠습니다.',
+        '사내 시스템 개발 및 운영을 담당하며 Java 기반의 백엔드 개발, 데이터베이스 쿼리 튜닝, Linux 서버 환경 인프라 관리 경험 등을 통해 실무 경험의 폭을 넓힐 수 있었습니다.',
+      ],
       employmentStatus: 'retire',
       historyList: [
         {
           department: 'BE개발팀',
           role: '백엔드 전임 개발자',
           period: ['2018-04-09', '2020-12-11'],
-          workingList: [],
+          workingList: [
+            '삼성 글로벌 사이트 CMS 솔루션 위젯 개발',
+            '사내 시스템 개발 및 운영',
+            '사내 인프라 관리 (로컬 Gitlab, 로컬 리눅스 서버, 사내 Wiki 서버 등)',
+          ],
           skillNameList: [
             'vue.js',
             'vuex',
