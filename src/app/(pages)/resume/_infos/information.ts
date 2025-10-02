@@ -1,6 +1,7 @@
 import { IInformation } from '@/app/(pages)/resume/_components/infomation/types'
 
 const information: IInformation = {
+  isShow: true,
   introduceText: `안녕하세요.<br/>프론트엔드 개발자 <strong>편도걸</strong>입니다.`,
   contactList: [
     // example: { id: 0, type: 'default', name: '메일', url: 'pdg2491@naver.com', target: '_blank' }

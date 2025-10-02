@@ -1,13 +1,13 @@
 import React from 'react'
 import { History } from './types'
 import ExperienceSkills from './experience-skills'
-import HighlightedText from '@/features/highlighted-text'
 
 type Props = {
   history: History
+  isShowPeriod?: boolean
 }
 
-const ExperienceCompanyHistory = ({ history }: Props) => {
+const ExperienceCompanyHistory = ({ history, isShowPeriod = true }: Props) => {
   const formatDate = (date: string) => date.substring(0, 7).replace('-', '.')
 
   return (
@@ -19,9 +19,11 @@ const ExperienceCompanyHistory = ({ history }: Props) => {
         <span className="text-neutral-500 dark:text-neutral-400">/</span>
         <p className="text-neutral-500 dark:text-neutral-400">{history.role}</p>
       </div>
-      <p className={'text-sm text-neutral-500 dark:text-neutral-400'}>
-        {formatDate(history.period[0])} ~ {history.period[1] && formatDate(history.period[1])}
-      </p>
+      {isShowPeriod && (
+        <p className={'text-sm text-neutral-500 dark:text-neutral-400'}>
+          {formatDate(history.period[0])} ~ {history.period[1] && formatDate(history.period[1])}
+        </p>
+      )}
       <div className={'mt-3 pl-3'}>
         <ul className={'flex list-outside list-disc flex-col gap-1 pl-5'}>
           {history.workingList.map((work, i) => (

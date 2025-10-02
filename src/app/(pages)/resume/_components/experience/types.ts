@@ -1,4 +1,5 @@
 import { SkillName } from '@/app/(pages)/resume/_components/common/skill'
+import { ICommonArticle } from '@/app/(pages)/resume/_components/common/types'
 
 export type History = {
   department: string
@@ -16,7 +17,7 @@ export type Experience = {
   historyList: History[]
 }
 
-export declare interface IExperience {
+export declare interface IExperience extends ICommonArticle {
   experienceList: Experience[]
   isUsedTotalPeriod?: boolean
 }

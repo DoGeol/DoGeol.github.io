@@ -3,6 +3,10 @@ import type { Metadata, NextPage } from 'next'
 import Information from '@/app/(pages)/resume/_components/infomation'
 import Introduce from '@/app/(pages)/resume/_components/introduce'
 import Experience from '@/app/(pages)/resume/_components/experience'
+import Project from '@/app/(pages)/resume/_components/project'
+import Education from '@/app/(pages)/resume/_components/education'
+import Activity from '@/app/(pages)/resume/_components/activity'
+import License from '@/app/(pages)/resume/_components/license'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -16,8 +20,10 @@ const Page: NextPage = () => {
       <Information />
       <Introduce />
       <Experience />
-      <article className={'flex px-6 py-4'}>Projects</article>
-      <article className={'flex px-6 py-4'}>Contact</article>
+      <Project />
+      <Education />
+      <Activity />
+      <License />
     </section>
   )
 }

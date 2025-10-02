@@ -61,7 +61,11 @@ const ExperienceCompany = ({ experience }: Props) => {
 
       <ul className={'mt-2 flex flex-col gap-4'}>
         {experience.historyList.map((history, index) => (
-          <ExperienceCompanyHistory key={index} history={history} />
+          <ExperienceCompanyHistory
+            key={index}
+            history={history}
+            isShowPeriod={experience.historyList.length > 1}
+          />
         ))}
       </ul>
     </li>

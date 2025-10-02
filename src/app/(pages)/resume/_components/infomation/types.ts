@@ -1,3 +1,5 @@
+import { ICommonArticle } from '@/app/(pages)/resume/_components/common/types'
+
 type IntroduceText = string | TrustedHTML
 type Contact = {
   id: number
@@ -7,7 +9,7 @@ type Contact = {
   target: '_self' | '_blank'
 }
 
-export declare interface IInformation {
+export declare interface IInformation extends ICommonArticle {
   introduceText: IntroduceText
   contactList: Contact[]
 }
