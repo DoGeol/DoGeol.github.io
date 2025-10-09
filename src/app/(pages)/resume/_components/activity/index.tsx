@@ -16,7 +16,7 @@ const Activity = () => {
                 <p className={'text-sm text-neutral-500 dark:text-neutral-400'}>
                   {activity.period[0]} ~ {activity.period[1] ?? ''}
                 </p>
-                <p>{activity.summary}</p>
+                {activity.summary && <p>{activity.summary}</p>}
               </div>
             ))}
           </div>

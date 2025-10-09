@@ -5,13 +5,13 @@ const license: ILicense = {
   licenseList: [
     {
       title: '정보처리 산업기사',
-      date: '2020.08',
-      issuer: '한국산업인력공단',
+      date: '2020.06.26',
+      issuer: '산업인력관리공단',
     },
     {
       title: '리눅스 마스터 2급',
-      date: '2020.08',
-      issuer: '한국산업인력공단',
+      date: '2016.12.13',
+      issuer: '한국정보통신인력개발센터',
     },
   ],
 }
