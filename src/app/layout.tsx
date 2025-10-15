@@ -13,7 +13,7 @@ const rootFont = localFont({
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | PDG',
+    template: '%s',
     default: 'Playground',
   },
   description: '일 잘하고 싶은 개발자의 개인 공간',

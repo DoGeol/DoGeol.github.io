@@ -69,12 +69,12 @@ export default function GlobalHeader(): React.JSX.Element {
             <Link href="/" className={'shrink-0 px-2'}>
               <img src={'/logo.png'} alt={'logo-pdg'} className={'h-6 w-6'} />
             </Link>
-            <ul className={'tablet:flex hidden font-medium transition-all'}>
+            <ul className={'tablet:flex hidden font-medium'}>
               {MENUS.map((menu) => (
                 <Link href={menu.path} key={menu.id} scroll={true}>
                   <li
                     className={
-                      'flex cursor-pointer items-center justify-center rounded-xl px-5 py-2 hover:bg-neutral-200 dark:hover:bg-neutral-800'
+                      'flex cursor-pointer items-center justify-center rounded-xl px-5 py-2 transition-all duration-300 hover:bg-neutral-200 dark:hover:bg-neutral-800'
                     }
                   >
                     <span
@@ -97,7 +97,7 @@ export default function GlobalHeader(): React.JSX.Element {
         <div
           className={cn(
             scrollPercent === 0 ? 'opacity-0' : '',
-            'absolute bottom-0 left-0 w-full bg-gray-200 transition-opacity dark:bg-neutral-600',
+            'absolute bottom-0 left-0 w-full bg-gray-200 transition-opacity duration-300 dark:bg-neutral-600',
           )}
         >
           <div
