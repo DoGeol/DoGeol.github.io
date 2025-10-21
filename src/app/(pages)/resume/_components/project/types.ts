@@ -7,7 +7,7 @@ type Work = {
 
 type Project = {
   title: string
-  period: [string, string?] // start, end
+  period: string[] // start, end
   companyName: string
   summary: string
   works: Work[]

@@ -5,7 +5,7 @@ interface Props {
   classNames?: string
 }
 
-const ProfileImage = ({classNames = 'h-40 w-40'} : Props) => {
+const ProfileImage = ({ classNames = 'h-40 w-40' }: Props) => {
   const CommonCircleImageClasses = cn(
     'absolute top-0 left-0 h-full w-full overflow-hidden',
     'border border-solid rounded-full',
@@ -16,7 +16,7 @@ const ProfileImage = ({classNames = 'h-40 w-40'} : Props) => {
   return (
     <div
       className={cn(
-        'shrink-0 hover:[&_.front]:transform-rotate-y-180 hover:[&_.back]:transform-rotate-y-0',
+        'hover:[&_.front]:transform-rotate-y-180 hover:[&_.back]:transform-rotate-y-0 shrink-0',
         classNames,
       )}
       style={{ perspective: '500px' }}
@@ -30,7 +30,7 @@ const ProfileImage = ({classNames = 'h-40 w-40'} : Props) => {
       <div
         className={cn(
           CommonCircleImageClasses,
-          'back transform-rotate-y-180-back bg-[url("/logo.png")]',
+          'back transform-rotate-y-180-back bg-[url("/profile/pdg-profile.webp")]',
         )}
       />
     </div>

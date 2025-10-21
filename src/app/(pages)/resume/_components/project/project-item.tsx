@@ -13,25 +13,27 @@ const ProjectItem = ({ project }: Props) => {
           {project.title}
         </h3>
         <div className={'flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400'}>
-          <p>
-            {project.period[0]} ~ {project.period[1] ?? ''}
-          </p>
-          <span>/</span>
-          <p className={'capitalize'}>{project.companyName}</p>
+          {project.period.length > 0 && (
+            <p>
+              {project.period[0]} ~ {project.period[1] ?? ''}
+            </p>
+          )}
+          {project.period.length > 0 && project.companyName && <span>/</span>}
+          {project.companyName && <p className={'capitalize'}>{project.companyName}</p>}
         </div>
       </div>
       <p className={'mt-2 text-lg text-neutral-500 italic dark:text-neutral-400'}>
         {project.summary}
       </p>
       <ul className={'mt-6 ml-4 list-disc'}>
-        {project.works.map((work) => (
-          <li key={work.text} className={'mt-4'}>
+        {project.works.map((work, wIdx) => (
+          <li key={`${work}_${wIdx}`} className={'mt-4'}>
             <h4 className={'text-lg font-semibold text-neutral-800 dark:text-neutral-50'}>
               {work.text}
             </h4>
             <ul className={'mt-2 ml-4 list-decimal'}>
-              {work.details.map((detail) => (
-                <li key={detail} className={'mt-1.5 text-base font-light'}>
+              {work.details.map((detail, dIdx) => (
+                <li key={`${detail}_${dIdx}`} className={'mt-1.5 text-base font-light'}>
                   {detail}
                 </li>
               ))}
