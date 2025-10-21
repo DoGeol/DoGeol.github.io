@@ -94,7 +94,7 @@ export default function RootLayout({
         className={`${rootFont.className} text-gray-700 dark:bg-neutral-900 dark:text-gray-300`}
       >
         <DarkThemeProvider>
-          <GlobalHeader />
+          {/*<GlobalHeader />*/}
           {children}
         </DarkThemeProvider>
       </body>

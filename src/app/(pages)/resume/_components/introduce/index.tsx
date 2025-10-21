@@ -18,11 +18,7 @@ const Introduce = () => {
               </p>
             ))}
           </div>
-          <div
-            className={
-              'flex w-full flex-col items-end justify-end text-sm font-extralight text-shadow-md'
-            }
-          >
+          <div className={'flex w-full flex-col items-end justify-end text-sm font-extralight'}>
             <p className={'inline-flex items-center justify-center gap-x-1'}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

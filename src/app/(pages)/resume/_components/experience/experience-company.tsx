@@ -47,12 +47,27 @@ const ExperienceCompany = ({ experience }: Props) => {
         </div>
       </div>
 
-      {experience.summary && experience.summary.length > 0 && (
-        <div
-          className={'space-y-3 rounded-2xl bg-gray-50 px-4 py-3 font-light dark:bg-neutral-800'}
-        >
-          {experience.summary?.map((text, idx) => (
-            <p key={idx} className="break-keep whitespace-pre-wrap">
+      {experience.serviceSummary && experience.serviceSummary.length > 0 && (
+        <div className={'rounded-2xl bg-gray-50 px-4 py-3 font-light dark:bg-neutral-800'}>
+          <ul
+            className={
+              'flex list-outside list-disc flex-col gap-1 pl-5'
+              // 'tablet:space-y-0.5 list-inside list-disc space-y-2 font-light dark:bg-neutral-800'
+            }
+          >
+            {experience.serviceSummary?.map((text, idx) => (
+              <li key={idx} className="break-keep whitespace-pre-wrap">
+                <HighlightedText text={text} useUnderline={true} />
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {experience.experienceSummary && experience.experienceSummary.length > 0 && (
+        <div className={'tablet:space-y-0.5 space-y-2 px-4 dark:bg-neutral-800'}>
+          {experience.experienceSummary?.map((text, idx) => (
+            <p key={idx} className="break-all whitespace-pre-wrap">
               <HighlightedText text={text} useUnderline={true} />
             </p>
           ))}

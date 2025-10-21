@@ -21,7 +21,7 @@ export default function HighlightedText({
             key={i}
             className={cn(
               'font-semibold text-gray-800 dark:text-gray-200',
-              useUnderline && 'underline underline-offset-3',
+              useUnderline && 'underline underline-offset-2',
               className,
             )}
           >
