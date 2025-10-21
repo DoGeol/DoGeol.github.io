@@ -38,19 +38,34 @@ const RenderIcon = (type: IInformation['contactList'][number]['type']) => {
         />
       )}
       {type === 'site' && (
-        <>
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3 8.25V18a2.25 2.25 0 0 0 2.25 2.25h13.5A2.25 2.25 0 0 0 21 18V8.25m-18 0V6a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 6v2.25m-18 0h18M5.25 6h.008v.008H5.25V6ZM7.5 6h.008v.008H7.5V6Zm2.25 0h.008v.008H9.75V6Z"
-          />
-        </>
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3 8.25V18a2.25 2.25 0 0 0 2.25 2.25h13.5A2.25 2.25 0 0 0 21 18V8.25m-18 0V6a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 6v2.25m-18 0h18M5.25 6h.008v.008H5.25V6ZM7.5 6h.008v.008H7.5V6Zm2.25 0h.008v.008H9.75V6Z"
+        />
+      )}
+      {type === 'tel' && (
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
+        />
       )}
     </svg>
   )
 }
 
 const Contacts = ({ contactList = [] }: Props) => {
+  const getContactType = (type: IInformation['contactList'][number]['type']) => {
+    if (type === 'email') {
+      return 'mailto:'
+    } else if (type === 'tel') {
+      return 'tel:'
+    } else {
+      return ''
+    }
+  }
+
   return (
     <>
       {contactList && (
@@ -62,7 +77,7 @@ const Contacts = ({ contactList = [] }: Props) => {
         >
           {contactList.map((contact) => (
             <Link
-              href={contact.type === 'email' ? `mailto:${contact.url}` : contact.url}
+              href={`${getContactType(contact.type)}${contact.url}`}
               key={contact.id}
               target={contact.target}
             >
