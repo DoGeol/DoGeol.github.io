@@ -3,7 +3,6 @@ import type { Metadata, Viewport } from 'next'
 import '@/shared/styles/globals.css'
 import localFont from 'next/font/local'
 import DarkThemeProvider from '@/features/theme-provider'
-import GlobalHeader from '@/features/global-header'
 
 const rootFont = localFont({
   src: '../shared/fonts/Pretendard/PretendardVariable.woff2',
@@ -43,7 +42,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: {
-      template: '%s | PDG',
+      template: '%s',
       default: 'Playground',
     },
     description: '일 잘하고 싶은 개발자의 개인 공간',
@@ -63,7 +62,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: {
-      template: '%s | PDG',
+      template: '%s',
       default: 'Playground',
     },
     description: '일 잘하고 싶은 개발자의 개인 공간',
