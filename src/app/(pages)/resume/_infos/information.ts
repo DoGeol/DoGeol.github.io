@@ -6,7 +6,7 @@ const information: IInformation = {
   contactList: [
     // example: { id: 0, type: 'default', name: '메일', url: 'pdg2491@naver.com', target: '_blank' }
     { id: 0, type: 'email', name: '메일', url: 'pdg2491@naver.com', target: '_self' },
-    { id: 2, type: 'tel', name: '전화번호', url: '01062662491', target: '_blank' },
+    // { id: 2, type: 'tel', name: '전화번호', url: '01062662491', target: '_blank' },
     { id: 1, type: 'github', name: '깃허브', url: 'https://github.com/DoGeol', target: '_blank' },
   ],
 }

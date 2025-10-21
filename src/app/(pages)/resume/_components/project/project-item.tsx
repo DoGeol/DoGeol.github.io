@@ -33,7 +33,7 @@ const ProjectItem = ({ project }: Props) => {
             </h4>
             <ul className={'mt-2 ml-4 list-decimal'}>
               {work.details.map((detail, dIdx) => (
-                <li key={`${detail}_${dIdx}`} className={'mt-1.5 text-base font-light'}>
+                <li key={`${detail}_${dIdx}`} className={'mt-1.5 text-base'}>
                   {detail}
                 </li>
               ))}
