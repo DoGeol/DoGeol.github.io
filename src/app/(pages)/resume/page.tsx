@@ -8,13 +8,7 @@ import Education from '@/app/(pages)/resume/_components/education'
 import Activity from '@/app/(pages)/resume/_components/activity'
 import License from '@/app/(pages)/resume/_components/license'
 
-export async function generateMetadata(
-  {
-    params,
-    searchParams,
-  }: { params: { slug: string }; searchParams: { [key: string]: string | string[] | undefined } },
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata(_: any, parent: ResolvingMetadata): Promise<Metadata> {
   const previousOpenGraph = (await parent).openGraph || {}
   const previousTwitter = (await parent).twitter || {}
 
