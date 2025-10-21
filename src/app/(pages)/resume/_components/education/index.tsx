@@ -13,10 +13,22 @@ const Education = () => {
             {education.educationList.map((education) => (
               <div key={education.title}>
                 <p className={'text-xl font-bold'}>{education.title}</p>
-                <p className={'text-sm text-neutral-500 dark:text-neutral-400'}>
+                <div
+                  className={
+                    'flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400'
+                  }
+                >
                   {education.period[0]} ~ {education.period[1] ?? ''}
-                </p>
-                <p>{education.summary}</p>
+                  {education.isGraduate && (
+                    <>
+                      <span>/</span>
+                      <p className={'capitalize'}>{education.isGraduate && '졸업'}</p>
+                    </>
+                  )}
+                  <span>/</span>
+                  <p className={'capitalize'}>{education.major}</p>
+                </div>
+                <p className={'mt-2'}>{education.summary}</p>
               </div>
             ))}
           </div>
