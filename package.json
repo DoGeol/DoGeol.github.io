@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",
     "framer-motion": "^12.23.13",
+    "gray-matter": "^4.0.3",
     "immer": "^10.0.3",
     "next": "15.5.2",
     "next-themes": "^0.2.1",
