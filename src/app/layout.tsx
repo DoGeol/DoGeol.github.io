@@ -82,6 +82,8 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
+import GlobalHeader from '@/features/global-header'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -93,7 +95,7 @@ export default function RootLayout({
         className={`${rootFont.className} text-gray-700 dark:bg-neutral-900 dark:text-gray-300`}
       >
         <DarkThemeProvider>
-          {/*<GlobalHeader />*/}
+          <GlobalHeader />
           {children}
         </DarkThemeProvider>
       </body>

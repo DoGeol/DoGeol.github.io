@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 import { MENUS } from '@/features/global-header/const'
 import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/shared/lib/tailwindcss'
+import { useHeaderStore } from '@/shared/store/header'
 
 const HamburgerIcon = () => (
   <svg
@@ -36,6 +37,7 @@ export default function GlobalHeader(): React.JSX.Element {
   const [scrollPercent, setScrollPercent] = useState<number>(0)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const pathname = usePathname()
+  const { isVisible } = useHeaderStore()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -56,6 +58,8 @@ export default function GlobalHeader(): React.JSX.Element {
       setIsMenuOpen(false)
     }
   }, [pathname])
+
+  if (!isVisible) return <></>
 
   return (
     <>
@@ -78,7 +82,7 @@ export default function GlobalHeader(): React.JSX.Element {
                     }
                   >
                     <span
-                      className={pathname === menu.path ? `text-blue-600 dark:text-blue-400` : ''}
+                      className={pathname === menu.path || pathname.startsWith(`${menu.path}/`) ? `text-blue-600 dark:text-blue-400` : ''}
                     >
                       {menu.title}
                     </span>
