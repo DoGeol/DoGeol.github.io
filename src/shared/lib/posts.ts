@@ -3,7 +3,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import { Post, PostFrontmatter } from '@/shared/types/post'
 
-const postsDirectory = path.join(process.cwd(), 'content/blog')
+const postsDirectory = path.join(process.cwd(), 'content/post')
 
 export function getPosts(): Omit<Post, 'content'>[] {
   const fileNames = fs.readdirSync(postsDirectory)

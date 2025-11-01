@@ -1,20 +1,20 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import { getPosts } from '@/shared/lib/posts';
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { getPosts } from '@/shared/lib/posts'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: '블로그',
     description: 'DoGeol의 기술 블로그',
-  };
+  }
 }
 
 export default function Page() {
-  const posts = getPosts();
+  const posts = getPosts()
 
   return (
-    <section className="w-full max-w-4xl mx-auto py-12 md:py-20 px-4">
-      <div className="space-y-4 mb-12">
+    <section className="mx-auto w-full max-w-4xl px-4 py-12 md:py-20">
+      <div className="mb-12 space-y-4">
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">블로그</h1>
         <p className="text-lg text-gray-500 dark:text-gray-400">
           기술, 개발, 그리고 일상에 대한 생각을 기록합니다.
@@ -24,7 +24,7 @@ export default function Page() {
       <div className="space-y-10">
         {posts.map((post) => (
           <article key={post.slug} className="group">
-            <Link href={`/blog/${post.slug}`}>
+            <Link href={`/post/${post.slug}`}>
               <div className="flex flex-col space-y-2">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {new Date(post.date).toLocaleDateString('ko-KR', {
@@ -46,5 +46,5 @@ export default function Page() {
         ))}
       </div>
     </section>
-  );
+  )
 }

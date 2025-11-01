@@ -1,6 +1,6 @@
 import type { MDXComponents } from 'mdx/types'
 
-const mdxComponents: MDXComponents = {
+export const mdxComponents: MDXComponents = {
   h1: ({ children }) => (
     <h1 className="tracking-tigh mt-10 mb-4 text-4xl font-bold text-red-500">{children}</h1>
   ),
