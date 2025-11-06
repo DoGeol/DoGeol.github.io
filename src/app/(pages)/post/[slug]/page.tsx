@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPostBySlug, getPosts } from '@/shared/lib/posts'
-import { mdxComponents } from '@/shared/components/mdx-components'
+import { mdxComponents } from '@/shared/components/mdx-editor/mdx-components'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { PostDetail } from '@/app/(pages)/post/_components/post-detail'
 
