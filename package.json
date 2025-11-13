@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mdxeditor/editor": "^3.48.0",
     "@types/mdx": "^2.0.13",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",

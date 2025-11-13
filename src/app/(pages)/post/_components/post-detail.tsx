@@ -32,7 +32,7 @@ export function PostDetail({ post, children }: PropsWithChildren<Props>) {
         </p>
       </header>
 
-      <div>{children}</div>
+      <div className="mdx-content">{children}</div>
     </article>
   )
 }

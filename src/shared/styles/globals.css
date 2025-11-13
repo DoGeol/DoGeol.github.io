@@ -32,6 +32,48 @@
     }
 }
 
+@layer components {
+    .mdx-content h1 {
+        @apply tracking-tight mt-10 mb-4 text-4xl font-bold text-red-500;
+    }
+    .mdx-content h2 {
+        @apply mt-8 mb-3 text-3xl font-bold tracking-tight;
+    }
+    .mdx-content h3 {
+        @apply mt-6 mb-2 text-2xl font-semibold tracking-tight;
+    }
+    .mdx-content h4 {
+        @apply mt-4 mb-2 text-xl font-semibold tracking-tight;
+    }
+    .mdx-content h5 {
+        @apply mt-2 mb-1 text-lg font-semibold tracking-tight;
+    }
+    .mdx-content p {
+        @apply my-4 leading-7 whitespace-pre-line;
+    }
+    .mdx-content a {
+        @apply text-blue-600 hover:underline dark:text-blue-400;
+    }
+    .mdx-content ul {
+        @apply my-4 list-disc pl-6;
+    }
+    .mdx-content ol {
+        @apply my-4 list-decimal pl-6;
+    }
+    .mdx-content li {
+        @apply my-2;
+    }
+    .mdx-content blockquote {
+        @apply my-4 border-l-4 pl-4 italic;
+    }
+    .mdx-content pre {
+        @apply block rounded-md bg-gray-100 p-4 font-mono text-sm dark:bg-gray-800 overflow-x-auto;
+    }
+    .mdx-content code {
+        @apply rounded-md bg-gray-100 px-2 py-1 font-mono text-sm dark:bg-gray-800;
+    }
+}
+
 @utility transform-rotate-y-0 {
     transform: rotateY(0deg);
 }
