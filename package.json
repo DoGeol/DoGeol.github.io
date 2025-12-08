@@ -16,7 +16,7 @@
     "dayjs": "^1.11.18",
     "framer-motion": "^12.23.13",
     "immer": "^10.0.3",
-    "next": "15.5.2",
+    "next": "15.5.7",
     "next-themes": "^0.2.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -36,9 +36,5 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2"
-  },
-  "overrides": {
-    "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.2"
   }
 }
