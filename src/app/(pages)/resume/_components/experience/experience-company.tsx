@@ -65,7 +65,7 @@ const ExperienceCompany = ({ experience }: Props) => {
       )}
 
       {experience.experienceSummary && experience.experienceSummary.length > 0 && (
-        <div className={'tablet:space-y-0.5 space-y-2 px-4 dark:bg-neutral-800'}>
+        <div className={'tablet:space-y-0.5 space-y-2 px-4'}>
           {experience.experienceSummary?.map((text, idx) => (
             <p key={idx} className="break-all whitespace-pre-wrap">
               <HighlightedText text={text} useUnderline={true} />
