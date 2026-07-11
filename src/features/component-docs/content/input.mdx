@@ -1,1 +1,44 @@
-# Input
+import {
+  InputBasicExample,
+  InputPasswordExample,
+  InputEnterExample,
+} from '../examples/input-examples'
+import { ComponentPreview } from '../ui/code/component-preview'
+import { SourceCode } from '../ui/code/source-code'
+
+<ComponentPreview>
+  <InputBasicExample />
+</ComponentPreview>
+
+## Usage
+
+기본 input 속성을 그대로 전달하며, 프로젝트 전용 `size`와 `onEnter`를 추가로 지원합니다.
+
+## Examples
+
+### Password
+
+<ComponentPreview>
+  <InputPasswordExample />
+</ComponentPreview>
+
+### Enter
+
+<ComponentPreview>
+  <InputEnterExample />
+</ComponentPreview>
+
+## Props
+
+- `size?: 'small' | 'medium' | 'large'` — 입력 높이, 기본값 `medium`
+- `onEnter?: (event, value) => void` — Enter 입력 시 호출
+- `wrapperClass?: string` — 바깥 wrapper class
+- 그 밖의 표준 `input` 속성
+
+## Source
+
+<SourceCode sourceIds={['input', 'input-examples']} />
+
+## Known limitations
+
+현재 비밀번호 표시 버튼은 접근 가능한 이름과 명시적 `type="button"`이 없습니다. 현행 UI 보존 범위에서는 수정하지 않았으며, 접근성 개선 작업에서 보완해야 합니다.
