@@ -327,38 +327,38 @@ git commit -m "docs: Actions 배포 운영 절차 정리"
 - Consumes: Task 1~3의 manifest, workflow, 문서
 - Produces: 원격 반영 전에 검증된 feature branch
 
-- [ ] **Step 1: frozen install을 확인한다**
+- [x] **Step 1: frozen install을 확인한다**
 
 Run: `pnpm install --frozen-lockfile`
 
 Expected: lockfile 변경 없이 exit code 0으로 끝난다.
 
-- [ ] **Step 2: 전체 문서·코드·빌드 검증을 실행한다**
+- [x] **Step 2: 전체 문서·코드·빌드 검증을 실행한다**
 
 Run: `pnpm docs:check && pnpm check`
 
 Expected: 문서 검사, typecheck, lint, 단위 테스트, format, 정적 build가 성공한다.
 
-- [ ] **Step 3: CI와 로컬 E2E를 모두 실행한다**
+- [x] **Step 3: CI와 로컬 E2E를 모두 실행한다**
 
 Run: `pnpm test:e2e:ci && pnpm test:e2e`
 
 Expected: CI route 10개와 전체 desktop/mobile 12개가 성공한다.
 
-- [ ] **Step 4: workflow와 정적 export를 확인한다**
+- [x] **Step 4: workflow와 정적 export를 확인한다**
 
 Run: `actionlint .github/workflows/quality-and-deploy.yml && test -f out/index.html && test -f out/blog.html && test -f out/resume.html && test -f out/old-resume.html && test -f out/404.html`
 
 Expected: 출력 없이 성공한다.
 
-- [ ] **Step 5: 로컬 검증 결과를 커밋한다**
+- [x] **Step 5: 로컬 검증 결과를 커밋한다**
 
 ```bash
 git add docs/superpowers/plans/2026-07-11-github-actions-pages.md
 git commit -m "docs: Actions 로컬 검증 결과 기록"
 ```
 
-- [ ] **Step 6: 브랜치 차이를 검토한다**
+- [x] **Step 6: 브랜치 차이를 검토한다**
 
 Run: `git diff --check develop...HEAD && git status --short && git log --oneline --decorate develop..HEAD`
 
