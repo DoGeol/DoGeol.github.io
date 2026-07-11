@@ -1,17 +1,17 @@
-export const getLocalStorageObject = (key: string) => {
-  // @ts-ignore
-  return localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : null
+export const getLocalStorageObject = <T>(key: string): T | null => {
+  const value = localStorage.getItem(key)
+  return value ? (JSON.parse(value) as T) : null
 }
 
 export const getLocalStorage = (key: string) => {
-  return localStorage.getItem(key) ? localStorage.getItem(key) : null
+  return localStorage.getItem(key)
 }
 
-export const setLocalStorageObject = (key: string, object: any) => {
+export const setLocalStorageObject = (key: string, object: unknown) => {
   return localStorage.setItem(key, JSON.stringify(object))
 }
 
-export const setLocalStorage = (key: string, data: any) => {
+export const setLocalStorage = (key: string, data: string) => {
   return localStorage.setItem(key, data)
 }
 

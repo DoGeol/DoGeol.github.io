@@ -5,7 +5,7 @@ import ThemeModeButton from '@/features/theme-toggle'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { MENUS } from '@/features/global-header/const'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 import { cn } from '@/shared/lib/tailwindcss'
 
 const HamburgerIcon = () => (

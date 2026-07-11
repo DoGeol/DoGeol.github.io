@@ -11,7 +11,7 @@ import {
 type AccordionRootProps = {
   multiple?: boolean
   values: string[]
-  onChange?: (values: any[]) => void
+  onChange?: (values: string[]) => void
   rounded?: boolean
 }
 
@@ -34,14 +34,18 @@ export const AccordionRoot = ({
   onChange,
   rounded = false,
 }: PropsWithChildren<AccordionRootProps>) => {
-  const [items, setItems] = useState<any[]>(values)
+  const [items, setItems] = useState<string[]>(values)
 
   const setter = useCallback(
     (item: string) => {
       let newItem = new Set([item])
       if (multiple) {
         newItem = new Set(items)
-        newItem.has(item) ? newItem.delete(item) : newItem.add(item)
+        if (newItem.has(item)) {
+          newItem.delete(item)
+        } else {
+          newItem.add(item)
+        }
       }
       setItems(Array.from(newItem))
     },
@@ -56,7 +60,7 @@ export const AccordionRoot = ({
     if (onChange && typeof onChange === 'function') {
       onChange(memoizedItems)
     }
-  }, [memoizedItems])
+  }, [memoizedItems, onChange])
 
   return (
     <AccordionActionsContext.Provider value={{ setter: memoizedSetter }}>

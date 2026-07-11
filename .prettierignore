@@ -71,6 +71,9 @@ typings/
 # next.js build output
 .next
 
+# generated dependency lockfile
+pnpm-lock.yaml
+
 # vuepress build output
 .vuepress/dist
 
