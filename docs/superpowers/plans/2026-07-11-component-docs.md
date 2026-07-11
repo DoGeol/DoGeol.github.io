@@ -90,3 +90,7 @@
 - [ ] `out/components/index.html`, `accordion.html`, `input.html`과 기존 route HTML을 확인한다.
 - [ ] `git diff --check`, 브랜치 diff, Wiki·manifest·MDX 계약을 최종 검토한다.
 - [ ] 완료 체크박스와 검증 결과를 커밋하고 feature branch를 PR 가능한 상태로 둔다.
+
+## 완료 결과
+
+2026-07-11 구현 완료. frozen install, 문서 검사, `pnpm check`, CI E2E 20개, 전체·시각 E2E 24개를 통과했다. 정적 산출물 `components.html`, `components/accordion.html`, `components/input.html`을 확인했다.

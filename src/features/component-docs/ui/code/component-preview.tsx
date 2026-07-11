@@ -1,9 +1,17 @@
 import type { PropsWithChildren } from 'react'
+import { highlightCode } from '../../lib/highlight'
+import type { SourceId } from '../../model/catalog'
+import { readSource } from '../../model/source-registry'
+import { CodeTabs } from './code-tabs'
 
-export function ComponentPreview({ children }: PropsWithChildren) {
+export async function ComponentPreview({
+  children,
+  sourceId,
+}: PropsWithChildren<{ sourceId: SourceId }>) {
+  const code = await readSource(sourceId)
   return (
-    <div className="my-6 flex min-h-72 items-center justify-center rounded-xl border bg-[radial-gradient(#d4d4d4_1px,transparent_1px)] bg-[size:16px_16px] p-6 dark:bg-[radial-gradient(#404040_1px,transparent_1px)]">
+    <CodeTabs code={code} highlightedCode={await highlightCode(code)}>
       {children}
-    </div>
+    </CodeTabs>
   )
 }
