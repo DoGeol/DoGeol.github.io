@@ -42,7 +42,7 @@ jobs:
       - name: Verify static export
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: >-
-          test -f out/index.html && test -f out/blog.html && test -f out/resume.html && test -f out/old-resume.html && test -f out/404.html
+          test -f out/index.html && test -f out/blog.html && test -f out/resume.html && test -f out/old-resume.html && test -f out/components.html && test -f out/components/accordion.html && test -f out/components/input.html && test -f out/404.html
       - name: Configure Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0

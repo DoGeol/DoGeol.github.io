@@ -22,7 +22,11 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-기본 주소는 `http://localhost:3000`이다. `/resume`과 `/old-resume`에서 현재·이전 이력서를 확인한다.
+기본 주소는 `http://localhost:3000`이다. `/resume`과 `/old-resume`에서 이력서를, `/components`에서 UI 카탈로그를 확인한다.
+
+## 컴포넌트 문서
+
+새 컴포넌트 문서는 `src/features/component-docs/model/catalog.ts`에 metadata와 MDX loader를 등록한다. `content`에 사용법을, `examples`에 실행 예제를 추가하고 source ID는 allowlist에 명시한다. 같은 변경에서 route test, sitemap, Wiki를 갱신한다.
 
 ## 검증
 
