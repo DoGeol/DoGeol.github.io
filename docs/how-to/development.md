@@ -36,4 +36,6 @@ pnpm build
 
 전체 검증은 `pnpm check`, route와 screenshot 검증은 `pnpm test:e2e`, 문서 검증은 `pnpm docs:check`를 사용한다.
 
+`pnpm test:e2e:ci`는 Linux CI에서 macOS screenshot을 제외한 route 10개를 검증한다. 현행 디자인 기준선까지 확인하려면 macOS에서 `pnpm test:e2e`를 실행한다.
+
 시각 기준선을 의도적으로 바꿀 때만 `pnpm test:e2e --update-snapshots`를 실행하고 생성된 차이를 검토한다.

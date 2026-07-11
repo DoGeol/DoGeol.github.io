@@ -16,7 +16,7 @@ sourceOfTruth:
 | `src/app/**`                     | 라우트 참조, 프로젝트 구조                             |
 | `src/features/**`                | 프로젝트 구조, 관련 UI 규칙                            |
 | `src/shared/**`                  | 프로젝트 구조, 코드 규칙                               |
-| `.github/workflows/**`           | 개발·배포·문서 최신화 가이드                           |
+| `.github/workflows/**`           | 개발 가이드, Pages 배포 가이드, 테스트 스택            |
 | `AGENTS.md`, `docs/agent/**`     | Wiki 홈과 하네스 설명                                  |
 | 배포 명령·산출물                 | GitHub Pages 가이드                                    |
 

@@ -254,7 +254,7 @@ git commit -m "ci: 품질 검사와 Pages 자동 배포 추가"
 - Consumes: Task 2 workflow 이름과 trigger, Task 1 E2E script
 - Produces: 주간 Action 업데이트와 개발·배포 운영 절차
 
-- [ ] **Step 1: Dependabot 설정을 작성한다**
+- [x] **Step 1: Dependabot 설정을 작성한다**
 
 `.github/dependabot.yml`을 다음 내용으로 만든다.
 
@@ -275,7 +275,7 @@ updates:
     open-pull-requests-limit: 5
 ```
 
-- [ ] **Step 2: 개발 가이드에 CI 검증 경계를 기록한다**
+- [x] **Step 2: 개발 가이드에 CI 검증 경계를 기록한다**
 
 `docs/how-to/development.md`의 검증 절에 다음 내용을 반영한다.
 
@@ -283,7 +283,7 @@ updates:
 `pnpm test:e2e:ci`는 Linux CI에서 macOS screenshot을 제외한 route 10개를 검증한다. 현행 디자인 기준선까지 확인하려면 macOS에서 `pnpm test:e2e`를 실행한다.
 ```
 
-- [ ] **Step 3: 배포 가이드를 Actions 방식으로 교체한다**
+- [x] **Step 3: 배포 가이드를 Actions 방식으로 교체한다**
 
 `docs/how-to/github-pages-deployment.md`에 아래 계약을 기록한다.
 
@@ -296,17 +296,17 @@ updates:
 
 로컬 `pnpm deploy`와 `gh-pages` 브랜치 게시 설명은 제거한다.
 
-- [ ] **Step 4: 문서 연결과 테스트 참조를 갱신한다**
+- [x] **Step 4: 문서 연결과 테스트 참조를 갱신한다**
 
 `docs/reference/doc-map.md`에서 workflow 변경 시 `development.md`, `github-pages-deployment.md`, `stack/testing.md`를 확인하도록 명시한다. `docs/reference/stack/testing.md`에는 `test:e2e:ci`가 visual test만 제외한다는 내용을 추가한다.
 
-- [ ] **Step 5: YAML과 문서를 검증한다**
+- [x] **Step 5: YAML과 문서를 검증한다**
 
 Run: `actionlint .github/workflows/quality-and-deploy.yml && pnpm docs:check && pnpm format:check`
 
 Expected: workflow 오류, 깨진 문서 링크, format 불일치 없이 성공한다.
 
-- [ ] **Step 6: 운영 설정과 Wiki를 커밋한다**
+- [x] **Step 6: 운영 설정과 Wiki를 커밋한다**
 
 ```bash
 git add .github/dependabot.yml docs
