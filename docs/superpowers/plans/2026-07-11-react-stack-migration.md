@@ -306,7 +306,7 @@ Run: `pnpm test`
 
 Expected: 모든 단위·컴포넌트 테스트가 성공한다.
 
-- [ ] **Step 4: 테스트를 커밋한다**
+- [x] **Step 4: 테스트를 커밋한다**
 
 ```bash
 git add src
@@ -326,21 +326,21 @@ git commit -m "test: 이력서 핵심 렌더링 회귀 검증 추가"
 - Consumes: Next.js dev server와 정적 페이지 라우트
 - Produces: desktop/mobile 라우트와 screenshot 기준선
 
-- [ ] **Step 1: 주요 라우트 smoke test를 작성한다**
+- [x] **Step 1: 주요 라우트 smoke test를 작성한다**
 
 `/`, `/blog`, `/resume`, `/old-resume`, 존재하지 않는 경로를 열고 정상 heading 또는 404 문구를 확인한다.
 
-- [ ] **Step 2: desktop과 mobile screenshot assertion을 추가한다**
+- [x] **Step 2: desktop과 mobile screenshot assertion을 추가한다**
 
 `/resume`을 Chromium desktop과 mobile viewport에서 `toHaveScreenshot`으로 검증한다. animation을 비활성화하고 color scheme을 고정한다.
 
-- [ ] **Step 3: Chromium을 설치하고 기준 screenshot을 생성한다**
+- [x] **Step 3: Chromium을 설치하고 기준 screenshot을 생성한다**
 
 Run: `pnpm exec playwright install chromium && pnpm test:e2e --update-snapshots`
 
 Expected: 모든 route test가 통과하고 snapshot 파일이 생성된다.
 
-- [ ] **Step 4: snapshot을 다시 검증한다**
+- [x] **Step 4: snapshot을 다시 검증한다**
 
 Run: `pnpm test:e2e`
 
