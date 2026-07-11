@@ -187,7 +187,7 @@ Run: `pnpm lint && pnpm format:check`
 
 Expected: 경고와 포맷 오류 없이 성공한다.
 
-- [ ] **Step 6: 도구 설정을 커밋한다**
+- [x] **Step 6: 도구 설정을 커밋한다**
 
 ```bash
 git add -A eslint.config.mjs .eslintrc.json .prettierignore .prettierrc.js src
@@ -207,17 +207,17 @@ git commit -m "chore: lint와 format 검증 체계 전환"
 - Consumes: `motion/react`, Vitest, Testing Library
 - Produces: 기존 Accordion 동작을 고정하는 component 테스트
 
-- [ ] **Step 1: Accordion onChange 회귀 테스트를 작성한다**
+- [x] **Step 1: Accordion onChange 회귀 테스트를 작성한다**
 
 초기 values 전달과 item toggle 후 `onChange`가 현재 string 배열을 받는 테스트를 작성한다.
 
-- [ ] **Step 2: 기존 Accordion 동작을 확인한다**
+- [x] **Step 2: 기존 Accordion 동작을 확인한다**
 
 Run: `pnpm vitest run src/shared/ui/Accordion/Root.test.tsx`
 
 Expected: 초기 values와 toggle callback 테스트가 통과한다.
 
-- [ ] **Step 3: 단위 테스트와 lint를 검증한다**
+- [x] **Step 3: 단위 테스트와 lint를 검증한다**
 
 Run: `pnpm vitest run src/shared/ui/Accordion/Root.test.tsx && pnpm lint`
 
