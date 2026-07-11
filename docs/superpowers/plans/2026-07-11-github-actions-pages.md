@@ -380,7 +380,7 @@ Expected: whitespace 오류와 미커밋 파일이 없고 설계·계약·workfl
 - Consumes: Task 4에서 검증한 branch와 GitHub Actions workflow
 - Produces: 성공한 PR quality check, workflow Pages source, 배포된 main site
 
-- [ ] **Step 1: feature branch를 push하고 develop PR을 만든다**
+- [x] **Step 1: feature branch를 push하고 develop PR을 만든다**
 
 ```bash
 git push -u origin codex/github-actions-pages
@@ -393,19 +393,19 @@ gh pr create \
 
 Expected: develop 대상 PR URL이 반환된다.
 
-- [ ] **Step 2: PR quality check를 확인한다**
+- [x] **Step 2: PR quality check를 확인한다**
 
 Run: `gh pr checks --watch --fail-fast`
 
 Expected: `Quality` check가 성공한다. 실패하면 log를 확인해 feature branch에서 수정하고 다시 검증한다.
 
-- [ ] **Step 3: feature PR을 develop에 병합한다**
+- [x] **Step 3: feature PR을 develop에 병합한다**
 
 Run: `gh pr merge --merge`
 
 Expected: PR이 merged 상태가 되고 원격 feature branch가 삭제된다.
 
-- [ ] **Step 4: develop의 push quality를 확인한다**
+- [x] **Step 4: develop의 push quality를 확인한다**
 
 ```bash
 RUN_ID=$(gh run list --workflow "Quality and Deploy" --branch develop --limit 1 --json databaseId --jq '.[0].databaseId')
@@ -414,7 +414,7 @@ gh run watch "$RUN_ID" --exit-status
 
 Expected: develop push의 `Quality`가 성공하고 `Deploy`는 skip된다.
 
-- [ ] **Step 5: develop에서 main으로 승격할 PR을 만든다**
+- [x] **Step 5: develop에서 main으로 승격할 PR을 만든다**
 
 ```bash
 gh pr create \
@@ -426,7 +426,7 @@ gh pr create \
 
 Expected: main 대상 PR URL이 반환된다.
 
-- [ ] **Step 6: main PR quality를 확인하고 Pages source를 전환한다**
+- [x] **Step 6: main PR quality를 확인하고 Pages source를 전환한다**
 
 Run: `gh pr checks --watch --fail-fast`
 
@@ -436,7 +436,7 @@ Run: `gh api --method PUT repos/DoGeol/DoGeol.github.io/pages -f build_type=work
 
 Expected: 오류 없이 Pages 게시 소스가 workflow로 바뀐다.
 
-- [ ] **Step 7: main PR을 병합하고 배포 workflow를 확인한다**
+- [x] **Step 7: main PR을 병합하고 배포 workflow를 확인한다**
 
 ```bash
 gh pr merge --merge
@@ -446,16 +446,16 @@ gh run watch "$RUN_ID" --exit-status
 
 Expected: main 실행의 `Quality`와 `Deploy`가 모두 성공한다.
 
-- [ ] **Step 8: Pages 설정과 공개 사이트를 검증한다**
+- [x] **Step 8: Pages 설정과 공개 사이트를 검증한다**
 
 ```bash
 gh api repos/DoGeol/DoGeol.github.io/pages --jq '{build_type, status, html_url}'
-curl --fail --silent --show-error --location https://dogeol.github.io/ >/dev/null
+node --input-type=module -e "const response = await fetch('https://dogeol.github.io/'); if (!response.ok) process.exit(1)"
 ```
 
 Expected: `build_type`은 `workflow`, `status`는 `built`, 사이트 응답은 HTTP 성공이다.
 
-- [ ] **Step 9: 완료 결과를 Wiki와 계획에 기록한다**
+- [x] **Step 9: 완료 결과를 Wiki와 계획에 기록한다**
 
 메인 checkout의 `develop`에서 원격 병합을 받은 뒤 `docs/how-to/github-pages-deployment.md`에 아래 문장을 추가한다.
 

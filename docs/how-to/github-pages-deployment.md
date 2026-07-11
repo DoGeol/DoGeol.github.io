@@ -34,3 +34,5 @@ test -f out/404.html
 ## 배포 후 확인
 
 `https://dogeol.github.io`의 주요 route, 새로고침, favicon, profile과 company image, robots, sitemap을 확인한다.
+
+2026-07-11에 main Actions의 `Quality`와 `Deploy` 성공, Pages `build_type: workflow`, 공개 route 응답을 확인했다.
