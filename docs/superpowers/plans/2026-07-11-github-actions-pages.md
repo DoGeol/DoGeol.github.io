@@ -115,7 +115,7 @@ git commit -m "test: CI용 Playwright 검증 경로 분리"
 - Consumes: Task 1의 `pnpm test:e2e:ci`, `pnpm check`, Next.js `out/`
 - Produces: `quality` job, main 전용 `deploy` job, `github-pages` artifact
 
-- [ ] **Step 1: workflow 구조 계약 테스트를 추가한다**
+- [x] **Step 1: workflow 구조 계약 테스트를 추가한다**
 
 `scripts/ci-contract.test.ts`에 다음 테스트를 추가한다.
 
@@ -135,13 +135,13 @@ it('main 배포를 quality 성공과 공식 Pages Actions로 제한한다', () =
 })
 ```
 
-- [ ] **Step 2: workflow 파일 부재로 테스트가 실패하는지 확인한다**
+- [x] **Step 2: workflow 파일 부재로 테스트가 실패하는지 확인한다**
 
 Run: `pnpm test scripts/ci-contract.test.ts`
 
 Expected: `.github/workflows/quality-and-deploy.yml`을 읽지 못해 실패한다.
 
-- [ ] **Step 3: 품질 검사와 배포 workflow를 작성한다**
+- [x] **Step 3: 품질 검사와 배포 workflow를 작성한다**
 
 `.github/workflows/quality-and-deploy.yml`을 다음 내용으로 만든다.
 
@@ -219,7 +219,7 @@ jobs:
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
 ```
 
-- [ ] **Step 4: 계약 테스트와 workflow 구문을 검증한다**
+- [x] **Step 4: 계약 테스트와 workflow 구문을 검증한다**
 
 Run: `pnpm test scripts/ci-contract.test.ts`
 
@@ -229,7 +229,7 @@ Run: `command -v actionlint >/dev/null || brew install actionlint; actionlint .g
 
 Expected: actionlint 1.7.12가 출력 없이 성공한다.
 
-- [ ] **Step 5: workflow를 커밋한다**
+- [x] **Step 5: workflow를 커밋한다**
 
 ```bash
 git add .github/workflows/quality-and-deploy.yml scripts/ci-contract.test.ts

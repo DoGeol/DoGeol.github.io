@@ -18,4 +18,21 @@ describe('CI contract', () => {
     expect(packageJson.scripts).not.toHaveProperty('deploy')
     expect(packageJson.devDependencies).not.toHaveProperty('gh-pages')
   })
+
+  it('main 배포를 quality 성공과 공식 Pages Actions로 제한한다', () => {
+    const workflow = readFileSync(
+      path.join(root, '.github/workflows/quality-and-deploy.yml'),
+      'utf8',
+    )
+
+    expect(workflow).toContain('pull_request:')
+    expect(workflow).toContain('branches: [main, develop]')
+    expect(workflow).toContain('pnpm test:e2e:ci')
+    expect(workflow).toContain('needs: quality')
+    expect(workflow).toContain("github.ref == 'refs/heads/main'")
+    expect(workflow).toContain('pages: write')
+    expect(workflow).toContain('id-token: write')
+    expect(workflow).toContain('path: ./out')
+    expect(workflow).not.toMatch(/uses: [^\n]+@v\d/)
+  })
 })
