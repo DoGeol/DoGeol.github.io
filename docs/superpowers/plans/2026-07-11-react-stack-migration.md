@@ -346,7 +346,7 @@ Run: `pnpm test:e2e`
 
 Expected: 갱신 없이 모든 E2E test가 통과한다.
 
-- [ ] **Step 5: E2E 검증을 커밋한다**
+- [x] **Step 5: E2E 검증을 커밋한다**
 
 ```bash
 git add playwright.config.ts tests package.json pnpm-lock.yaml
@@ -370,36 +370,36 @@ git commit -m "test: 주요 페이지 시각 회귀 검증 추가"
 - Consumes: 실제 package manifest, source tree, test/build output
 - Produces: 현재 코드와 일치하는 Wiki와 완료 증거
 
-- [ ] **Step 1: 설치·보류·제거 상태를 실제 manifest와 대조한다**
+- [x] **Step 1: 설치·보류·제거 상태를 실제 manifest와 대조한다**
 
 Run: `pnpm list --depth 0`
 
 Expected: Wiki의 adopted, temporary, deferred, removed 분류와 일치한다.
 
-- [ ] **Step 2: 전체 검증을 실행한다**
+- [x] **Step 2: 전체 검증을 실행한다**
 
 Run: `pnpm docs:check && pnpm check && pnpm test:e2e`
 
 Expected: 모든 명령이 exit code 0으로 끝난다.
 
-- [ ] **Step 3: 정적 export 파일을 확인한다**
+- [x] **Step 3: 정적 export 파일을 확인한다**
 
 Run: `test -f out/index.html && test -f out/blog.html && test -f out/resume.html && test -f out/old-resume.html && test -f out/404.html`
 
 Expected: 명령이 출력 없이 성공한다.
 
-- [ ] **Step 4: 완료 문서를 갱신한다**
+- [x] **Step 4: 완료 문서를 갱신한다**
 
 마이그레이션 문서에 최종 버전, 검증 명령, 기존 경고 해소 여부, 보류 항목을 기록한다. 이 계획의 완료된 단계 체크박스를 실제 상태대로 표시한다.
 
-- [ ] **Step 5: 최종 문서 변경을 커밋한다**
+- [x] **Step 5: 최종 문서 변경을 커밋한다**
 
 ```bash
 git add docs
 git commit -m "docs: React 스택 마이그레이션 결과 최신화"
 ```
 
-- [ ] **Step 6: 전체 브랜치 차이를 검토한다**
+- [x] **Step 6: 전체 브랜치 차이를 검토한다**
 
 Run: `git diff --check && git status --short && git log --oneline --decorate -12`
 

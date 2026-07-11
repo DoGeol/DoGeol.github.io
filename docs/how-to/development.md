@@ -1,5 +1,5 @@
 ---
-status: draft
+status: active
 lastReviewed: 2026-07-11
 sourceOfTruth:
   - ../../package.json
@@ -7,8 +7,6 @@ sourceOfTruth:
 ---
 
 # 개발 가이드
-
-이 문서는 React 스택 마이그레이션 중이며 최종 명령은 작업 완료 시 다시 검증한다.
 
 ## 설치
 
@@ -37,3 +35,5 @@ pnpm build
 ```
 
 전체 검증은 `pnpm check`, route와 screenshot 검증은 `pnpm test:e2e`, 문서 검증은 `pnpm docs:check`를 사용한다.
+
+시각 기준선을 의도적으로 바꿀 때만 `pnpm test:e2e --update-snapshots`를 실행하고 생성된 차이를 검토한다.

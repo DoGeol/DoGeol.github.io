@@ -12,6 +12,9 @@ sourceOfTruth:
 
 - `AGENTS.md`: Codex가 읽는 저장소 규칙 라우터
 - `docs/`: 설명, 참조, 실행 가이드, 마이그레이션 기록
+- `scripts/check-docs.mjs`: 문서 크기와 Markdown 링크 검사
+- `tests/e2e`: 주요 route와 현행 디자인 회귀 검증
+- `eslint.config.mjs`, `vitest.config.ts`, `playwright.config.ts`: 품질 도구 설정
 - `next.config.mjs`: 정적 export와 Next.js 설정
 - `package.json`: 의존성과 개발 명령의 기준
 - `pnpm-lock.yaml`: 재현 가능한 설치 기준
@@ -35,6 +38,8 @@ sourceOfTruth:
 `features`에는 theme, global header, highlighted text가 있다. GlobalHeader는 현재 root layout에서 렌더링하지 않지만 향후 사용을 위해 보존한다. `shared/ui`에는 이전 이력서에서 사용하는 Accordion과 범용 Input이 있다.
 
 `shared/lib/tailwindcss.ts`의 `cn()`은 clsx와 tailwind-merge를 결합한다. `shared/lib/localStorage.ts`는 현재 사용처가 없으므로 후속 정리 후보지만 이번 스택 마이그레이션에서는 삭제하지 않는다.
+
+단위·컴포넌트 테스트는 검증 대상과 같은 디렉터리에 둔다. E2E와 screenshot 기준선은 `tests/e2e`에 두며 실행 산출물은 `output/playwright`에 격리한다.
 
 ## Static assets
 

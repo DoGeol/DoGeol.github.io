@@ -12,7 +12,7 @@ sourceOfTruth:
 
 Next.js App Router와 React를 사용한다. Server Component를 기본으로 하고 Hook, browser API, local interaction이 필요한 경계만 Client Component로 둔다. 이 프로젝트는 `output: 'export'`를 유지하므로 서버 전용 runtime 기능을 추가하지 않는다.
 
-목표 runtime은 Next.js 16.2.10과 React/React DOM 19.2.7이다. Node는 Next.js와 ESLint 조건을 모두 만족하는 22.13 이상을 사용한다.
+현재 runtime은 Next.js 16.2.10과 React/React DOM 19.2.7이다. Node는 Next.js와 ESLint 조건을 모두 만족하는 22.13 이상을 사용한다.
 
 ## Styling
 

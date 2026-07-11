@@ -1,5 +1,5 @@
 ---
-status: draft
+status: active
 lastReviewed: 2026-07-11
 sourceOfTruth:
   - ../../package.json

@@ -16,10 +16,10 @@ sourceOfTruth:
 | Tailwind CSS, PostCSS | adopted | 전체 페이지 styling |
 | clsx, tailwind-merge | adopted | `cn()` class 병합 |
 | Day.js | adopted | 이력서 날짜 계산과 표시 |
-| Motion | planned | GlobalHeader의 Framer Motion 교체 |
-| next-themes | temporary | 현행 dark theme 유지 |
-| Vitest, Testing Library | planned | 순수 로직과 component 회귀 테스트 |
-| Playwright | planned | route와 desktop/mobile 시각 검증 |
+| Motion | adopted | GlobalHeader를 `motion/react`로 전환 |
+| next-themes | adopted | 현행 dark theme 유지 |
+| Vitest, Testing Library | adopted | 순수 로직과 component 회귀 테스트 |
+| Playwright | adopted | route와 desktop/mobile 시각 검증 |
 | ESLint 9, Prettier | adopted | Next.js plugin peer 범위와 호환되는 정적 분석·format 검증 |
 | Immer | removed | 사용처 없음 |
 | Zustand | deferred | 공유 UI 상태 없음 |
@@ -30,4 +30,4 @@ sourceOfTruth:
 | MSW | deferred | API 요청 없음 |
 | dnd-kit, Table, Virtual, Recharts | deferred | 해당 UI 요구 없음 |
 
-상태 의미는 adopted(현재 사용), temporary(교체 전 임시), planned(이번 작업), deferred(요구 발생 시), removed(제거 결정)다.
+상태 의미는 adopted(현재 사용), deferred(요구 발생 시), removed(제거 결정)다.
