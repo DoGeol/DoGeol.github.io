@@ -27,6 +27,7 @@ sourceOfTruth:
 - `blog`: `/blog` placeholder 화면
 - `resume`: 현재 이력서
 - `old-resume`: Accordion 기반 이전 이력서
+- `components`: 정적 MDX 컴포넌트 카탈로그와 동적 slug route
 - `not-found.tsx`: 정적 404 화면
 
 ## Resume
@@ -35,7 +36,7 @@ sourceOfTruth:
 
 ## Features와 Shared
 
-`features`에는 theme, global header, highlighted text가 있다. GlobalHeader는 현재 root layout에서 렌더링하지 않지만 향후 사용을 위해 보존한다. `shared/ui`에는 이전 이력서에서 사용하는 Accordion과 범용 Input이 있다.
+`features`에는 theme, global header, highlighted text와 component docs가 있다. `component-docs`는 타입 manifest, MDX 콘텐츠, 실행 예제, source allowlist, 문서 UI를 함께 관리한다. GlobalHeader는 현재 root layout에서 렌더링하지 않는다. `shared/ui`에는 문서와 이전 이력서에서 사용하는 Accordion과 범용 Input이 있다.
 
 `shared/lib/tailwindcss.ts`의 `cn()`은 clsx와 tailwind-merge를 결합한다. `shared/lib/localStorage.ts`는 현재 사용처가 없으므로 후속 정리 후보지만 이번 스택 마이그레이션에서는 삭제하지 않는다.
 
