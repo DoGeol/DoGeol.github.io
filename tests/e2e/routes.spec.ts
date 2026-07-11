@@ -16,7 +16,7 @@ for (const route of routes) {
   })
 }
 
-test('/resume 현행 디자인을 유지한다', async ({ page }) => {
+test('/resume 현행 디자인을 유지한다 @visual', async ({ page }) => {
   await page.goto('/resume')
   await page.evaluate(() => document.fonts.ready)
 
