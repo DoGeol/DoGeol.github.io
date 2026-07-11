@@ -223,7 +223,7 @@ Run: `pnpm vitest run src/shared/ui/Accordion/Root.test.tsx && pnpm lint`
 
 Expected: 테스트와 lint가 경고 없이 성공한다.
 
-- [ ] **Step 4: 코드 변경을 커밋한다**
+- [x] **Step 4: 코드 변경을 커밋한다**
 
 ```bash
 git add src/features/global-header src/shared/ui/Accordion src/test vitest.config.ts
@@ -243,7 +243,7 @@ git commit -m "refactor: Motion과 Accordion 상태 처리 정비"
 - Consumes: `AGENTS.md`, `docs/agent`, 일반 Wiki Markdown
 - Produces: `checkDocs(root): DocCheckResult`와 `pnpm docs:check`
 
-- [ ] **Step 1: 실패하는 문서 검사 테스트를 작성한다**
+- [x] **Step 1: 실패하는 문서 검사 테스트를 작성한다**
 
 테스트 fixture를 임시 디렉터리에 만들고 다음을 검증한다.
 
@@ -253,23 +253,23 @@ expect(result.errors).toContainEqual(expect.stringContaining('깨진 링크'))
 expect(result.warnings).toContainEqual(expect.stringContaining('12KB'))
 ```
 
-- [ ] **Step 2: 테스트 실패를 확인한다**
+- [x] **Step 2: 테스트 실패를 확인한다**
 
 Run: `pnpm vitest run scripts/check-docs.test.ts`
 
 Expected: `checkDocs` 모듈이 없어 실패한다.
 
-- [ ] **Step 3: 최소 검사기를 구현한다**
+- [x] **Step 3: 최소 검사기를 구현한다**
 
 `checkDocs(root)`는 에이전트 문서 Unicode 길이, 상대 Markdown 링크, 일반 Wiki 250줄·12KB soft limit을 검사한다. CLI 실행 시 오류가 있으면 exit code 1, 경고만 있으면 exit code 0을 반환한다.
 
-- [ ] **Step 4: 테스트와 실제 문서를 검증한다**
+- [x] **Step 4: 테스트와 실제 문서를 검증한다**
 
 Run: `pnpm vitest run scripts/check-docs.test.ts && pnpm docs:check`
 
 Expected: 테스트가 통과하고 실제 문서에 오류가 없다.
 
-- [ ] **Step 5: 진행 원장을 Git에서 제외한다**
+- [x] **Step 5: 진행 원장을 Git에서 제외한다**
 
 `.gitignore`에 `/.superpowers/sdd/`를 추가하고 `.superpowers/sdd/progress.md`는 작업 복구용으로만 유지한다.
 
