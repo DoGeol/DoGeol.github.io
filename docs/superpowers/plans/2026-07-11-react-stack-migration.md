@@ -6,7 +6,7 @@
 
 **Architecture:** 루트 `AGENTS.md`는 짧은 라우터로 두고 세부 규칙과 Wiki를 `docs/`로 분리한다. 런타임은 Next.js App Router와 정적 export를 유지하며 pnpm, Flat Config, Vitest, Playwright를 하나의 검증 체계로 연결한다.
 
-**Tech Stack:** Next.js 16.2.10, React 19.2.7, TypeScript 5.9.2, Tailwind CSS 4.3.2, Motion 12.42.2, Vitest 4.1.10, Playwright 1.61.1
+**Tech Stack:** Next.js 16.2.10, React 19.2.7, TypeScript 5.9.2, Tailwind CSS 4.3.2, Motion 12.42.2, ESLint 9.39.5, Vitest 4.1.10, Playwright 1.61.1
 
 ## Global Constraints
 
@@ -84,15 +84,17 @@ git commit -m "docs: 에이전트 규칙과 프로젝트 위키 구축"
 - Modify: `pnpm-lock.yaml`
 - Modify: `.nvmrc`
 - Modify: `next.config.mjs`
+- Modify: `tsconfig.json`
+- Modify: `src/features/global-header/index.tsx`
 - Delete: `package-lock.json`
 
 **Interfaces:**
 - Consumes: `docs/reference/adoption-matrix.md`의 adopted·temporary 목록
 - Produces: 재현 가능한 pnpm 설치와 Next.js 16 런타임
 
-- [ ] **Step 1: package.json을 목표 버전과 검증 명령으로 갱신한다**
+- [x] **Step 1: package.json을 목표 버전과 검증 명령으로 갱신한다**
 
-핵심 dependency는 Next.js 16.2.10, React 19.2.7, Day.js 1.11.21, Motion 12.42.2, next-themes 0.4.6을 사용한다. `immer`, `zustand`, `framer-motion`을 제거한다. `packageManager`는 실제 사용 pnpm 10 계열을 기록하고 Node 엔진은 ESLint 10 조건을 포함하도록 `>=22.13.0`으로 둔다.
+핵심 dependency는 Next.js 16.2.10, React 19.2.7, Day.js 1.11.21, Motion 12.42.2, next-themes 0.4.6을 사용한다. `immer`, `zustand`, `framer-motion`을 제거한다. `packageManager`는 실제 사용 pnpm 10 계열을 기록하고 Node 엔진은 jsdom 조건을 포함하도록 `>=22.13.0`으로 둔다. ESLint는 Next.js 하위 plugin peer 범위와 호환되는 9.39.5를 사용한다.
 
 스크립트는 다음 책임을 제공한다.
 
@@ -112,22 +114,30 @@ git commit -m "docs: 에이전트 규칙과 프로젝트 위키 구축"
 }
 ```
 
-- [ ] **Step 2: package-lock.json을 제거하고 pnpm lockfile을 갱신한다**
+- [x] **Step 2: package-lock.json을 제거하고 pnpm lockfile을 갱신한다**
 
 Run: `pnpm install`
 
 Expected: `pnpm-lock.yaml`이 새 버전을 해석하고 설치가 성공한다.
 
-- [ ] **Step 3: 깨끗한 설치를 검증한다**
+- [x] **Step 3: 깨끗한 설치를 검증한다**
 
 Run: `pnpm install --frozen-lockfile`
 
 Expected: lockfile 변경 없이 성공한다.
 
-- [ ] **Step 4: 핵심 스택 변경을 커밋한다**
+- [x] **Step 4: Motion import와 Next.js build를 검증한다**
+
+`src/features/global-header/index.tsx`의 import를 `motion/react`로 바꾼다.
+
+Run: `pnpm build`
+
+Expected: Next.js 16.2.10으로 정적 export가 성공한다.
+
+- [ ] **Step 5: 핵심 스택 변경을 커밋한다**
 
 ```bash
-git add package.json pnpm-lock.yaml package-lock.json .nvmrc next.config.mjs
+git add package.json pnpm-lock.yaml package-lock.json .nvmrc next.config.mjs tsconfig.json src/features/global-header/index.tsx
 git commit -m "chore: React 핵심 스택 업데이트"
 ```
 
@@ -142,7 +152,7 @@ git commit -m "chore: React 핵심 스택 업데이트"
 - Format: existing supported source and documentation files
 
 **Interfaces:**
-- Consumes: Next.js 16과 ESLint 10
+- Consumes: Next.js 16과 ESLint 9 Flat Config
 - Produces: `pnpm lint`, `pnpm format:check` 검증 명령
 
 - [ ] **Step 1: Next.js Flat Config를 작성한다**
@@ -178,17 +188,16 @@ git add -A eslint.config.mjs .eslintrc.json .prettierignore .prettierrc.js src
 git commit -m "chore: lint와 format 검증 체계 전환"
 ```
 
-### Task 4: Motion 전환과 Accordion 동작 테스트
+### Task 4: Accordion 동작 테스트
 
 **Files:**
-- Modify: `src/features/global-header/index.tsx`
 - Create: `src/shared/ui/Accordion/Root.test.tsx`
 - Create: `vitest.config.ts`
 - Create: `src/test/setup.ts`
 
 **Interfaces:**
 - Consumes: `motion/react`, Vitest, Testing Library
-- Produces: 기존 Accordion 동작을 고정하는 테스트와 Motion 패키지 전환
+- Produces: 기존 Accordion 동작을 고정하는 component 테스트
 
 - [ ] **Step 1: Accordion onChange 회귀 테스트를 작성한다**
 
@@ -200,17 +209,13 @@ Run: `pnpm vitest run src/shared/ui/Accordion/Root.test.tsx`
 
 Expected: 초기 values와 toggle callback 테스트가 통과한다.
 
-- [ ] **Step 3: Motion import를 교체한다**
-
-`framer-motion` import를 `motion/react`로 변경한다. 애니메이션 값과 markup은 유지한다.
-
-- [ ] **Step 4: 단위 테스트와 lint를 검증한다**
+- [ ] **Step 3: 단위 테스트와 lint를 검증한다**
 
 Run: `pnpm vitest run src/shared/ui/Accordion/Root.test.tsx && pnpm lint`
 
 Expected: 테스트와 lint가 경고 없이 성공한다.
 
-- [ ] **Step 5: 코드 변경을 커밋한다**
+- [ ] **Step 4: 코드 변경을 커밋한다**
 
 ```bash
 git add src/features/global-header src/shared/ui/Accordion src/test vitest.config.ts

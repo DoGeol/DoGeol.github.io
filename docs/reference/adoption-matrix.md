@@ -20,7 +20,7 @@ sourceOfTruth:
 | next-themes | temporary | 현행 dark theme 유지 |
 | Vitest, Testing Library | planned | 순수 로직과 component 회귀 테스트 |
 | Playwright | planned | route와 desktop/mobile 시각 검증 |
-| ESLint, Prettier | adopted | 정적 분석과 format 검증 |
+| ESLint 9, Prettier | adopted | Next.js plugin peer 범위와 호환되는 정적 분석·format 검증 |
 | Immer | removed | 사용처 없음 |
 | Zustand | deferred | 공유 UI 상태 없음 |
 | Astryx | deferred | 현행 디자인 유지와 Beta 위험 |

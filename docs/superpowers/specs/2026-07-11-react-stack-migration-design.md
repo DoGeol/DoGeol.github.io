@@ -11,7 +11,7 @@
 - `framer-motion`을 `motion`으로 교체한다.
 - 사용하지 않는 `immer`, `zustand`를 제거한다.
 - `next-themes`는 현행 다크 테마를 위해 유지하고 0.4.6으로 업데이트한다.
-- ESLint Flat Config, Prettier, Vitest, Testing Library, Playwright를 구성한다.
+- ESLint 9 Flat Config, Prettier, Vitest, Testing Library, Playwright를 구성한다. 기준 문서의 ESLint 10은 Next.js 하위 plugin의 peer 범위가 열릴 때까지 보류한다.
 - 프로젝트 구조, 라우트, 기술 스택, 개발·배포 절차를 `docs/`에 기록한다.
 - `GEMINI.md`의 유효한 규칙을 분리 문서로 이전한 뒤 삭제한다.
 
