@@ -6,6 +6,10 @@
 기억은 생각보다 빠르게 잊혀진다.  
 기억보단 기록을 믿어보자.
 
+## Wiki
+
+프로젝트 구조, 기술 스택, 개발·배포 절차는 [프로젝트 Wiki](docs/README.md)에서 관리한다.
+
 ----
 
 ### Commit Message Convention

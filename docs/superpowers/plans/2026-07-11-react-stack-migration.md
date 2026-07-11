@@ -52,19 +52,19 @@
 - Consumes: 승인된 설계 명세와 현재 저장소 구조
 - Produces: Codex가 읽는 루트 라우터, 작업별 규칙, 사람이 탐색하는 Wiki
 
-- [ ] **Step 1: 루트 규칙과 300자 이하 세부 규칙을 작성한다**
+- [x] **Step 1: 루트 규칙과 300자 이하 세부 규칙을 작성한다**
 
 `AGENTS.md`는 관련 문서를 읽으라는 명시적 링크만 유지한다. `docs/agent` 규칙은 workflow, harness, code, ui, wiki, verify 책임을 중복 없이 나눈다.
 
-- [ ] **Step 2: 프로젝트 구조와 기술 Wiki를 작성한다**
+- [x] **Step 2: 프로젝트 구조와 기술 Wiki를 작성한다**
 
 현재 `src/app`, `src/features`, `src/shared`, `public` 책임과 실제 라우트를 기록한다. 기술 카탈로그는 역할별 파일로 분리하고 각 패키지를 adopted, temporary, planned, deferred, removed 중 하나로 분류한다.
 
-- [ ] **Step 3: GEMINI.md 규칙을 이전하고 삭제한다**
+- [x] **Step 3: GEMINI.md 규칙을 이전하고 삭제한다**
 
 App Router, Server Component 기본, strict TypeScript, kebab-case, Tailwind mobile-first, `img` 사용, Motion/CSS 구분, 검증 규칙만 유지한다. Next.js 15, Framer Motion, SWR, Atomic Design 강제, `mo:` 접두사 규칙은 폐기한다.
 
-- [ ] **Step 4: 문서 링크를 수동 검증한다**
+- [x] **Step 4: 문서 링크를 수동 검증한다**
 
 Run: `find docs -type f -name '*.md' | sort`
 
