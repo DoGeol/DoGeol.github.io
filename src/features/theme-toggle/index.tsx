@@ -1,19 +1,23 @@
 'use client'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useSyncExternalStore } from 'react'
 import { useTheme } from 'next-themes'
+
+const subscribeToMountedState = () => () => undefined
+const getMountedSnapshot = () => true
+const getServerMountedSnapshot = () => false
 
 export default function ThemeModeButton(): React.JSX.Element {
   const { systemTheme, theme, setTheme } = useTheme()
   const currentTheme = theme === 'system' ? systemTheme : theme
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    subscribeToMountedState,
+    getMountedSnapshot,
+    getServerMountedSnapshot,
+  )
 
   const handleClickButton = useCallback(() => {
     setTheme(currentTheme === 'dark' ? 'light' : 'dark')
   }, [currentTheme, setTheme])
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   if (!mounted) {
     return <></>

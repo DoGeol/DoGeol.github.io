@@ -1,11 +1,5 @@
 export type SkillCategory =
-  | 'frontend'
-  | 'app'
-  | 'backend'
-  | 'devops'
-  | 'analysis'
-  | 'collaboration'
-  | 'etc'
+  'frontend' | 'app' | 'backend' | 'devops' | 'analysis' | 'collaboration' | 'etc'
 
 export interface SkillDefinition {
   name: string

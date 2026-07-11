@@ -22,6 +22,7 @@
 ### Task 1: 에이전트 라우터와 Wiki 기반 구축
 
 **Files:**
+
 - Create: `AGENTS.md`
 - Create: `docs/README.md`
 - Create: `docs/agent/workflow.md`
@@ -49,6 +50,7 @@
 - Delete: `GEMINI.md`
 
 **Interfaces:**
+
 - Consumes: 승인된 설계 명세와 현재 저장소 구조
 - Produces: Codex가 읽는 루트 라우터, 작업별 규칙, 사람이 탐색하는 Wiki
 
@@ -70,7 +72,7 @@ Run: `find docs -type f -name '*.md' | sort`
 
 Expected: 설계에 명시한 문서가 모두 출력되고 빈 문서가 없다.
 
-- [ ] **Step 5: 문서 기반 변경을 커밋한다**
+- [x] **Step 5: 문서 기반 변경을 커밋한다**
 
 ```bash
 git add AGENTS.md README.md docs GEMINI.md
@@ -80,6 +82,7 @@ git commit -m "docs: 에이전트 규칙과 프로젝트 위키 구축"
 ### Task 2: pnpm 단일화와 핵심 스택 업데이트
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `pnpm-lock.yaml`
 - Modify: `.nvmrc`
@@ -89,6 +92,7 @@ git commit -m "docs: 에이전트 규칙과 프로젝트 위키 구축"
 - Delete: `package-lock.json`
 
 **Interfaces:**
+
 - Consumes: `docs/reference/adoption-matrix.md`의 adopted·temporary 목록
 - Produces: 재현 가능한 pnpm 설치와 Next.js 16 런타임
 
@@ -134,7 +138,7 @@ Run: `pnpm build`
 
 Expected: Next.js 16.2.10으로 정적 export가 성공한다.
 
-- [ ] **Step 5: 핵심 스택 변경을 커밋한다**
+- [x] **Step 5: 핵심 스택 변경을 커밋한다**
 
 ```bash
 git add package.json pnpm-lock.yaml package-lock.json .nvmrc next.config.mjs tsconfig.json src/features/global-header/index.tsx
@@ -144,6 +148,7 @@ git commit -m "chore: React 핵심 스택 업데이트"
 ### Task 3: ESLint Flat Config와 포맷 기준 정비
 
 **Files:**
+
 - Create: `eslint.config.mjs`
 - Modify: `.prettierignore`
 - Modify: `.prettierrc.js`
@@ -152,30 +157,31 @@ git commit -m "chore: React 핵심 스택 업데이트"
 - Format: existing supported source and documentation files
 
 **Interfaces:**
+
 - Consumes: Next.js 16과 ESLint 9 Flat Config
 - Produces: `pnpm lint`, `pnpm format:check` 검증 명령
 
-- [ ] **Step 1: Next.js Flat Config를 작성한다**
+- [x] **Step 1: Next.js Flat Config를 작성한다**
 
 `eslint-config-next/core-web-vitals`와 `eslint-config-next/typescript` 배열을 `defineConfig`로 결합하고 `.next`, `out`, `coverage`, worktree scratch 경로를 무시한다.
 
-- [ ] **Step 2: Prettier로 저장소를 일괄 포맷한다**
+- [x] **Step 2: Prettier로 저장소를 일괄 포맷한다**
 
 Run: `pnpm format`
 
 Expected: 기존 18개 불일치 파일이 포맷되고 명령이 성공한다.
 
-- [ ] **Step 3: lint가 기존 Hook 경고를 실패로 처리하는지 확인한다**
+- [x] **Step 3: lint가 기존 Hook 경고를 실패로 처리하는지 확인한다**
 
 Run: `pnpm lint`
 
 Expected: Accordion Hook 의존성 경고 1건 때문에 `--max-warnings=0`으로 실패한다.
 
-- [ ] **Step 4: Accordion 타입과 effect 의존성을 최소 수정한다**
+- [x] **Step 4: Accordion 타입과 effect 의존성을 최소 수정한다**
 
 `any[]`를 `string[]`으로 바꾸고 `onChange`를 effect 의존성에 포함한다. 렌더링 markup과 기존 toggle 동작은 바꾸지 않는다.
 
-- [ ] **Step 5: lint와 format check를 다시 실행한다**
+- [x] **Step 5: lint와 format check를 다시 실행한다**
 
 Run: `pnpm lint && pnpm format:check`
 
@@ -191,11 +197,13 @@ git commit -m "chore: lint와 format 검증 체계 전환"
 ### Task 4: Accordion 동작 테스트
 
 **Files:**
+
 - Create: `src/shared/ui/Accordion/Root.test.tsx`
 - Create: `vitest.config.ts`
 - Create: `src/test/setup.ts`
 
 **Interfaces:**
+
 - Consumes: `motion/react`, Vitest, Testing Library
 - Produces: 기존 Accordion 동작을 고정하는 component 테스트
 
@@ -225,11 +233,13 @@ git commit -m "refactor: Motion과 Accordion 상태 처리 정비"
 ### Task 5: 문서 하네스 검사기를 TDD로 구현
 
 **Files:**
+
 - Create: `scripts/check-docs.test.ts`
 - Create: `scripts/check-docs.mjs`
 - Modify: `.gitignore`
 
 **Interfaces:**
+
 - Consumes: `AGENTS.md`, `docs/agent`, 일반 Wiki Markdown
 - Produces: `checkDocs(root): DocCheckResult`와 `pnpm docs:check`
 
@@ -273,10 +283,12 @@ git commit -m "test: 문서 하네스 검증 추가"
 ### Task 6: 핵심 로직 단위 테스트 추가
 
 **Files:**
+
 - Create: `src/app/(pages)/resume/_components/experience/utils.test.ts`
 - Create: `src/features/highlighted-text/index.test.tsx`
 
 **Interfaces:**
+
 - Consumes: 현재 경력 계산과 강조 표시 API
 - Produces: 마이그레이션 전후 동일 동작을 보장하는 단위 테스트
 
@@ -304,11 +316,13 @@ git commit -m "test: 이력서 핵심 렌더링 회귀 검증 추가"
 ### Task 7: Playwright 라우트·시각 회귀 검증
 
 **Files:**
+
 - Create: `playwright.config.ts`
 - Create: `tests/e2e/routes.spec.ts`
 - Create: `tests/e2e/routes.spec.ts-snapshots/*`
 
 **Interfaces:**
+
 - Consumes: Next.js dev server와 정적 페이지 라우트
 - Produces: desktop/mobile 라우트와 screenshot 기준선
 
@@ -342,6 +356,7 @@ git commit -m "test: 주요 페이지 시각 회귀 검증 추가"
 ### Task 8: Wiki 최신화와 전체 완료 검증
 
 **Files:**
+
 - Modify: `docs/reference/adoption-matrix.md`
 - Modify: `docs/reference/stack/*.md`
 - Modify: `docs/explanation/project-structure.md`
@@ -351,6 +366,7 @@ git commit -m "test: 주요 페이지 시각 회귀 검증 추가"
 - Modify: this plan
 
 **Interfaces:**
+
 - Consumes: 실제 package manifest, source tree, test/build output
 - Produces: 현재 코드와 일치하는 Wiki와 완료 증거
 

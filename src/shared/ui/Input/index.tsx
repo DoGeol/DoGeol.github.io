@@ -1,12 +1,7 @@
 'use client'
 
 import React, { forwardRef, PropsWithChildren, Ref, useCallback, useEffect, useState } from 'react'
-import {
-  iconSizeClasses,
-  IInputProps,
-  passwordClasses,
-  sizeClasses,
-} from '@/shared/ui/Input/types'
+import { iconSizeClasses, IInputProps, passwordClasses, sizeClasses } from '@/shared/ui/Input/types'
 
 export default forwardRef<HTMLInputElement, IInputProps>(function DInput(
   {

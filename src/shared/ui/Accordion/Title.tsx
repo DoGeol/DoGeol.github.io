@@ -19,7 +19,7 @@ export const AccordionTitle = ({
 
   return (
     <div
-      className={`flex items-center justify-between px-6 transition-all cursor-pointer h-20 hover:[&>span]:underline hover:[&>span]:underline-offset-4 ${isExpanded ? 'bg-blue-100 dark:bg-blue-900' : ''} ${wrapperClass}`}
+      className={`flex h-20 cursor-pointer items-center justify-between px-6 transition-all hover:[&>span]:underline hover:[&>span]:underline-offset-4 ${isExpanded ? 'bg-blue-100 dark:bg-blue-900' : ''} ${wrapperClass}`}
       onClick={() => {
         setter(itemValue)
       }}
@@ -31,7 +31,7 @@ export const AccordionTitle = ({
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className={`w-8 h-8 ${isExpanded ? '-rotate-180' : ''} shrink-0 text-neutral-500 transition-transform`}
+        className={`h-8 w-8 ${isExpanded ? '-rotate-180' : ''} shrink-0 text-neutral-500 transition-transform`}
       >
         <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
       </svg>

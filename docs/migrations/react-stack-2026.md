@@ -14,13 +14,13 @@ sourceOfTruth:
 
 ## 기준선
 
-| 검사 | 결과 |
-| --- | --- |
-| `pnpm build` | 성공 |
-| `tsc --noEmit` | 성공 |
+| 검사             | 결과                          |
+| ---------------- | ----------------------------- |
+| `pnpm build`     | 성공                          |
+| `tsc --noEmit`   | 성공                          |
 | 기존 `next lint` | 성공, Accordion Hook 경고 1건 |
-| Prettier check | 18개 파일 불일치 |
-| unit/E2E | 구성 없음 |
+| Prettier check   | 18개 파일 불일치              |
+| unit/E2E         | 구성 없음                     |
 
 ## 진행 순서
 
