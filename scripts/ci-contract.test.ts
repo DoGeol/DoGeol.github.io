@@ -6,6 +6,7 @@ import { describe, expect, it } from 'vitest'
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const packageJson = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'))
 const routesSpec = readFileSync(path.join(root, 'tests/e2e/routes.spec.ts'), 'utf8')
+const nodeVersion = readFileSync(path.join(root, '.nvmrc'), 'utf8').trim()
 
 describe('CI contract', () => {
   it('Linux CI에서는 visual screenshot test만 제외한다', () => {
@@ -34,5 +35,9 @@ describe('CI contract', () => {
     expect(workflow).toContain('id-token: write')
     expect(workflow).toContain('path: ./out')
     expect(workflow).not.toMatch(/uses: [^\n]+@v\d/)
+  })
+
+  it('setup-node가 설치 가능한 Node 버전을 사용한다', () => {
+    expect(nodeVersion).toBe('22.16.0')
   })
 })
