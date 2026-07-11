@@ -32,6 +32,35 @@
   }
 }
 
+.docs-prose h2 {
+  @apply mt-12 mb-4 scroll-mt-20 text-2xl font-semibold tracking-tight;
+}
+.docs-prose h3 {
+  @apply mt-8 mb-3 scroll-mt-20 text-xl font-semibold;
+}
+.docs-prose p {
+  @apply my-4 leading-7 text-neutral-600 dark:text-neutral-400;
+}
+.docs-prose ul {
+  @apply my-4 list-disc space-y-2 pl-6;
+}
+.docs-prose code:not(pre code) {
+  @apply rounded bg-neutral-100 px-1.5 py-0.5 text-sm dark:bg-neutral-800;
+}
+.docs-code .shiki {
+  @apply min-w-max p-4;
+  background-color: var(--shiki-light-bg) !important;
+}
+.docs-code .shiki span {
+  color: var(--shiki-light);
+}
+.dark .docs-code .shiki {
+  background-color: var(--shiki-dark-bg) !important;
+}
+.dark .docs-code .shiki span {
+  color: var(--shiki-dark);
+}
+
 @utility transform-rotate-y-0 {
   transform: rotateY(0deg);
 }

@@ -4,7 +4,12 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
-import { componentDocs, type ComponentSlug } from '../../model/catalog'
+import type { ComponentSlug } from '../../model/catalog'
+
+const navigationDocs = [
+  { slug: 'accordion', title: 'Accordion', category: 'Disclosure' },
+  { slug: 'input', title: 'Input', category: 'Form' },
+] as const
 
 function NavLinks({ currentSlug }: { currentSlug?: ComponentSlug }) {
   const pathname = usePathname()
@@ -16,7 +21,7 @@ function NavLinks({ currentSlug }: { currentSlug?: ComponentSlug }) {
             {category}
           </h2>
           <ul className="space-y-1">
-            {componentDocs
+            {navigationDocs
               .filter((doc) => doc.category === category)
               .map((doc) => {
                 const active = currentSlug === doc.slug || pathname === `/components/${doc.slug}`
