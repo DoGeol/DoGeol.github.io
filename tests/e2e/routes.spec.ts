@@ -48,7 +48,22 @@ test('모바일 컴포넌트 메뉴를 연다', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/components/accordion')
   await page.getByRole('button', { name: '메뉴 열기' }).click()
+  const dialog = page.getByRole('dialog', { name: '컴포넌트 메뉴' })
+  await expect(dialog).toBeVisible()
+  await expect(dialog).toHaveCSS('position', 'fixed')
+  await expect(dialog).toHaveCSS('inset', '0px')
+  await expect(page.locator('body')).toHaveCSS('overflow', 'hidden')
+  expect(await dialog.boundingBox()).toEqual({ x: 0, y: 0, width: 390, height: 844 })
+})
+
+test('모바일 컴포넌트 메뉴 배경을 유지한다 @visual', async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith('mobile'), 'mobile 전용 시각 기준선')
+  await page.addInitScript(() => window.localStorage.setItem('theme', 'dark'))
+  await page.goto('/components/accordion')
+  await expect(page.locator('html')).toHaveClass('dark')
+  await page.getByRole('button', { name: '메뉴 열기' }).click()
   await expect(page.getByRole('dialog', { name: '컴포넌트 메뉴' })).toBeVisible()
+  await expect(page).toHaveScreenshot('component-mobile-menu.png')
 })
 
 test('/components/accordion 현행 디자인을 유지한다 @visual', async ({ page }) => {
