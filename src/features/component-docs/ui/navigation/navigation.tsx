@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 import type { ComponentSlug } from '../../model/catalog'
 
@@ -64,6 +65,15 @@ export function MobileDocsNav({ currentSlug }: { currentSlug?: ComponentSlug }) 
     return () => window.removeEventListener('keydown', close)
   }, [open])
 
+  useEffect(() => {
+    if (!open) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [open])
+
   return (
     <>
       <button
@@ -74,28 +84,30 @@ export function MobileDocsNav({ currentSlug }: { currentSlug?: ComponentSlug }) 
       >
         Menu
       </button>
-      {open && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="컴포넌트 메뉴"
-          className="fixed inset-0 z-50 bg-white p-6 dark:bg-neutral-950"
-        >
-          <div className="mb-8 flex items-center justify-between">
-            <strong>Components</strong>
-            <button
-              onClick={() => {
-                setOpen(false)
-                requestAnimationFrame(() => buttonRef.current?.focus())
-              }}
-              aria-label="메뉴 닫기"
-            >
-              Close
-            </button>
-          </div>
-          <NavLinks currentSlug={currentSlug} />
-        </div>
-      )}
+      {open &&
+        createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="컴포넌트 메뉴"
+            className="fixed inset-0 z-50 bg-white p-6 dark:bg-neutral-950"
+          >
+            <div className="mb-8 flex items-center justify-between">
+              <strong>Components</strong>
+              <button
+                onClick={() => {
+                  setOpen(false)
+                  requestAnimationFrame(() => buttonRef.current?.focus())
+                }}
+                aria-label="메뉴 닫기"
+              >
+                Close
+              </button>
+            </div>
+            <NavLinks currentSlug={currentSlug} />
+          </div>,
+          document.body,
+        )}
     </>
   )
 }
