@@ -273,7 +273,7 @@ Expected: 테스트가 통과하고 실제 문서에 오류가 없다.
 
 `.gitignore`에 `/.superpowers/sdd/`를 추가하고 `.superpowers/sdd/progress.md`는 작업 복구용으로만 유지한다.
 
-- [ ] **Step 6: 문서 검사기를 커밋한다**
+- [x] **Step 6: 문서 검사기를 커밋한다**
 
 ```bash
 git add scripts .gitignore package.json docs
@@ -292,15 +292,15 @@ git commit -m "test: 문서 하네스 검증 추가"
 - Consumes: 현재 경력 계산과 강조 표시 API
 - Produces: 마이그레이션 전후 동일 동작을 보장하는 단위 테스트
 
-- [ ] **Step 1: 경력 기간 테스트를 작성한다**
+- [x] **Step 1: 경력 기간 테스트를 작성한다**
 
 종료일이 있는 단일 경력, 여러 회사 합산, 회사 표시 기간을 고정 날짜 fixture로 검증한다.
 
-- [ ] **Step 2: 강조 표시 테스트를 작성한다**
+- [x] **Step 2: 강조 표시 테스트를 작성한다**
 
 `**텍스트**`가 strong으로 렌더링되고 일반 문자열이 그대로 유지되는지 검증한다.
 
-- [ ] **Step 3: 단위 테스트를 실행한다**
+- [x] **Step 3: 단위 테스트를 실행한다**
 
 Run: `pnpm test`
 
