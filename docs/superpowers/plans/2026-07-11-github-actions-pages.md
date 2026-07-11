@@ -34,7 +34,7 @@
 - Consumes: 기존 `pnpm test:e2e`, `/resume` screenshot test, pnpm manifest
 - Produces: `pnpm test:e2e:ci`, `@visual` tag, legacy `gh-pages`가 없는 manifest
 
-- [ ] **Step 1: CI script와 visual tag 계약 테스트를 작성한다**
+- [x] **Step 1: CI script와 visual tag 계약 테스트를 작성한다**
 
 `scripts/ci-contract.test.ts`를 다음 내용으로 만든다.
 
@@ -44,7 +44,7 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
-const root = path.dirname(fileURLToPath(new URL('../package.json', import.meta.url)))
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const packageJson = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'))
 const routesSpec = readFileSync(path.join(root, 'tests/e2e/routes.spec.ts'), 'utf8')
 
@@ -62,13 +62,13 @@ describe('CI contract', () => {
 })
 ```
 
-- [ ] **Step 2: 계약 테스트가 실패하는지 확인한다**
+- [x] **Step 2: 계약 테스트가 실패하는지 확인한다**
 
 Run: `pnpm test scripts/ci-contract.test.ts`
 
 Expected: `test:e2e:ci`가 없고 기존 deploy script와 `gh-pages`가 있어 2개 테스트가 실패한다.
 
-- [ ] **Step 3: E2E CI script와 visual tag를 추가한다**
+- [x] **Step 3: E2E CI script와 visual tag를 추가한다**
 
 `package.json` scripts에 아래 항목을 추가하고 `predeploy`, `deploy`를 삭제한다.
 
@@ -82,19 +82,19 @@ Expected: `test:e2e:ci`가 없고 기존 deploy script와 `gh-pages`가 있어 2
 test('/resume 현행 디자인을 유지한다 @visual', async ({ page }) => {
 ```
 
-- [ ] **Step 4: legacy dependency와 lockfile을 제거한다**
+- [x] **Step 4: legacy dependency와 lockfile을 제거한다**
 
 Run: `pnpm remove -D gh-pages`
 
 Expected: `package.json` devDependencies와 `pnpm-lock.yaml`에서 `gh-pages` 및 전용 하위 dependency가 제거된다.
 
-- [ ] **Step 5: 계약과 두 E2E 경로를 검증한다**
+- [x] **Step 5: 계약과 두 E2E 경로를 검증한다**
 
 Run: `pnpm test scripts/ci-contract.test.ts && pnpm test:e2e:ci && pnpm test:e2e`
 
 Expected: 계약 2개, CI route 10개, 전체 E2E 12개가 성공한다.
 
-- [ ] **Step 6: CI 실행 계약을 커밋한다**
+- [x] **Step 6: CI 실행 계약을 커밋한다**
 
 ```bash
 git add package.json pnpm-lock.yaml tests/e2e/routes.spec.ts scripts/ci-contract.test.ts
