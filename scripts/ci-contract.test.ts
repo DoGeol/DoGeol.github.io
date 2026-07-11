@@ -34,6 +34,9 @@ describe('CI contract', () => {
     expect(workflow).toContain('pages: write')
     expect(workflow).toContain('id-token: write')
     expect(workflow).toContain('path: ./out')
+    expect(workflow).toContain('out/components.html')
+    expect(workflow).toContain('out/components/accordion.html')
+    expect(workflow).toContain('out/components/input.html')
     expect(workflow).not.toMatch(/uses: [^\n]+@v\d/)
   })
 
