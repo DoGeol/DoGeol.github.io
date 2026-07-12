@@ -81,6 +81,20 @@ describe('ResumeEditor', () => {
     expect(screen.queryByText('프리뷰 준비 중')).not.toBeInTheDocument()
   })
 
+  it('catalog card를 기본 DOM에서 제외하고 validation target일 때 자동 마운트한다', async () => {
+    const user = createUser()
+    const draft = createResumeFixture()
+    draft.skillCatalog[0]!.label = ''
+    render(<ResumeEditor initialResume={draft} />)
+
+    expect(screen.queryByLabelText('기술 ID')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'JSON 내보내기' }))
+    await advance(0)
+
+    expect(screen.getByLabelText('기술 ID')).toBeVisible()
+    expect(screen.getByRole('textbox', { name: '기술명' })).toHaveFocus()
+  })
+
   it('saves the current form draft only after the 300ms debounce', async () => {
     const user = createUser()
     render(<ResumeEditor initialResume={createResumeFixture()} />)

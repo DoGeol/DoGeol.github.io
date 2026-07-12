@@ -5,6 +5,7 @@
 **Files:**
 
 - Create: `src/app/(dev)/resume-editor/_components/skills/skill-catalog-editor.tsx`
+- Create: `src/app/(dev)/resume-editor/_components/skills/skill-editor-options.ts`
 - Create: `src/app/(dev)/resume-editor/_components/skills/skill-reference-picker.tsx`
 - Create: `src/app/(dev)/resume-editor/_components/skills/skill-editors.test.tsx`
 - Modify: `src/app/(dev)/resume-editor/_components/document-settings-editor.tsx`

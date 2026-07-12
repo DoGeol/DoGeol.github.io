@@ -242,6 +242,16 @@ describe('SectionEditorList', () => {
     }
   }
 
+  const openSkillCatalog = async (user: ReturnType<typeof userEvent.setup>) => {
+    const opener = screen.queryByRole('button', { name: /기술 목록 \d+개 열기/ })
+    if (opener !== null) await user.click(opener)
+  }
+
+  const openFirstSkillPicker = async (user: ReturnType<typeof userEvent.setup>) => {
+    const opener = screen.queryAllByRole('button', { name: '기술 선택기 열기' })[0]
+    if (opener !== undefined) await user.click(opener)
+  }
+
   it('일곱 section heading, 표시 switch, 독립 accordion을 제공한다', async () => {
     const user = userEvent.setup()
     renderEditor()
@@ -540,6 +550,7 @@ describe('SectionEditorList', () => {
       },
     ]
     const user = userEvent.setup()
+    await openSkillCatalog(user)
     for (const move of moves) {
       const before = snapshot()
       expect(before[move.key]).toHaveLength(2)
@@ -578,6 +589,7 @@ describe('SectionEditorList', () => {
     const user = userEvent.setup()
     const { getDraft } = renderEditor('section-experience')
 
+    await openSkillCatalog(user)
     await user.click(screen.getByRole('button', { name: '기술 추가' }))
     expect(getDraft().skillCatalog).toHaveLength(2)
     expect(getDraft().skillCatalog[1]?.id).toEqual(expect.any(String))
@@ -595,6 +607,7 @@ describe('SectionEditorList', () => {
     if (experience?.type !== 'experience') throw new Error('경력 section이 없습니다')
     expect(experience.data.items[0]?.histories).toHaveLength(1)
 
+    await openFirstSkillPicker(user)
     const selectedSkill = screen.getByRole('checkbox', { name: /TypeScript선택 1/ })
     await user.click(selectedSkill)
     expect(experience.data.items[0]?.histories[0]?.skills).toHaveLength(0)
@@ -779,6 +792,7 @@ describe('SectionEditorList', () => {
       const user = userEvent.setup()
       vi.spyOn(window, 'confirm').mockReturnValue(true)
       const { onSelectedRegionChange } = renderEditor(selectedRegionId)
+      if (role === 'checkbox') await openFirstSkillPicker(user)
       const control = await screen.findByRole(role, { name: accessibleName })
 
       await user.click(control)
@@ -837,6 +851,7 @@ describe('SectionEditorList', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true)
     const { onSelectedRegionChange } = renderEditor('history-skill-1')
 
+    await openSkillCatalog(user)
     await user.click(screen.getByRole('button', { name: 'TypeScript 기술 삭제' }))
 
     expect(onSelectedRegionChange).toHaveBeenCalledWith('section-experience')
@@ -870,6 +885,7 @@ describe('SectionEditorList', () => {
     const referenceDraft = createResumeFixture()
     referenceDraft.sections[2]!.id = 'career-section-opaque'
     const selectedReference = renderEditor('history-skill-1', referenceDraft)
+    await openSkillCatalog(user)
     await user.click(screen.getByRole('button', { name: 'TypeScript 기술 삭제' }))
     expect(selectedReference.onSelectedRegionChange).toHaveBeenCalledWith('career-section-opaque')
   })
@@ -879,6 +895,7 @@ describe('SectionEditorList', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true)
     const { onSelectedRegionChange } = renderEditor('section-projects')
 
+    await openSkillCatalog(user)
     await user.click(screen.getByRole('button', { name: 'TypeScript 기술 삭제' }))
 
     expect(onSelectedRegionChange).not.toHaveBeenCalled()

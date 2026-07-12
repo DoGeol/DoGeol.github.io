@@ -2,6 +2,7 @@ import { useFieldArray, useFormContext, useWatch, type FieldArrayPath } from 're
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { createSkillReference } from '@/app/(dev)/resume-editor/_model/default-items'
+import { SkillReferencePicker } from '@/app/(dev)/resume-editor/_components/skills/skill-reference-picker'
 import { SortableHandle } from '@/app/(dev)/resume-editor/_components/sortable/sortable-handle'
 import { SortableItem } from '@/app/(dev)/resume-editor/_components/sortable/sortable-item'
 import { SortableList } from '@/app/(dev)/resume-editor/_components/sortable/sortable-list'
@@ -70,34 +71,28 @@ export function SkillReferenceField({
           })}
         </div>
       </SortableList>
-      {catalog.map((skill) => {
-        const selectedIndex = selected.indexOf(skill.id)
-        return (
-          <label key={skill.id} className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={selectedIndex >= 0}
-              onChange={(event) => {
-                if (event.target.checked) fieldArray.append(createSkillReference(skill.id))
-                else if (selectedIndex >= 0) {
-                  const removedId = fieldArray.fields[selectedIndex]?.id
-                  fieldArray.remove(selectedIndex)
-                  if (
-                    selectedRegionId === removedId &&
-                    owningSectionId !== undefined &&
-                    onSelectedRegionChange !== undefined
-                  ) {
-                    onSelectedRegionChange(owningSectionId)
-                  }
-                }
-              }}
-            />
-            {skill.label || skill.id}
-            {selectedIndex >= 0 && <span className="text-slate-500">선택 {selectedIndex + 1}</span>}
-          </label>
-        )
-      })}
-      {catalog.length === 0 && <p className="text-sm text-slate-500">등록된 기술이 없습니다.</p>}
+      <SkillReferencePicker
+        catalog={catalog}
+        selectedSkillIds={selected}
+        onToggle={(skillId, checked) => {
+          const selectedIndex = selected.indexOf(skillId)
+          if (checked && selectedIndex < 0) {
+            fieldArray.append(createSkillReference(skillId))
+            return
+          }
+          if (checked || selectedIndex < 0) return
+
+          const removedId = fieldArray.fields[selectedIndex]?.id
+          fieldArray.remove(selectedIndex)
+          if (
+            selectedRegionId === removedId &&
+            owningSectionId !== undefined &&
+            onSelectedRegionChange !== undefined
+          ) {
+            onSelectedRegionChange(owningSectionId)
+          }
+        }}
+      />
     </fieldset>
   )
 }
