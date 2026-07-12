@@ -1,8 +1,8 @@
 'use client'
 
-import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { resumeDraftSchema, type ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
+import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import {
   parsePreviewToEditorMessage,
   type EditorToPreviewMessage,
@@ -25,11 +25,6 @@ export function PreviewFrame({
 }) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const handshakeTimeoutRef = useRef<number | null>(null)
-  const deferredDraft = useDeferredValue(draft)
-  const validDraft = useMemo(() => {
-    const parsed = resumeDraftSchema.safeParse(deferredDraft)
-    return parsed.success ? parsed.data : null
-  }, [deferredDraft])
   const [preset, setPreset] = useState<PreviewPreset>('desktop')
   const [mode, setMode] = useState<PreviewMode>('select')
   const [scale, setScale] = useState(1)
@@ -77,9 +72,9 @@ export function PreviewFrame({
   }, [onSelectedRegionChange, origin])
 
   useEffect(() => {
-    if (!ready || validDraft === null) return
-    post({ type: 'RENDER_DRAFT', draft: validDraft, selectedRegionId })
-  }, [post, ready, selectedRegionId, validDraft])
+    if (!ready || draft === null) return
+    post({ type: 'RENDER_DRAFT', draft, selectedRegionId })
+  }, [draft, post, ready, selectedRegionId])
 
   useEffect(() => {
     if (!ready) return

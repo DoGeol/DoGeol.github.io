@@ -1,4 +1,4 @@
-import { useFieldArray, useFormContext, type FieldArrayPath, type FieldPath } from 'react-hook-form'
+import { useFieldArray, useFormContext, type FieldArrayPath } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { createDefaultItem } from '@/app/(dev)/resume-editor/_model/default-items'
@@ -8,11 +8,11 @@ import { SortableItem } from '@/app/(dev)/resume-editor/_components/sortable/sor
 export const cardClassName =
   'space-y-3 rounded-md border border-slate-200 p-3 dark:border-neutral-700'
 
-export const useResumeFieldArray = (name: FieldPath<ResumeDraft>) => {
+export const useResumeFieldArray = <TName extends FieldArrayPath<ResumeDraft>>(name: TName) => {
   const { control } = useFormContext<ResumeDraft>()
-  return useFieldArray({
+  return useFieldArray<ResumeDraft, TName, 'formKey'>({
     control,
-    name: name as FieldArrayPath<ResumeDraft>,
+    name,
     keyName: 'formKey',
   })
 }

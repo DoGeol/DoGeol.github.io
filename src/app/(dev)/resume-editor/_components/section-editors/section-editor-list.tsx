@@ -1,5 +1,5 @@
 import { useEffect, useEffectEvent } from 'react'
-import { useFieldArray, useFormContext, useWatch, type FieldPath } from 'react-hook-form'
+import { useFieldArray, useFormContext, type FieldPath } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { buildEditorRegionIndex } from '@/app/(dev)/resume-editor/_model/editor-region-index'
@@ -49,10 +49,6 @@ export function SectionEditorList({
     name: 'sections',
     keyName: 'formKey',
   })
-  const sections = useWatch({ control: form.control, name: 'sections' })
-  const sectionFormKeys = new Map(
-    sectionFields.map((section) => [String(section.id), section.formKey]),
-  )
   const ensureSectionOpen = useEffectEvent((sectionId: string) => {
     if (!openSectionIds.has(sectionId)) {
       onOpenSectionIdsChange(new Set([...openSectionIds, sectionId]))
@@ -118,15 +114,16 @@ export function SectionEditorList({
   return (
     <SortableList
       containerId="resume-sections"
-      entries={sections.map((section) => ({
-        id: section.id,
+      entries={sectionFields.map((section) => ({
+        id: String(section.id),
         label: getResumeSectionLabel(section.type),
       }))}
       onMove={moveSection}
     >
       <div className="space-y-4">
-        {sections.map((section, sectionIndex) => {
-          const expanded = openSectionIds.has(section.id)
+        {sectionFields.map((section, sectionIndex) => {
+          const sectionId = String(section.id)
+          const expanded = openSectionIds.has(sectionId)
           const commonProps = {
             sectionIndex,
             selectedRegionId,
@@ -138,7 +135,7 @@ export function SectionEditorList({
               editor = <InformationEditor {...commonProps} />
               break
             case 'introduce':
-              editor = <IntroduceEditor {...commonProps} sectionId={section.id} />
+              editor = <IntroduceEditor {...commonProps} sectionId={sectionId} />
               break
             case 'experience':
               editor = <ExperienceEditor {...commonProps} />
@@ -161,20 +158,20 @@ export function SectionEditorList({
 
           const label = getResumeSectionLabel(section.type)
           return (
-            <SortableItem key={sectionFormKeys.get(section.id) ?? section.id} id={section.id}>
+            <SortableItem key={section.formKey} id={sectionId}>
               <SectionCard
-                regionId={section.id}
+                regionId={sectionId}
                 title={label}
                 dragHandle={<SortableHandle label={label} />}
                 expanded={expanded}
-                selected={selectedRegionId === section.id}
+                selected={selectedRegionId === sectionId}
                 visibleName={`sections.${sectionIndex}.visible`}
                 onExpandedChange={(nextExpanded) => {
                   const next = new Set(openSectionIds)
-                  if (nextExpanded) next.add(section.id)
-                  else next.delete(section.id)
+                  if (nextExpanded) next.add(sectionId)
+                  else next.delete(sectionId)
                   onOpenSectionIdsChange(next)
-                  onSelectedRegionChange(section.id)
+                  onSelectedRegionChange(sectionId)
                 }}
               >
                 {editor}
@@ -182,7 +179,7 @@ export function SectionEditorList({
             </SortableItem>
           )
         })}
-        {new Set(sections.map((section) => section.id)).size !== 7 && (
+        {new Set(sectionFields.map((section) => section.id)).size !== 7 && (
           <p role="alert">필수 section 구성이 올바르지 않습니다.</p>
         )}
       </div>

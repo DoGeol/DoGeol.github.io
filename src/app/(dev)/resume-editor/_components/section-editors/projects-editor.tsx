@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { NullableDateField } from '@/app/(dev)/resume-editor/_components/fields/nullable-date-field'
@@ -36,6 +36,7 @@ function ProjectWorks({
 }) {
   const form = useFormContext<ResumeDraft>()
   const works = useResumeFieldArray(name)
+  const values = useWatch({ control: form.control, name })
   return (
     <div data-item-list={name} className="space-y-3">
       <h4 className="font-semibold">프로젝트 업무</h4>
@@ -43,13 +44,14 @@ function ProjectWorks({
         containerId={`project-works-${parentId}`}
         entries={works.fields.map((work, index) => ({
           id: String(work.id),
-          label: form.getValues(`${name}.${index}`).title || '새 프로젝트 업무',
+          label: values[index]?.title || '새 프로젝트 업무',
         }))}
         onMove={works.move}
       >
         {works.fields.map((work, index) => {
           const base = `${name}.${index}` as const
-          const value = form.getValues(base)
+          const value = values[index]
+          if (value === undefined) return null
           return (
             <SortableItemRegion
               key={work.formKey}
@@ -102,7 +104,7 @@ export function ProjectsEditor({ sectionIndex, selectedRegionId, onSelectedRegio
   const form = useFormContext<ResumeDraft>()
   const base = `sections.${sectionIndex}.data.items` as const
   const projects = useResumeFieldArray(base)
-  const section = form.getValues(`sections.${sectionIndex}`)
+  const section = useWatch({ control: form.control, name: `sections.${sectionIndex}` })
   if (section.type !== 'projects') return null
   return (
     <div data-item-list="projects" className="space-y-4">
@@ -116,7 +118,8 @@ export function ProjectsEditor({ sectionIndex, selectedRegionId, onSelectedRegio
       >
         {projects.fields.map((project, index) => {
           const itemBase = `${base}.${index}` as const
-          const value = section.data.items[index]!
+          const value = section.data.items[index]
+          if (value === undefined) return null
           return (
             <SortableItemRegion
               key={project.formKey}

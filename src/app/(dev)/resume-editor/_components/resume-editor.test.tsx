@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+
 import { act, cleanup, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -49,6 +52,16 @@ describe('ResumeEditor', () => {
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
     sessionStorage.clear()
+  })
+
+  it('부모에서 전체 draft를 watch하거나 반복 parse하지 않는다', () => {
+    const source = readFileSync(
+      path.join(process.cwd(), 'src/app/(dev)/resume-editor/_components/resume-editor.tsx'),
+      'utf8',
+    )
+
+    expect(source).not.toContain('useWatch')
+    expect(source).not.toContain('resumeDraftSchema.safeParse')
   })
 
   it('starts from the canonical metadata and marks the client-only root', () => {

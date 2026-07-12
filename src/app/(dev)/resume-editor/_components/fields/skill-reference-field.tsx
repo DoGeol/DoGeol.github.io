@@ -1,10 +1,4 @@
-import {
-  useFieldArray,
-  useFormContext,
-  useWatch,
-  type FieldArrayPath,
-  type FieldPath,
-} from 'react-hook-form'
+import { useFieldArray, useFormContext, useWatch, type FieldArrayPath } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { createSkillReference } from '@/app/(dev)/resume-editor/_model/default-items'
@@ -13,7 +7,7 @@ import { SortableItem } from '@/app/(dev)/resume-editor/_components/sortable/sor
 import { SortableList } from '@/app/(dev)/resume-editor/_components/sortable/sortable-list'
 
 type SkillReferenceFieldProps = {
-  name: FieldPath<ResumeDraft>
+  name: FieldArrayPath<ResumeDraft>
   label?: string
   selectedRegionId?: string | null
   owningSectionId?: string
@@ -29,14 +23,14 @@ export function SkillReferenceField({
   onSelectedRegionChange,
   containerId = `skill-references-${name}`,
 }: SkillReferenceFieldProps) {
-  const { control, getValues } = useFormContext<ResumeDraft>()
+  const { control } = useFormContext<ResumeDraft>()
   const catalog = useWatch({ control, name: 'skillCatalog' })
+  const references = useWatch({ control, name })
   const fieldArray = useFieldArray({
     control,
-    name: name as FieldArrayPath<ResumeDraft>,
+    name,
     keyName: 'formKey',
   })
-  const references = getValues(name)
   const selected = Array.isArray(references)
     ? references.flatMap((reference) =>
         typeof reference === 'object' && reference !== null && 'skillId' in reference

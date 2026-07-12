@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { NullableDateField } from '@/app/(dev)/resume-editor/_components/fields/nullable-date-field'
@@ -39,6 +39,7 @@ function HistoryList({
 }) {
   const form = useFormContext<ResumeDraft>()
   const histories = useResumeFieldArray(name)
+  const values = useWatch({ control: form.control, name })
   return (
     <div data-item-list={name} className="space-y-3">
       <h4 className="font-semibold">경력 상세</h4>
@@ -46,13 +47,14 @@ function HistoryList({
         containerId={`histories-${parentId}`}
         entries={histories.fields.map((history, index) => ({
           id: String(history.id),
-          label: form.getValues(`${name}.${index}`).department || '새 경력 상세',
+          label: values[index]?.department || '새 경력 상세',
         }))}
         onMove={histories.move}
       >
         {histories.fields.map((history, historyIndex) => {
           const base = `${name}.${historyIndex}` as const
-          const value = form.getValues(base)
+          const value = values[historyIndex]
+          if (value === undefined) return null
           return (
             <SortableItemRegion
               key={history.formKey}
@@ -119,7 +121,7 @@ export function ExperienceEditor({
   const form = useFormContext<ResumeDraft>()
   const base = `sections.${sectionIndex}.data` as const
   const companies = useResumeFieldArray(`${base}.items`)
-  const section = form.getValues(`sections.${sectionIndex}`)
+  const section = useWatch({ control: form.control, name: `sections.${sectionIndex}` })
   if (section.type !== 'experience') return null
   return (
     <div className="space-y-4">
@@ -138,7 +140,8 @@ export function ExperienceEditor({
         >
           {companies.fields.map((company, companyIndex) => {
             const itemBase = `${base}.items.${companyIndex}` as const
-            const value = section.data.items[companyIndex]!
+            const value = section.data.items[companyIndex]
+            if (value === undefined) return null
             return (
               <SortableItemRegion
                 key={company.formKey}

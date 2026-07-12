@@ -1,4 +1,4 @@
-import { get, useFormContext, type FieldPath } from 'react-hook-form'
+import { get, useFormContext, useFormState, type FieldPath } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 
@@ -19,8 +19,9 @@ type FieldShellProps = {
 }
 
 export function FieldShell({ name, label, help, children }: FieldShellProps) {
-  const { formState } = useFormContext<ResumeDraft>()
-  const error = get(formState.errors, name) as { message?: unknown } | undefined
+  const { control } = useFormContext<ResumeDraft>()
+  const { errors } = useFormState({ control, name, exact: true })
+  const error = get(errors, name) as { message?: unknown } | undefined
   const inputId = getFieldDomId(name)
   const helpId = help === undefined ? undefined : `${inputId}-help`
   const errorId = error?.message === undefined ? undefined : `${inputId}-error`

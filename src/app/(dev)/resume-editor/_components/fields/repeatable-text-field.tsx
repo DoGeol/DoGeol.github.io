@@ -1,4 +1,10 @@
-import { useFieldArray, useFormContext, type FieldArrayPath, type FieldPath } from 'react-hook-form'
+import {
+  useFieldArray,
+  useFormContext,
+  useWatch,
+  type FieldArrayPath,
+  type FieldPath,
+} from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { createDefaultItem } from '@/app/(dev)/resume-editor/_model/default-items'
@@ -9,7 +15,7 @@ import { SortableItem } from '@/app/(dev)/resume-editor/_components/sortable/sor
 import { SortableList } from '@/app/(dev)/resume-editor/_components/sortable/sortable-list'
 
 type RepeatableTextFieldProps = {
-  name: FieldPath<ResumeDraft>
+  name: FieldArrayPath<ResumeDraft>
   label: string
   addLabel: string
   selectedRegionId?: string | null
@@ -34,12 +40,13 @@ export function RepeatableTextField({
   onSelectedRegionChange,
   containerId = `repeatable-${name}`,
 }: RepeatableTextFieldProps) {
-  const { control, getValues } = useFormContext<ResumeDraft>()
+  const { control } = useFormContext<ResumeDraft>()
   const fieldArray = useFieldArray({
     control,
-    name: name as FieldArrayPath<ResumeDraft>,
+    name,
     keyName: 'formKey',
   })
+  const values = useWatch({ control, name })
 
   const add = () => {
     fieldArray.append(createDefaultItem('text'))
@@ -57,14 +64,14 @@ export function RepeatableTextField({
       <SortableList
         containerId={containerId}
         entries={fieldArray.fields.map((field, index) => {
-          const value = getValues(`${name}.${index}` as FieldPath<ResumeDraft>)
+          const value = Array.isArray(values) ? values[index] : undefined
           const text = getText(value) || label
           return { id: String(field.id), label: text }
         })}
         onMove={fieldArray.move}
       >
         {fieldArray.fields.map((field, index) => {
-          const value = getValues(`${name}.${index}` as FieldPath<ResumeDraft>)
+          const value = Array.isArray(values) ? values[index] : undefined
           const itemLabel = getText(value) || label
           return (
             <SortableItem key={field.formKey} id={String(field.id)}>

@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { NullableDateField } from '@/app/(dev)/resume-editor/_components/fields/nullable-date-field'
@@ -22,7 +22,7 @@ export function ActivityEditor({ sectionIndex, selectedRegionId, onSelectedRegio
   const form = useFormContext<ResumeDraft>()
   const name = `sections.${sectionIndex}.data.items` as const
   const items = useResumeFieldArray(name)
-  const section = form.getValues(`sections.${sectionIndex}`)
+  const section = useWatch({ control: form.control, name: `sections.${sectionIndex}` })
   if (section.type !== 'activity') return null
   return (
     <div data-item-list="activity" className="space-y-3">
@@ -36,7 +36,8 @@ export function ActivityEditor({ sectionIndex, selectedRegionId, onSelectedRegio
       >
         {items.fields.map((item, index) => {
           const base = `${name}.${index}` as const
-          const value = section.data.items[index]!
+          const value = section.data.items[index]
+          if (value === undefined) return null
           return (
             <SortableItemRegion
               key={item.formKey}

@@ -65,7 +65,7 @@ describe('PreviewFrame', () => {
     expect(postMessage).not.toHaveBeenCalled()
   })
 
-  it('READY 후 latest schema-valid draft와 mode만 정확한 origin으로 보낸다', async () => {
+  it('READY 후 bridge가 검증한 latest draft와 mode만 정확한 origin으로 보낸다', async () => {
     const draft = createResumeFixture()
     const { rerender } = render(
       <PreviewFrame draft={draft} selectedRegionId={null} onSelectedRegionChange={vi.fn()} />,
@@ -87,14 +87,18 @@ describe('PreviewFrame', () => {
     )
 
     postMessage.mockClear()
-    const invalid = { ...draft, schemaVersion: 2 } as unknown as typeof draft
+    const updated = {
+      ...draft,
+      metadata: { ...draft.metadata, title: '브리지에서 검증한 제목' },
+    }
     rerender(
-      <PreviewFrame draft={invalid} selectedRegionId={null} onSelectedRegionChange={vi.fn()} />,
+      <PreviewFrame draft={updated} selectedRegionId={null} onSelectedRegionChange={vi.fn()} />,
     )
-    await act(async () => {})
-    expect(postMessage).not.toHaveBeenCalledWith(
-      expect.objectContaining({ type: 'RENDER_DRAFT' }),
-      expect.anything(),
+    await waitFor(() =>
+      expect(postMessage).toHaveBeenCalledWith(
+        { type: 'RENDER_DRAFT', draft: updated, selectedRegionId: null },
+        window.location.origin,
+      ),
     )
   })
 

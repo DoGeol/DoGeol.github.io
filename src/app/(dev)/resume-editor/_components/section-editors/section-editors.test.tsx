@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -61,6 +64,27 @@ afterEach(() => {
 })
 
 describe('section editor field primitives', () => {
+  it('field error와 object array 경계를 path-local API로 구독한다', () => {
+    const readSource = (relativePath: string) =>
+      readFileSync(path.join(process.cwd(), relativePath), 'utf8')
+    const fieldShell = readSource('src/app/(dev)/resume-editor/_components/fields/field-shell.tsx')
+    const helpers = readSource(
+      'src/app/(dev)/resume-editor/_components/section-editors/section-editor-helpers.tsx',
+    )
+    const repeatable = readSource(
+      'src/app/(dev)/resume-editor/_components/fields/repeatable-text-field.tsx',
+    )
+    const skillReferences = readSource(
+      'src/app/(dev)/resume-editor/_components/fields/skill-reference-field.tsx',
+    )
+
+    expect(fieldShell).toContain('useFormState')
+    expect(fieldShell).toContain('exact: true')
+    expect(helpers).not.toContain('name as FieldArrayPath')
+    expect(repeatable).not.toContain('name as FieldArrayPath')
+    expect(skillReferences).not.toContain('name as FieldArrayPath')
+  })
+
   it('text와 textarea 변경을 RHF 값에 즉시 반영한다', async () => {
     const user = userEvent.setup()
     const getForm = renderField(
@@ -101,6 +125,23 @@ describe('section editor field primitives', () => {
 
     await user.click(screen.getAllByRole('button', { name: '소개 문단 삭제' })[1]!)
     expect(getForm().getValues('sections.1.data.paragraphs')).toHaveLength(1)
+  })
+
+  it('repeatable text의 지역 값 변경으로 sortable label을 즉시 갱신한다', async () => {
+    const user = userEvent.setup()
+    renderField(
+      <RepeatableTextField
+        name="sections.1.data.paragraphs"
+        label="소개 문단"
+        addLabel="문단 추가"
+      />,
+    )
+
+    const paragraph = screen.getByRole('textbox', { name: '소개 문단' })
+    await user.clear(paragraph)
+    await user.type(paragraph, '지역 구독 소개')
+
+    expect(screen.getByRole('button', { name: '지역 구독 소개 순서 변경' })).toBeInTheDocument()
   })
 
   it('nullable 종료일을 null과 마지막 값 사이에서 전환한다', async () => {
@@ -247,6 +288,18 @@ describe('SectionEditorList', () => {
     if (experience?.type !== 'experience') throw new Error('경력 section이 없습니다')
     expect(experience.data.items).toHaveLength(2)
     await waitFor(() => expect(document.activeElement).toHaveAccessibleName('회사명'))
+  })
+
+  it('열린 section의 지역 값 변경으로 item label을 즉시 갱신한다', async () => {
+    const user = userEvent.setup()
+    renderEditor('section-experience')
+    const companyName = screen.getByRole('textbox', { name: '회사명' })
+
+    await user.clear(companyName)
+    await user.type(companyName, '지역 구독 회사')
+
+    expect(screen.getByRole('button', { name: '지역 구독 회사 회사 삭제' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '지역 구독 회사 순서 변경' })).toBeInTheDocument()
   })
 
   it('section을 keyboard로 이동해도 stable selection을 유지하고 최신 path를 계산한다', async () => {

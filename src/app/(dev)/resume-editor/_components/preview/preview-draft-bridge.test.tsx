@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs'
+import path from 'node:path'
+
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { createRef, useEffect, type RefObject } from 'react'
 import { FormProvider, useForm, type UseFormReturn } from 'react-hook-form'
@@ -83,6 +86,25 @@ describe('PreviewDraftBridge', () => {
   afterEach(() => {
     cleanup()
     vi.unstubAllGlobals()
+  })
+
+  it('form 전체 watch와 schema 검증을 프리뷰 브리지 한 곳에 둔다', () => {
+    const bridgeSource = readFileSync(
+      path.join(
+        process.cwd(),
+        'src/app/(dev)/resume-editor/_components/preview/preview-draft-bridge.tsx',
+      ),
+      'utf8',
+    )
+    const frameSource = readFileSync(
+      path.join(process.cwd(), 'src/app/(dev)/resume-editor/_components/preview/preview-frame.tsx'),
+      'utf8',
+    )
+
+    expect(bridgeSource).toContain('useWatch')
+    expect(bridgeSource).toContain('resumeDraftSchema.safeParse')
+    expect(frameSource).not.toContain('resumeDraftSchema.safeParse')
+    expect(frameSource).not.toContain('useDeferredValue')
   })
 
   it('전체 draft 변경을 schema-valid preview로 전달한다', async () => {

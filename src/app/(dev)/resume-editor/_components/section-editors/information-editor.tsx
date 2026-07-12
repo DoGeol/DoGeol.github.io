@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { SelectField } from '@/app/(dev)/resume-editor/_components/fields/select-field'
@@ -27,7 +27,7 @@ export function InformationEditor({
   const form = useFormContext<ResumeDraft>()
   const base = `sections.${sectionIndex}.data` as const
   const contacts = useResumeFieldArray(`${base}.contacts`)
-  const section = form.getValues(`sections.${sectionIndex}`)
+  const section = useWatch({ control: form.control, name: `sections.${sectionIndex}` })
   if (section.type !== 'information') return null
   return (
     <div className="space-y-4">
@@ -37,12 +37,13 @@ export function InformationEditor({
           containerId={`contacts-${section.id}`}
           entries={contacts.fields.map((contact, index) => ({
             id: String(contact.id),
-            label: form.getValues(`${base}.contacts.${index}`).label || '새 연락처',
+            label: section.data.contacts[index]?.label || '새 연락처',
           }))}
           onMove={contacts.move}
         >
           {contacts.fields.map((contact, index) => {
-            const value = form.getValues(`${base}.contacts.${index}`)
+            const value = section.data.contacts[index]
+            if (value === undefined) return null
             return (
               <SortableItemRegion
                 key={contact.formKey}

@@ -1,4 +1,4 @@
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { resumeTemplateOptions } from '@/app/(pages)/resume/_templates/registry'
 import { createDefaultItem } from '@/app/(dev)/resume-editor/_model/default-items'
@@ -35,6 +35,7 @@ export function DocumentSettingsEditor({
 }: DocumentSettingsEditorProps) {
   const form = useFormContext<ResumeDraft>()
   const skills = useResumeFieldArray('skillCatalog')
+  const catalog = useWatch({ control: form.control, name: 'skillCatalog' })
 
   return (
     <section
@@ -57,18 +58,20 @@ export function DocumentSettingsEditor({
           containerId="skill-catalog"
           entries={skills.fields.map((skill, index) => ({
             id: String(skill.id),
-            label: `${form.getValues(`skillCatalog.${index}`).label || skill.id} 기술`,
+            label: `${catalog[index]?.label || skill.id} 기술`,
           }))}
           onMove={skills.move}
         >
           {skills.fields.map((skill, index) => {
-            const current = form.getValues(`skillCatalog.${index}`)
+            const current = catalog[index]
+            const currentId = current?.id ?? String(skill.id)
+            const currentLabel = current?.label ?? ''
             return (
               <SortableItemRegion
                 key={skill.formKey}
-                id={String(skill.id)}
-                label={`${current.label || '새 기술'} 기술`}
-                selected={selectedRegionId === skill.id}
+                id={currentId}
+                label={`${currentLabel || '새 기술'} 기술`}
+                selected={selectedRegionId === currentId}
               >
                 <TextField name={`skillCatalog.${index}.id`} label="기술 ID" readOnly />
                 <TextField name={`skillCatalog.${index}.label`} label="기술명" />
@@ -79,8 +82,9 @@ export function DocumentSettingsEditor({
                 />
                 <button
                   type="button"
-                  aria-label={`${current.label || current.id} 기술 삭제`}
+                  aria-label={`${currentLabel || currentId} 기술 삭제`}
                   onClick={() => {
+                    const selectedSkill = form.getValues(`skillCatalog.${index}`)
                     const source = form.getValues()
                     const referenceSection = source.sections.find(
                       (section) =>
@@ -90,16 +94,16 @@ export function DocumentSettingsEditor({
                             history.skills.some(
                               (reference) =>
                                 reference.id === selectedRegionId &&
-                                reference.skillId === current.id,
+                                reference.skillId === selectedSkill.id,
                             ),
                           ),
                         ),
                     )
                     const fallbackRegionId =
-                      selectedRegionId === current.id
+                      selectedRegionId === selectedSkill.id
                         ? (source.sections[0]?.id ?? null)
                         : (referenceSection?.id ?? null)
-                    const result = removeSkillAndReferences(source, current.id)
+                    const result = removeSkillAndReferences(source, selectedSkill.id)
                     if (
                       !window.confirm(
                         `기술을 삭제하면 경력의 참조 ${result.removedReferenceCount}개도 함께 삭제됩니다. 계속할까요?`,
