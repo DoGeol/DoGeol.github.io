@@ -1,4 +1,4 @@
-import { IProject } from '@/app/(pages)/resume/_components/project/types'
+import type { IProject } from '@/app/(pages)/resume/_components/project/types'
 
 const projects: IProject = {
   isShow: true,

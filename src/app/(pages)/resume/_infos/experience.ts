@@ -1,4 +1,4 @@
-import { IExperience } from '@/app/(pages)/resume/_components/experience/types'
+import type { IExperience } from '@/app/(pages)/resume/_components/experience/types'
 
 const experience: IExperience = {
   isShow: true,

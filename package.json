@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm check:resume-assets && next build",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
     "typecheck": "next typegen && tsc --noEmit",
@@ -20,6 +20,7 @@
     "format": "prettier . --write --ignore-unknown",
     "format:check": "prettier . --check --ignore-unknown",
     "docs:check": "node scripts/check-docs.mjs",
+    "check:resume-assets": "node scripts/check-resume-assets.mjs",
     "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm format:check && pnpm build"
   },
   "dependencies": {

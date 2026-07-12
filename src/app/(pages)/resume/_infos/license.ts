@@ -1,4 +1,4 @@
-import { ILicense } from '@/app/(pages)/resume/_components/license/types'
+import type { ILicense } from '@/app/(pages)/resume/_components/license/types'
 
 const license: ILicense = {
   isShow: true,

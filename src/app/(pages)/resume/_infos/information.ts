@@ -1,4 +1,4 @@
-import { IInformation } from '@/app/(pages)/resume/_components/infomation/types'
+import type { IInformation } from '@/app/(pages)/resume/_components/infomation/types'
 
 const information: IInformation = {
   isShow: true,

@@ -1,4 +1,4 @@
-import { IIntroduce } from '@/app/(pages)/resume/_components/introduce/types'
+import type { IIntroduce } from '@/app/(pages)/resume/_components/introduce/types'
 
 const introduce: IIntroduce = {
   isShow: true,
