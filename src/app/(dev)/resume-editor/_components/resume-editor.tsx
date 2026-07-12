@@ -1,10 +1,14 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, useForm, useWatch, type FieldErrors, type FieldPath } from 'react-hook-form'
 
-import { resumeSchema, type ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
+import {
+  resumeDraftSchema,
+  resumeSchema,
+  type ResumeDraft,
+} from '@/app/(pages)/resume/_model/resume-schema'
 
 import {
   clearResumeDraft,
@@ -19,7 +23,10 @@ import { DocumentSettingsEditor } from '@/app/(dev)/resume-editor/_components/do
 import { EditorTabs, type EditorPane } from '@/app/(dev)/resume-editor/_components/editor-tabs'
 import { EditorToolbar } from '@/app/(dev)/resume-editor/_components/editor-toolbar'
 import { ErrorSummary } from '@/app/(dev)/resume-editor/_components/error-summary'
+import { PreviewFrame } from '@/app/(dev)/resume-editor/_components/preview/preview-frame'
+import { usePreviewAssets } from '@/app/(dev)/resume-editor/_components/preview/use-preview-assets'
 import { SectionEditorList } from '@/app/(dev)/resume-editor/_components/section-editors/section-editor-list'
+import { buildEditorRegionIndex } from '@/app/(dev)/resume-editor/_model/editor-region-index'
 
 const SAVE_DEBOUNCE_MS = 300
 
@@ -50,6 +57,13 @@ export function ResumeEditor({ initialResume }: ResumeEditorProps) {
     mode: 'onBlur',
   })
   const watchedDraft = useWatch({ control: form.control })
+  const deferredWatchedDraft = useDeferredValue(watchedDraft)
+  const deferredDraftResult = useMemo(
+    () => resumeDraftSchema.safeParse(deferredWatchedDraft),
+    [deferredWatchedDraft],
+  )
+  const deferredDraft = deferredDraftResult.success ? deferredDraftResult.data : null
+  const { previewDraft, reapplyAssetErrors } = usePreviewAssets(form, deferredDraft)
   const [hydrated, setHydrated] = useState(false)
   const [notice, setNotice] = useState<string | null>(null)
   const [savedAt, setSavedAt] = useState<string | null>(null)
@@ -62,6 +76,39 @@ export function ResumeEditor({ initialResume }: ResumeEditorProps) {
     () => new Set(initialResume.sections[0] === undefined ? [] : [initialResume.sections[0].id]),
   )
   const autosaveBaselineRef = useRef<ResumeDraft | null>(null)
+  const previewRegionParentsRef = useRef(new Map<string, string>())
+
+  useEffect(() => {
+    if (deferredDraft === null) return
+    const index = buildEditorRegionIndex(deferredDraft)
+    deferredDraft.sections.forEach((section, sectionIndex) => {
+      const prefix = `sections.${sectionIndex}`
+      index.forEach((path, regionId) => {
+        if (path === prefix || path.startsWith(`${prefix}.`)) {
+          previewRegionParentsRef.current.set(regionId, section.id)
+        }
+      })
+    })
+  }, [deferredDraft])
+
+  const selectPreviewRegion = useCallback(
+    (regionId: string) => {
+      setActivePane('editor')
+      const currentDraft = form.getValues()
+      if (buildEditorRegionIndex(currentDraft).has(regionId)) {
+        setSelectedRegionId(regionId)
+        return
+      }
+      const parentSectionId = previewRegionParentsRef.current.get(regionId)
+      if (
+        parentSectionId !== undefined &&
+        currentDraft.sections.some((section) => section.id === parentSectionId)
+      ) {
+        setSelectedRegionId(parentSectionId)
+      }
+    },
+    [form],
+  )
 
   useEffect(() => {
     const result = readResumeDraft(sessionStorage)
@@ -114,6 +161,12 @@ export function ResumeEditor({ initialResume }: ResumeEditorProps) {
   }
 
   const submitValidDraft = (draft: ResumeDraft) => {
+    const firstAssetError = reapplyAssetErrors()
+    if (firstAssetError !== null) {
+      setShowErrorSummary(true)
+      form.setFocus(firstAssetError)
+      return
+    }
     const result = serializeResumeForExport(draft)
     if (!result.success) {
       setShowErrorSummary(true)
@@ -126,8 +179,10 @@ export function ResumeEditor({ initialResume }: ResumeEditorProps) {
 
   const submitInvalidDraft = (errors: FieldErrors<ResumeDraft>) => {
     setShowErrorSummary(true)
+    const firstAssetError = reapplyAssetErrors()
     const firstErrorPath = findFirstErrorPath(errors)
     if (firstErrorPath !== null) form.setFocus(firstErrorPath)
+    else if (firstAssetError !== null) form.setFocus(firstAssetError)
   }
 
   return (
@@ -140,12 +195,12 @@ export function ResumeEditor({ initialResume }: ResumeEditorProps) {
         <form onSubmit={form.handleSubmit(submitValidDraft, submitInvalidDraft)} noValidate>
           <EditorToolbar notice={notice} savedAt={savedAt} onReset={resetDraft} />
           <EditorTabs activePane={activePane} onChange={setActivePane} />
-          <div className="md:grid md:grid-cols-2">
+          <div className="tablet:grid tablet:grid-cols-2">
             <section
               id="resume-editor-pane"
               role="tabpanel"
               aria-labelledby="resume-editor-tab"
-              className={`${activePane === 'editor' ? 'block' : 'hidden'} p-4 md:block md:p-6 dark:bg-neutral-950`}
+              className={`${activePane === 'editor' ? 'block' : 'hidden'} tablet:block tablet:p-6 p-4 dark:bg-neutral-950`}
             >
               <div className="mx-auto max-w-2xl space-y-5">
                 <ErrorSummary visible={showErrorSummary} />
@@ -165,11 +220,13 @@ export function ResumeEditor({ initialResume }: ResumeEditorProps) {
               id="resume-preview-pane"
               role="tabpanel"
               aria-labelledby="resume-preview-tab"
-              className={`${activePane === 'preview' ? 'block' : 'hidden'} min-h-80 border-l border-slate-200 bg-slate-50 p-4 md:block md:p-6 dark:border-neutral-700 dark:bg-neutral-900`}
+              className={`${activePane === 'preview' ? 'block' : 'hidden'} tablet:block tablet:p-6 min-h-80 border-l border-slate-200 bg-slate-50 p-4 dark:border-neutral-700 dark:bg-neutral-900`}
             >
-              <div className="grid min-h-64 place-items-center rounded-lg border border-dashed border-slate-300 bg-white text-slate-500 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
-                프리뷰 준비 중
-              </div>
+              <PreviewFrame
+                draft={previewDraft}
+                selectedRegionId={selectedRegionId}
+                onSelectedRegionChange={selectPreviewRegion}
+              />
             </section>
           </div>
         </form>

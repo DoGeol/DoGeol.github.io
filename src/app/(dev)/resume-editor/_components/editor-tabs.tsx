@@ -43,7 +43,7 @@ export function EditorTabs({ activePane, onChange }: EditorTabsProps) {
     <div
       role="tablist"
       aria-label="이력서 편집 화면"
-      className="grid grid-cols-2 border-b border-slate-200 bg-white md:hidden dark:border-neutral-700 dark:bg-neutral-900"
+      className="tablet:hidden grid grid-cols-2 border-b border-slate-200 bg-white dark:border-neutral-700 dark:bg-neutral-900"
     >
       <button
         ref={editorTabRef}

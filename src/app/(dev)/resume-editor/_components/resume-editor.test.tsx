@@ -18,6 +18,17 @@ const advance = async (milliseconds: number) => {
   })
 }
 
+class ImageMock {
+  static instances: ImageMock[] = []
+  onload: (() => void) | null = null
+  onerror: (() => void) | null = null
+  src = ''
+
+  constructor() {
+    ImageMock.instances.push(this)
+  }
+}
+
 describe('ResumeEditor', () => {
   beforeEach(() => {
     sessionStorage.clear()
@@ -44,6 +55,13 @@ describe('ResumeEditor', () => {
       'data-resume-editor-client-marker',
       'resume-editor-client-only-marker',
     )
+  })
+
+  it('실제 viewport preview frame을 editor 선택 상태와 함께 렌더링한다', () => {
+    render(<ResumeEditor initialResume={createResumeFixture()} />)
+
+    expect(screen.getByTitle('실제 이력서 프리뷰')).toHaveAttribute('src', '/resume-preview')
+    expect(screen.queryByText('프리뷰 준비 중')).not.toBeInTheDocument()
   })
 
   it('saves the current form draft only after the 300ms debounce', async () => {
@@ -178,10 +196,10 @@ describe('ResumeEditor', () => {
     const previewPanel = screen.getByRole('tabpanel', { name: '프리뷰' })
     expect(editorPanel).toHaveAttribute('id', 'resume-editor-pane')
     expect(editorPanel).toHaveAttribute('aria-labelledby', 'resume-editor-tab')
-    expect(editorPanel).toHaveClass('block', 'md:block')
+    expect(editorPanel).toHaveClass('block', 'tablet:block')
     expect(previewPanel).toHaveAttribute('id', 'resume-preview-pane')
     expect(previewPanel).toHaveAttribute('aria-labelledby', 'resume-preview-tab')
-    expect(previewPanel).toHaveClass('hidden', 'md:block')
+    expect(previewPanel).toHaveClass('hidden', 'tablet:block')
 
     editorTab.focus()
     await user.keyboard('{ArrowRight}')
@@ -189,8 +207,8 @@ describe('ResumeEditor', () => {
     expect(previewTab).toHaveAttribute('aria-selected', 'true')
     expect(previewTab).toHaveAttribute('tabindex', '0')
     expect(editorTab).toHaveAttribute('tabindex', '-1')
-    expect(editorPanel).toHaveClass('hidden', 'md:block')
-    expect(previewPanel).toHaveClass('block', 'md:block')
+    expect(editorPanel).toHaveClass('hidden', 'tablet:block')
+    expect(previewPanel).toHaveClass('block', 'tablet:block')
 
     await user.keyboard('{ArrowLeft}')
     expect(editorTab).toHaveFocus()
@@ -244,5 +262,27 @@ describe('ResumeEditor', () => {
 
     expect(click).toHaveBeenCalledOnce()
     expect(clickedAnchors[0]?.download).toBe('resume.json')
+  })
+
+  it('현재 asset preload 실패는 resolver 이후에도 export를 막고 오류를 보존한다', async () => {
+    const user = createUser()
+    ImageMock.instances = []
+    vi.stubGlobal('Image', ImageMock)
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined)
+    render(<ResumeEditor initialResume={createResumeFixture()} />)
+    const failedImage = ImageMock.instances.find((image) => image.src === '/profile/pdg-real.webp')
+    if (failedImage?.onerror === null || failedImage?.onerror === undefined) {
+      throw new Error('profile preload가 시작되지 않았습니다')
+    }
+
+    act(() => failedImage.onerror?.())
+    expect(screen.getByText('이미지를 불러올 수 없습니다')).toBeVisible()
+    await user.click(screen.getByRole('button', { name: 'JSON 내보내기' }))
+    await advance(0)
+
+    expect(click).not.toHaveBeenCalled()
+    expect(screen.getByRole('heading', { name: '내보내기 오류' })).toBeVisible()
+    expect(screen.getByText('이미지를 불러올 수 없습니다')).toBeVisible()
+    expect(screen.getByLabelText('앞면 프로필 이미지 경로')).toHaveFocus()
   })
 })
