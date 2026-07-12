@@ -109,7 +109,7 @@ export function SortableList({ containerId, entries, onMove, children }: Sortabl
         {activeId === null ? null : (
           <div
             aria-hidden="true"
-            className="pointer-events-none rounded border border-blue-400 bg-white px-3 py-2 text-sm shadow-lg dark:bg-neutral-900"
+            className="pointer-events-none rounded border border-blue-600 bg-white px-3 py-2 text-sm shadow-lg dark:border-blue-400 dark:bg-neutral-900"
           >
             {labels.get(activeId)}
           </div>

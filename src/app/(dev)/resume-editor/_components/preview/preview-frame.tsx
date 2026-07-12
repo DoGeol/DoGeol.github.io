@@ -92,6 +92,7 @@ export function PreviewFrame({
         preset={preset}
         mode={mode}
         scale={scale}
+        status={timedOut ? '연결 실패' : ready ? '연결됨' : '연결 중'}
         onPresetChange={setPreset}
         onModeChange={setMode}
       />
@@ -103,7 +104,7 @@ export function PreviewFrame({
           <span>프리뷰에 연결하지 못했습니다</span>
           <button
             type="button"
-            className="rounded border border-red-400 px-2 py-1"
+            className="rounded border border-red-700 px-2 py-1 dark:border-red-400"
             onClick={() => {
               setReady(false)
               setTimedOut(false)

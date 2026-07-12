@@ -16,7 +16,7 @@ export function SortableHandle({ label }: SortableHandleProps) {
       {...attributes}
       {...listeners}
       aria-label={`${label} 순서 변경`}
-      className="cursor-grab touch-none rounded border border-slate-300 px-2 py-1 text-sm active:cursor-grabbing dark:border-neutral-600"
+      className="cursor-grab touch-none rounded border border-slate-500 px-2 py-1 text-sm active:cursor-grabbing dark:border-neutral-400"
     >
       <span aria-hidden="true">↕</span>
     </button>

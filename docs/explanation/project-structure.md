@@ -1,6 +1,6 @@
 ---
 status: active
-lastReviewed: 2026-07-11
+lastReviewed: 2026-07-12
 sourceOfTruth:
   - ../../src
   - ../../public
@@ -13,6 +13,7 @@ sourceOfTruth:
 - `AGENTS.md`: Codex가 읽는 저장소 규칙 라우터
 - `docs/`: 설명, 참조, 실행 가이드, 마이그레이션 기록
 - `scripts/check-docs.mjs`: 문서 크기와 Markdown 링크 검사
+- `scripts/check-resume-assets.mjs`, `scripts/check-static-export.mjs`: 이력서 asset과 production 격리 검사
 - `tests/e2e`: 주요 route와 현행 디자인 회귀 검증
 - `eslint.config.mjs`, `vitest.config.ts`, `playwright.config.ts`: 품질 도구 설정
 - `next.config.mjs`: 정적 export와 Next.js 설정
@@ -29,10 +30,13 @@ sourceOfTruth:
 - `old-resume`: Accordion 기반 이전 이력서
 - `components`: 정적 MDX 컴포넌트 카탈로그와 동적 slug route
 - `not-found.tsx`: 정적 404 화면
+- `(dev)`: development compile에서만 제공하는 이력서 editor, iframe preview와 message protocol
 
 ## Resume
 
-`resume/_infos`는 소개, 경력, 프로젝트, 학력, 활동, 자격 데이터를 보관한다. `resume/_components`는 section별 렌더링과 기간 계산을 담당한다. 페이지 전용 코드이므로 `src/shared`로 이동하지 않는다.
+`resume/_data/resume.json`은 canonical 이력서다. `_model`은 Zod schema, loader와 region interface를, `_templates`는 template registry와 renderer를 소유한다. `_components`는 section별 표현과 기간 계산을 담당한다. 페이지 전용 코드이므로 `src/shared`로 이동하지 않는다.
+
+`(dev)/resume-editor/_components`는 form, sortable editor와 preview shell을, `_model`은 draft storage, export, asset과 이동 규칙을 소유한다. `(dev)/resume-preview`는 iframe runtime을, `(dev)/_shared`는 양방향 message schema를 소유한다. schema·asset·static export script test는 소스 가까이에 두고 전체 workflow와 세 editor screenshot은 `tests/e2e/resume-editor.spec.ts`가 소유한다.
 
 ## Features와 Shared
 

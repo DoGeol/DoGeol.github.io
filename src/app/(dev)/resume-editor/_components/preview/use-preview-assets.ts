@@ -1,15 +1,21 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react'
 import type { FieldPath, UseFormReturn } from 'react-hook-form'
 
-import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
+import { resumeDraftSchema, type ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import {
   collectPreviewAssets,
+  type PreviewAsset,
   type ResumeAssetFieldPath,
 } from '@/app/(dev)/resume-editor/_model/preview-assets'
 
-type FailedAssets = Partial<Record<ResumeAssetFieldPath, string>>
+type AssetValidationStatus = 'pending' | 'succeeded' | 'failed'
+
+type AssetValidation = {
+  url: string
+  status: AssetValidationStatus
+}
 
 export interface PreviewAssetsState {
   previewDraft: ResumeDraft | null
@@ -17,44 +23,96 @@ export interface PreviewAssetsState {
   reapplyAssetErrors: () => ResumeAssetFieldPath | null
 }
 
-const getCurrentAssetUrl = (draft: ResumeDraft, fieldPath: ResumeAssetFieldPath) =>
-  collectPreviewAssets(draft).find((asset) => asset.fieldPath === fieldPath)?.url
+const pendingMessage = '이미지 확인이 끝날 때까지 기다려 주세요'
+const failedMessage = '이미지를 불러올 수 없습니다'
+
+const isAssetError = (type: unknown) => type === 'asset' || type === 'asset-pending'
 
 export function usePreviewAssets(
   form: UseFormReturn<ResumeDraft>,
-  draft: ResumeDraft | null,
+  validationDraft: ResumeDraft | null,
+  previewSource: ResumeDraft | null = validationDraft,
 ): PreviewAssetsState {
-  const [failedAssets, setFailedAssets] = useState<FailedAssets>({})
+  const [validations, setValidations] = useState<
+    ReadonlyMap<ResumeAssetFieldPath, AssetValidation>
+  >(new Map())
   const validationGeneration = useRef(0)
-  const assets = useMemo(() => (draft === null ? [] : collectPreviewAssets(draft)), [draft])
+  const collectedAssets = validationDraft === null ? [] : collectPreviewAssets(validationDraft)
+  const assetSignature = JSON.stringify(collectedAssets)
+  const assets = useMemo(() => JSON.parse(assetSignature) as PreviewAsset[], [assetSignature])
+  const currentValidations = useMemo(
+    () =>
+      new Map(
+        assets.map((asset) => {
+          const existing = validations.get(asset.fieldPath)
+          return [
+            asset.fieldPath,
+            existing?.url === asset.url
+              ? existing
+              : ({ url: asset.url, status: 'pending' } satisfies AssetValidation),
+          ] as const
+        }),
+      ),
+    [assets, validations],
+  )
+  const getCurrentValidation = useEffectEvent((fieldPath: ResumeAssetFieldPath) =>
+    currentValidations.get(fieldPath),
+  )
 
   useEffect(() => {
     const generation = ++validationGeneration.current
-    const images = assets.map((asset) => {
+    const images: HTMLImageElement[] = []
+
+    assets.forEach((asset) => {
+      const validation = getCurrentValidation(asset.fieldPath)
+      const path = asset.fieldPath as FieldPath<ResumeDraft>
+      const currentError = form.getFieldState(path).error
+      if (
+        validation?.status === 'pending' &&
+        (currentError === undefined || isAssetError(currentError.type))
+      ) {
+        form.setError(path, { type: 'asset-pending', message: pendingMessage })
+      } else if (
+        validation?.status === 'failed' &&
+        (currentError === undefined || isAssetError(currentError.type))
+      ) {
+        form.setError(path, { type: 'asset', message: failedMessage })
+      }
+      if (validation?.status !== 'pending') return
+
       const image = new Image()
       image.onload = () => {
         if (validationGeneration.current !== generation) return
-        if (getCurrentAssetUrl(form.getValues(), asset.fieldPath) !== asset.url) return
-        const path = asset.fieldPath as FieldPath<ResumeDraft>
-        if (form.getFieldState(path).error?.type === 'asset') form.clearErrors(path)
-        setFailedAssets((current) => {
-          if (current[asset.fieldPath] !== asset.url) return current
-          const next = { ...current }
-          delete next[asset.fieldPath]
+        const currentUrl = collectPreviewAssets(form.getValues()).find(
+          ({ fieldPath }) => fieldPath === asset.fieldPath,
+        )?.url
+        if (currentUrl !== asset.url) return
+        setValidations((current) => {
+          const next = new Map(current)
+          next.set(asset.fieldPath, { url: asset.url, status: 'succeeded' })
           return next
         })
+        const error = form.getFieldState(path).error
+        if (isAssetError(error?.type)) form.clearErrors(path)
       }
       image.onerror = () => {
         if (validationGeneration.current !== generation) return
-        if (getCurrentAssetUrl(form.getValues(), asset.fieldPath) !== asset.url) return
-        form.setError(asset.fieldPath as FieldPath<ResumeDraft>, {
-          type: 'asset',
-          message: '이미지를 불러올 수 없습니다',
+        const currentUrl = collectPreviewAssets(form.getValues()).find(
+          ({ fieldPath }) => fieldPath === asset.fieldPath,
+        )?.url
+        if (currentUrl !== asset.url) return
+        setValidations((current) => {
+          const next = new Map(current)
+          next.set(asset.fieldPath, { url: asset.url, status: 'failed' })
+          return next
         })
-        setFailedAssets((current) => ({ ...current, [asset.fieldPath]: asset.url }))
+        const error = form.getFieldState(path).error
+        if (error === undefined || isAssetError(error.type)) {
+          form.setError(path, { type: 'asset', message: failedMessage })
+        }
       }
       image.src = asset.url
-      return image
+      images.push(image)
     })
 
     return () => {
@@ -66,36 +124,55 @@ export function usePreviewAssets(
     }
   }, [assets, form])
 
-  const currentFailures = useMemo(
-    () => assets.filter((asset) => failedAssets[asset.fieldPath] === asset.url),
-    [assets, failedAssets],
-  )
+  const getCurrentBlockedAssets = useCallback(() => {
+    const parsed = resumeDraftSchema.safeParse(form.getValues())
+    if (!parsed.success) return []
+    return collectPreviewAssets(parsed.data).flatMap((asset) => {
+      const validation = validations.get(asset.fieldPath)
+      if (validation?.url === asset.url && validation.status === 'succeeded') return []
+      return [{ ...asset, status: validation?.url === asset.url ? validation.status : 'pending' }]
+    })
+  }, [form, validations])
+
   const reapplyAssetErrors = useCallback(() => {
-    currentFailures.forEach((asset) => {
-      form.setError(asset.fieldPath as FieldPath<ResumeDraft>, {
-        type: 'asset',
-        message: '이미지를 불러올 수 없습니다',
+    const blockedAssets = getCurrentBlockedAssets()
+    blockedAssets.forEach((asset) => {
+      const path = asset.fieldPath as FieldPath<ResumeDraft>
+      const currentError = form.getFieldState(path).error
+      if (currentError !== undefined && !isAssetError(currentError.type)) return
+      form.setError(path, {
+        type: asset.status === 'failed' ? 'asset' : 'asset-pending',
+        message: asset.status === 'failed' ? failedMessage : pendingMessage,
       })
     })
-    return currentFailures[0]?.fieldPath ?? null
-  }, [currentFailures, form])
+    return blockedAssets[0]?.fieldPath ?? null
+  }, [form, getCurrentBlockedAssets])
+
+  const failedAssets = useMemo(
+    () => assets.filter((asset) => currentValidations.get(asset.fieldPath)?.status === 'failed'),
+    [assets, currentValidations],
+  )
   const previewDraft = useMemo(
     () =>
-      draft === null
+      previewSource === null
         ? null
         : {
-            ...draft,
+            ...previewSource,
             assets: {
-              profileFront:
-                failedAssets['assets.profileFront'] === draft.assets.profileFront
-                  ? ''
-                  : draft.assets.profileFront,
-              profileBack:
-                failedAssets['assets.profileBack'] === draft.assets.profileBack
-                  ? ''
-                  : draft.assets.profileBack,
+              profileFront: failedAssets.some(
+                ({ fieldPath, url }) =>
+                  fieldPath === 'assets.profileFront' && url === previewSource.assets.profileFront,
+              )
+                ? ''
+                : previewSource.assets.profileFront,
+              profileBack: failedAssets.some(
+                ({ fieldPath, url }) =>
+                  fieldPath === 'assets.profileBack' && url === previewSource.assets.profileBack,
+              )
+                ? ''
+                : previewSource.assets.profileBack,
             },
-            sections: draft.sections.map((section, sectionIndex) => {
+            sections: previewSource.sections.map((section, sectionIndex) => {
               if (section.type !== 'experience') return section
               return {
                 ...section,
@@ -104,7 +181,9 @@ export function usePreviewAssets(
                   items: section.data.items.map((item, itemIndex) => {
                     const fieldPath =
                       `sections.${sectionIndex}.data.items.${itemIndex}.logoPath` as const
-                    return failedAssets[fieldPath] === item.logoPath
+                    return failedAssets.some(
+                      (asset) => asset.fieldPath === fieldPath && asset.url === item.logoPath,
+                    )
                       ? { ...item, logoPath: '' }
                       : item
                   }),
@@ -112,8 +191,8 @@ export function usePreviewAssets(
               }
             }),
           },
-    [draft, failedAssets],
+    [failedAssets, previewSource],
   )
 
-  return { previewDraft, failedAssets: currentFailures, reapplyAssetErrors }
+  return { previewDraft, failedAssets, reapplyAssetErrors }
 }

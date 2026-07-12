@@ -14,17 +14,26 @@ export function PreviewToolbar({
   preset,
   mode,
   scale,
+  status,
   onPresetChange,
   onModeChange,
 }: {
   preset: PreviewPreset
   mode: PreviewMode
   scale: number
+  status: '연결 중' | '연결됨' | '연결 실패'
   onPresetChange: (preset: PreviewPreset) => void
   onModeChange: (mode: PreviewMode) => void
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-3 rounded-t-lg border border-slate-300 bg-white p-3 text-sm dark:border-neutral-600 dark:bg-neutral-800">
+    <div className="flex flex-wrap items-center gap-3 rounded-t-lg border border-slate-500 bg-white p-3 text-sm text-slate-800 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-100">
+      <output
+        data-testid="preview-status"
+        aria-label="프리뷰 연결 상태"
+        className="rounded-full border border-slate-500 px-2 py-1 text-xs font-medium dark:border-neutral-400"
+      >
+        {status}
+      </output>
       <fieldset className="flex flex-wrap gap-2">
         <legend className="sr-only">프리뷰 viewport</legend>
         {(
@@ -45,7 +54,7 @@ export function PreviewToolbar({
           </label>
         ))}
       </fieldset>
-      <div className="ml-auto inline-flex rounded-md border border-slate-300 p-0.5 dark:border-neutral-600">
+      <div className="ml-auto inline-flex rounded-md border border-slate-500 p-0.5 dark:border-neutral-400">
         <button
           type="button"
           aria-pressed={mode === 'select'}
@@ -63,7 +72,12 @@ export function PreviewToolbar({
           실제 화면
         </button>
       </div>
-      <output aria-label="현재 프리뷰 배율">{Math.round(scale * 100)}%</output>
+      <output
+        aria-label="현재 프리뷰 배율"
+        className="rounded-full bg-slate-100 px-2 py-1 font-mono text-xs font-semibold dark:bg-neutral-700"
+      >
+        {Math.round(scale * 100)}%
+      </output>
     </div>
   )
 }

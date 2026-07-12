@@ -36,6 +36,10 @@ describe('ResumeEditor', () => {
     vi.stubGlobal('jest', {
       advanceTimersByTime: (milliseconds: number) => vi.advanceTimersByTime(milliseconds),
     })
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) =>
+      window.setTimeout(() => callback(performance.now()), 0),
+    )
+    vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => window.clearTimeout(id))
   })
 
   afterEach(() => {
@@ -235,19 +239,26 @@ describe('ResumeEditor', () => {
       'dark:bg-blue-500',
     )
     expect(screen.getByRole('textbox', { name: '이력서 제목' })).toHaveClass(
-      'dark:border-neutral-600',
+      'border-slate-500',
+      'dark:border-neutral-400',
       'dark:bg-neutral-800',
       'dark:text-neutral-100',
     )
+    expect(screen.getByRole('combobox', { name: '템플릿' })).toHaveClass(
+      'border-slate-500',
+      'dark:border-neutral-400',
+    )
     expect(screen.getByRole('tabpanel', { name: '편집' })).toHaveClass('dark:bg-neutral-950')
     expect(screen.getByRole('tabpanel', { name: '프리뷰' })).toHaveClass(
-      'dark:border-neutral-700',
-      'dark:bg-neutral-900',
+      'dark:border-neutral-400',
+      'dark:bg-neutral-950',
     )
   })
 
   it('downloads a valid form once as resume.json', async () => {
     const user = createUser()
+    ImageMock.instances = []
+    vi.stubGlobal('Image', ImageMock)
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:resume')
     vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => undefined)
     const clickedAnchors: HTMLAnchorElement[] = []
@@ -257,6 +268,7 @@ describe('ResumeEditor', () => {
       clickedAnchors.push(this)
     })
     render(<ResumeEditor initialResume={createResumeFixture()} />)
+    act(() => ImageMock.instances.forEach((image) => image.onload?.()))
 
     await user.click(screen.getByRole('button', { name: 'JSON 내보내기' }))
 
@@ -278,11 +290,69 @@ describe('ResumeEditor', () => {
     act(() => failedImage.onerror?.())
     expect(screen.getByText('이미지를 불러올 수 없습니다')).toBeVisible()
     await user.click(screen.getByRole('button', { name: 'JSON 내보내기' }))
-    await advance(0)
+    await advance(40)
 
     expect(click).not.toHaveBeenCalled()
     expect(screen.getByRole('heading', { name: '내보내기 오류' })).toBeVisible()
     expect(screen.getByText('이미지를 불러올 수 없습니다')).toBeVisible()
     expect(screen.getByLabelText('앞면 프로필 이미지 경로')).toHaveFocus()
+  })
+
+  it('asset URL 수정 직후 callback 전 export를 막고 현재 성공 뒤에만 허용한다', async () => {
+    const user = createUser()
+    ImageMock.instances = []
+    vi.stubGlobal('Image', ImageMock)
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:resume')
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => undefined)
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined)
+    render(<ResumeEditor initialResume={createResumeFixture()} />)
+    act(() => ImageMock.instances.forEach((image) => image.onload?.()))
+
+    const assetInput = screen.getByLabelText('앞면 프로필 이미지 경로')
+    await user.clear(assetInput)
+    await user.type(assetInput, '/profile/new.webp')
+    await user.click(screen.getByRole('button', { name: 'JSON 내보내기' }))
+    await advance(0)
+
+    expect(click).not.toHaveBeenCalled()
+    expect(assetInput).toHaveAttribute('aria-invalid', 'true')
+    const describedBy = assetInput.getAttribute('aria-describedby')
+    expect(describedBy).not.toBeNull()
+    expect(document.getElementById(describedBy!)).toHaveTextContent(
+      '이미지 확인이 끝날 때까지 기다려 주세요',
+    )
+
+    const currentImage = ImageMock.instances.find((image) => image.src === '/profile/new.webp')
+    act(() => currentImage?.onload?.())
+    expect(assetInput).toHaveAttribute('aria-invalid', 'false')
+    act(() => ImageMock.instances.forEach((image) => image.onload?.()))
+    await user.click(screen.getByRole('button', { name: 'JSON 내보내기' }))
+
+    expect(click).toHaveBeenCalledOnce()
+  })
+
+  it('닫힌 section의 nested 오류로 이동하고 summary action으로 같은 탐색을 반복한다', async () => {
+    const user = createUser()
+    const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined)
+    render(<ResumeEditor initialResume={createResumeFixture()} />)
+
+    await user.click(screen.getByRole('button', { name: '경력' }))
+    const companyName = screen.getAllByRole('textbox', { name: '회사명' })[0]!
+    await user.clear(companyName)
+    await user.click(screen.getByRole('button', { name: '경력' }))
+    await user.click(screen.getByRole('tab', { name: '프리뷰' }))
+    await user.click(screen.getByRole('button', { name: 'JSON 내보내기' }))
+    await advance(40)
+
+    expect(click).not.toHaveBeenCalled()
+    expect(screen.getByRole('tab', { name: '편집' })).toHaveAttribute('aria-selected', 'true')
+    expect(screen.getByRole('button', { name: '경력' })).toHaveAttribute('aria-expanded', 'true')
+    expect(screen.getAllByRole('textbox', { name: '회사명' })[0]).toHaveFocus()
+
+    const summaryAction = screen.getByRole('button', { name: '첫 번째 오류로 이동' })
+    screen.getByRole('textbox', { name: '역할' }).focus()
+    await user.click(summaryAction)
+    await advance(40)
+    expect(screen.getAllByRole('textbox', { name: '회사명' })[0]).toHaveFocus()
   })
 })

@@ -35,9 +35,12 @@ export function PreviewStage({
     <div
       ref={stageRef}
       data-testid="preview-stage"
-      className="min-h-0 flex-1 overflow-auto rounded-b-lg border-x border-b border-slate-300 bg-slate-200 dark:border-neutral-600 dark:bg-neutral-950"
+      className="min-h-0 flex-1 overflow-auto rounded-b-lg border-x border-b border-slate-500 bg-slate-700 p-3 dark:border-neutral-400 dark:bg-neutral-950"
     >
-      <div style={{ width: viewport.width * scale, height: viewport.height * scale }}>
+      <div
+        className="mx-auto overflow-hidden bg-white shadow-2xl"
+        style={{ width: viewport.width * scale, height: viewport.height * scale }}
+      >
         {children(scale)}
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import { useFormContext, type FieldPath } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
@@ -23,11 +24,11 @@ export function SectionCard({
   dragHandle,
   children,
 }: SectionCardProps) {
-  const panelId = `section-panel-${regionId}`
+  const panelId = useId()
   return (
     <section
       data-editor-region-id={regionId}
-      className={`rounded-lg border bg-white shadow-sm dark:bg-neutral-900 ${selected ? 'border-blue-500' : 'border-slate-200 dark:border-neutral-700'}`}
+      className={`rounded-lg border bg-white shadow-sm dark:bg-neutral-900 ${selected ? 'border-blue-600 ring-2 ring-blue-600 ring-offset-2 dark:border-blue-400 dark:ring-blue-400 dark:ring-offset-neutral-950' : 'border-slate-200 dark:border-neutral-700'}`}
     >
       <div className="flex items-center gap-3 p-4">
         {dragHandle}

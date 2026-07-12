@@ -28,11 +28,21 @@ const ExperienceCompany = ({ experience, skillCatalog, renderRegion }: Props) =>
       <li className="flex flex-col gap-4 border-b border-neutral-200 py-8 last:border-b-0 dark:border-neutral-700">
         <div className="flex items-center gap-3">
           <div className="inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-neutral-100 bg-white dark:border-neutral-600">
-            <img
-              className="w-full"
-              src={experience.logoPath}
-              alt={`${experience.companyName} 로고`}
-            />
+            {experience.logoPath === '' ? (
+              <span
+                role="img"
+                aria-label={`${experience.companyName || '회사'} 로고`}
+                className="px-1 text-center text-[10px] leading-tight text-neutral-500"
+              >
+                로고 없음
+              </span>
+            ) : (
+              <img
+                className="w-full"
+                src={experience.logoPath}
+                alt={`${experience.companyName} 로고`}
+              />
+            )}
           </div>
           <div className="flex flex-col">
             <h3 className="text-2xl font-bold text-neutral-800 dark:text-neutral-50">

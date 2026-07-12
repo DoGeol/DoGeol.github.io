@@ -6,8 +6,11 @@ type EditorToolbarProps = {
 
 export function EditorToolbar({ notice, savedAt, onReset }: EditorToolbarProps) {
   return (
-    <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3 sm:px-6 dark:border-neutral-700 dark:bg-neutral-900">
-      <div>
+    <header
+      data-testid="editor-toolbar"
+      className="sticky top-0 z-20 flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-6 dark:border-neutral-700 dark:bg-neutral-900"
+    >
+      <div className="min-w-0">
         <h1 className="text-xl font-semibold text-slate-950 dark:text-neutral-50">이력서 편집기</h1>
         <p className="mt-1 text-sm text-slate-600 dark:text-neutral-400">
           {savedAt === null ? '초안 저장 준비 중' : `초안 저장됨: ${savedAt}`}
@@ -18,11 +21,11 @@ export function EditorToolbar({ notice, savedAt, onReset }: EditorToolbarProps) 
           </p>
         )}
       </div>
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <button
           type="button"
           onClick={onReset}
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:border-neutral-600 dark:text-neutral-200 dark:hover:bg-neutral-800"
+          className="rounded-md border border-slate-500 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 dark:border-neutral-400 dark:text-neutral-200 dark:hover:bg-neutral-800"
         >
           초안 초기화
         </button>

@@ -3,7 +3,10 @@ import { useController, useFormContext, type FieldPath } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 
-import { FieldShell } from '@/app/(dev)/resume-editor/_components/fields/field-shell'
+import {
+  FieldShell,
+  fieldControlClassName,
+} from '@/app/(dev)/resume-editor/_components/fields/field-shell'
 
 type NullableDateFieldProps = {
   name: FieldPath<ResumeDraft>
@@ -40,7 +43,7 @@ export function NullableDateField({ name, label, inputType }: NullableDateFieldP
               lastValue.current = event.target.value
               field.onChange(event.target.value)
             }}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 dark:border-neutral-600 dark:bg-neutral-800"
+            className={fieldControlClassName}
           />
           <label className="flex items-center gap-2 text-sm">
             <input

@@ -4,6 +4,11 @@ import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 
 export type EditorRegionIndex = Map<string, FieldPath<ResumeDraft>>
 
+export type EditorNavigationTarget = {
+  regionId: string | null
+  sectionId: string | null
+}
+
 export const buildEditorRegionIndex = (draft: ResumeDraft): EditorRegionIndex => {
   const index: EditorRegionIndex = new Map()
 
@@ -76,4 +81,27 @@ export const buildEditorRegionIndex = (draft: ResumeDraft): EditorRegionIndex =>
   })
 
   return index
+}
+
+export const findEditorNavigationTarget = (
+  draft: ResumeDraft,
+  fieldPath: FieldPath<ResumeDraft>,
+): EditorNavigationTarget => {
+  const sectionMatch = /^sections\.(\d+)/.exec(fieldPath)
+  const sectionIndex = sectionMatch === null ? null : Number(sectionMatch[1])
+  const sectionId = sectionIndex === null ? null : (draft.sections[sectionIndex]?.id ?? null)
+  let regionId: string | null = sectionId
+  let longestPath = sectionIndex === null ? -1 : `sections.${sectionIndex}`.length
+
+  buildEditorRegionIndex(draft).forEach((candidatePath, candidateId) => {
+    if (
+      (fieldPath === candidatePath || fieldPath.startsWith(`${candidatePath}.`)) &&
+      candidatePath.length > longestPath
+    ) {
+      regionId = candidateId
+      longestPath = candidatePath.length
+    }
+  })
+
+  return { regionId, sectionId }
 }

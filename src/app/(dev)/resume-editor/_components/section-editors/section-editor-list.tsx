@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import { useEffect, useEffectEvent } from 'react'
+import { useFieldArray, useFormContext, useWatch, type FieldPath } from 'react-hook-form'
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { buildEditorRegionIndex } from '@/app/(dev)/resume-editor/_model/editor-region-index'
@@ -22,6 +22,14 @@ type SectionEditorListProps = {
   onSelectedRegionChange: (regionId: string) => void
   openSectionIds: ReadonlySet<string>
   onOpenSectionIdsChange: (sectionIds: Set<string>) => void
+  focusRequest?: EditorFocusRequest | null
+}
+
+export type EditorFocusRequest = {
+  token: number
+  regionId: string | null
+  sectionId: string | null
+  fieldPath: FieldPath<ResumeDraft>
 }
 
 const assertNever = (value: never): never => {
@@ -33,6 +41,7 @@ export function SectionEditorList({
   onSelectedRegionChange,
   openSectionIds,
   onOpenSectionIdsChange,
+  focusRequest = null,
 }: SectionEditorListProps) {
   const form = useFormContext<ResumeDraft>()
   const { fields: sectionFields, move: moveSection } = useFieldArray({
@@ -41,27 +50,53 @@ export function SectionEditorList({
     keyName: 'formKey',
   })
   const sections = useWatch({ control: form.control, name: 'sections' })
+  const sectionFormKeys = new Map(
+    sectionFields.map((section) => [String(section.id), section.formKey]),
+  )
+  const ensureSectionOpen = useEffectEvent((sectionId: string) => {
+    if (!openSectionIds.has(sectionId)) {
+      onOpenSectionIdsChange(new Set([...openSectionIds, sectionId]))
+    }
+  })
 
   useEffect(() => {
-    if (selectedRegionId === null) return
-    const path = buildEditorRegionIndex(form.getValues()).get(selectedRegionId)
+    const draft = form.getValues()
+    const requestedRegionId = focusRequest?.regionId ?? selectedRegionId
+    const path =
+      focusRequest?.fieldPath ??
+      (requestedRegionId === null
+        ? undefined
+        : buildEditorRegionIndex(draft).get(requestedRegionId))
     if (path === undefined) return
     const match = /^sections\.(\d+)/.exec(path)
-    if (match === null) return
-    const section = form.getValues(`sections.${Number(match[1])}`)
-    queueMicrotask(() => {
-      if (!openSectionIds.has(section.id)) {
-        onOpenSectionIdsChange(new Set([...openSectionIds, section.id]))
-      }
-    })
+    const section = match === null ? undefined : draft.sections[Number(match[1])]
+    const sectionId = focusRequest?.sectionId ?? section?.id ?? null
+    if (sectionId !== null) ensureSectionOpen(sectionId)
 
-    if (form.getValues('sections').some((candidate) => candidate.id === selectedRegionId)) return
+    const isSectionSelection =
+      focusRequest === null &&
+      draft.sections.some((candidate) => candidate.id === requestedRegionId)
+    if (isSectionSelection) return
 
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
+    if (focusRequest !== null) {
+      const exactField = document.getElementById(
+        `field-${focusRequest.fieldPath.replaceAll('.', '-')}`,
+      )
+      exactField?.scrollIntoView?.({ block: 'nearest' })
+      exactField?.focus()
+      return
+    }
+
+    let active = true
+    let outerFrame: number | null = null
+    let innerFrame: number | null = null
+    outerFrame = window.requestAnimationFrame(() => {
+      if (!active) return
+      innerFrame = window.requestAnimationFrame(() => {
+        if (!active) return
         const region = Array.from(
           document.querySelectorAll<HTMLElement>('[data-editor-region-id]'),
-        ).find((element) => element.dataset.editorRegionId === selectedRegionId)
+        ).find((element) => element.dataset.editorRegionId === requestedRegionId)
         region?.scrollIntoView?.({ block: 'nearest' })
         const field = region?.querySelector<HTMLElement>(
           'input:not([type="hidden"]), textarea, select',
@@ -72,7 +107,13 @@ export function SectionEditorList({
         ;(field ?? fallbackButton)?.focus()
       })
     })
-  }, [form, onOpenSectionIdsChange, openSectionIds, selectedRegionId])
+
+    return () => {
+      active = false
+      if (outerFrame !== null) window.cancelAnimationFrame(outerFrame)
+      if (innerFrame !== null) window.cancelAnimationFrame(innerFrame)
+    }
+  }, [focusRequest, form, selectedRegionId])
 
   return (
     <SortableList
@@ -120,7 +161,7 @@ export function SectionEditorList({
 
           const label = getResumeSectionLabel(section.type)
           return (
-            <SortableItem key={sectionFields[sectionIndex]?.formKey ?? section.id} id={section.id}>
+            <SortableItem key={sectionFormKeys.get(section.id) ?? section.id} id={section.id}>
               <SectionCard
                 regionId={section.id}
                 title={label}

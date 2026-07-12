@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { cleanup, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm, type UseFormReturn } from 'react-hook-form'
@@ -214,6 +214,25 @@ describe('SectionEditorList', () => {
     expect(experienceToggle).toHaveAttribute('aria-expanded', 'false')
     await user.click(experienceToggle)
     expect(experienceToggle).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('opaque stable ID와 DOM-local accordion linkage ID를 분리한다', () => {
+    const draft = createResumeFixture()
+    const opaqueSectionId = 'career section:/opaque?x=1'
+    draft.sections[2]!.id = opaqueSectionId
+    renderEditor(opaqueSectionId, draft, [opaqueSectionId])
+
+    const toggle = screen.getByRole('button', { name: '경력' })
+    const controlledId = toggle.getAttribute('aria-controls')
+    expect(controlledId).not.toBeNull()
+    expect(controlledId).not.toContain(opaqueSectionId)
+    expect(document.getElementById(controlledId!)).not.toBeNull()
+    expect(document.querySelector('[data-editor-region-id]')).not.toBeNull()
+    expect(
+      Array.from(document.querySelectorAll<HTMLElement>('[data-editor-region-id]')).find(
+        (element) => element.dataset.editorRegionId === opaqueSectionId,
+      ),
+    ).toHaveAttribute('data-editor-region-id', opaqueSectionId)
   })
 
   it('section 표시 변경과 회사 추가를 반영하고 새 회사명에 focus한다', async () => {
@@ -618,6 +637,82 @@ describe('SectionEditorList', () => {
     await new Promise((resolve) => window.setTimeout(resolve, 50))
 
     expect(role).toHaveFocus()
+  })
+
+  it('늦은 RAF의 stale selection과 accordion 변경이 사용자 focus를 빼앗지 않는다', async () => {
+    let nextFrameId = 0
+    const frames = new Map<number, FrameRequestCallback>()
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => {
+      const id = ++nextFrameId
+      frames.set(id, callback)
+      return id
+    })
+    vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => {
+      frames.delete(id)
+    })
+    const runFrame = (id: number) => {
+      const callback = frames.get(id)
+      frames.delete(id)
+      if (callback !== undefined) act(() => callback(0))
+    }
+
+    function StatefulSelection() {
+      const [selectedRegionId, setSelectedRegionId] = useState('history-1')
+      const [openSectionIds, setOpenSectionIds] = useState(
+        () => new Set(['section-experience', 'section-projects']),
+      )
+      return (
+        <>
+          <button type="button" onClick={() => setSelectedRegionId('project-work-1')}>
+            프로젝트 업무 선택
+          </button>
+          <SectionEditorList
+            selectedRegionId={selectedRegionId}
+            onSelectedRegionChange={setSelectedRegionId}
+            openSectionIds={openSectionIds}
+            onOpenSectionIdsChange={setOpenSectionIds}
+          />
+        </>
+      )
+    }
+
+    render(
+      <Harness onForm={() => undefined}>
+        <StatefulSelection />
+      </Harness>,
+    )
+    const staleOuterFrame = Math.min(...frames.keys())
+    const user = userEvent.setup()
+    await user.click(screen.getByRole('button', { name: '프로젝트 업무 선택' }))
+
+    const currentOuterFrame = Math.max(...frames.keys())
+    runFrame(currentOuterFrame)
+    runFrame(Math.max(...frames.keys()))
+    expect(screen.getByRole('textbox', { name: '프로젝트 역할' })).toHaveFocus()
+    runFrame(staleOuterFrame)
+    if (frames.size > 0) runFrame(Math.max(...frames.keys()))
+    expect(screen.getByRole('textbox', { name: '프로젝트 역할' })).toHaveFocus()
+
+    await user.click(screen.getByRole('button', { name: '학력' }))
+    const role = screen.getByRole('textbox', { name: '프로젝트 역할' })
+    role.focus()
+    for (const id of [...frames.keys()]) runFrame(id)
+    for (const id of [...frames.keys()]) runFrame(id)
+    expect(role).toHaveFocus()
+  })
+
+  it('unmount에서 예약한 region focus RAF를 취소한다', () => {
+    let nextFrameId = 0
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation(() => ++nextFrameId)
+    const cancelAnimationFrame = vi
+      .spyOn(window, 'cancelAnimationFrame')
+      .mockImplementation(() => undefined)
+
+    const view = renderEditor('history-1', createResumeFixture(), ['section-experience'])
+    cleanup()
+
+    expect(cancelAnimationFrame).toHaveBeenCalled()
+    expect(view.onSelectedRegionChange).not.toHaveBeenCalled()
   })
 
   it.each([

@@ -1,6 +1,6 @@
 ---
 status: active
-lastReviewed: 2026-07-11
+lastReviewed: 2026-07-12
 sourceOfTruth:
   - ../../src/app
   - ../../next.config.mjs
@@ -27,7 +27,24 @@ App Router의 Server Component를 기본으로 사용한다. 테마, navigation,
 
 ## 데이터 흐름
 
-`/resume`은 `_infos`의 TypeScript 객체를 Server Component가 import해 각 section component에 렌더링한다. 외부 API, 원격 캐시, 전역 store는 사용하지 않는다. 날짜 표시와 경력 계산만 Day.js에 의존한다.
+`/resume`은 Zod schema로 검증한 `_data/resume.json`을 template registry의 `classic` renderer에 전달한다. JSON이 canonical source이며 section과 item의 stable ID가 public renderer와 개발 편집기의 연결 경계다. 외부 API, 원격 cache와 전역 store는 사용하지 않는다.
+
+## 이력서 편집 경계
+
+`(pages)/resume`은 schema, canonical data와 template registry를 소유한다. `(dev)/resume-editor`는 React Hook Form이 소유한 draft를 deferred preview와 현재 tab의 versioned `sessionStorage`에 전달한다. 별도 `(dev)/resume-preview` iframe은 same-origin 검증된 message protocol만 받고, 선택 모드의 region click만 editor로 돌려준다.
+
+```mermaid
+flowchart LR
+  JSON["canonical resume.json"] --> Schema["Zod schema"]
+  Schema --> Public["public /resume renderer"]
+  Schema --> Form["dev editor RHF draft"]
+  Form -->|"deferred RENDER_DRAFT"| Frame["preview iframe"]
+  Frame -->|"SELECT_REGION"| Form
+  Form --> Session["versioned sessionStorage"]
+  Form --> Download["downloaded resume.json"]
+```
+
+편집 route와 protocol은 production compile에서 제외되고 static export에 나타나지 않는다. 내려받은 JSON을 검토해 canonical file로 교체하는 단계는 의도적으로 수동이다.
 
 ## 배포
 

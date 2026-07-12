@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { createResumeFixture } from '@/test/fixtures/resume'
 
-import { buildEditorRegionIndex } from './editor-region-index'
+import { buildEditorRegionIndex, findEditorNavigationTarget } from './editor-region-index'
 
 describe('buildEditorRegionIndex', () => {
   it('maps stable nested IDs to their current field paths', () => {
@@ -48,5 +48,22 @@ describe('buildEditorRegionIndex', () => {
     expect(index.get('section-experience')).toBe('sections.0')
     expect(index.get('experience-1')).toBe('sections.0.data.items.0')
     expect(index.get('paragraph-1')).toBe('sections.6.data.paragraphs.0')
+  })
+
+  it('nested field path를 arbitrary stable ID의 가장 가까운 region과 section에 연결한다', () => {
+    const draft = createResumeFixture()
+    draft.sections[2]!.id = 'career-section-opaque'
+    const experience = draft.sections[2]
+    if (experience?.type !== 'experience') throw new Error('경력 section이 없습니다')
+    experience.data.items[0]!.id = 'company-opaque'
+
+    expect(findEditorNavigationTarget(draft, 'sections.2.data.items.0.companyName')).toEqual({
+      regionId: 'company-opaque',
+      sectionId: 'career-section-opaque',
+    })
+    expect(findEditorNavigationTarget(draft, 'metadata.title')).toEqual({
+      regionId: null,
+      sectionId: null,
+    })
   })
 })

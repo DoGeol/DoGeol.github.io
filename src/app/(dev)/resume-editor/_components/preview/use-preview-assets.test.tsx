@@ -24,7 +24,7 @@ const Harness = () => {
   const form = useForm<ResumeDraft>({ defaultValues: createResumeFixture() })
   const watchedDraft = useWatch({ control: form.control })
   const draft = useMemo(() => resumeDraftSchema.parse(watchedDraft), [watchedDraft])
-  const { previewDraft } = usePreviewAssets(form, draft)
+  const { previewDraft, reapplyAssetErrors } = usePreviewAssets(form, draft)
   const { errors } = useFormState({ control: form.control })
 
   return (
@@ -46,6 +46,9 @@ const Harness = () => {
         }
       >
         서버 오류
+      </button>
+      <button type="button" onClick={() => reapplyAssetErrors()}>
+        asset 오류 재적용
       </button>
     </FormProvider>
   )
@@ -74,7 +77,7 @@ describe('usePreviewAssets', () => {
       expect(ImageMock.instances.some((image) => image.src === '/profile/new.webp')).toBe(true),
     )
     staleError()
-    expect(screen.getByLabelText('앞면 오류')).toHaveTextContent('none')
+    expect(screen.getByLabelText('앞면 오류')).toHaveTextContent('asset-pending')
     expect(screen.getByLabelText('프리뷰 앞면 경로')).toHaveTextContent('/profile/new.webp')
 
     const currentImage = ImageMock.instances.find((image) => image.src === '/profile/new.webp')
@@ -114,5 +117,38 @@ describe('usePreviewAssets', () => {
     staleSuccess()
     expect(screen.getByLabelText('앞면 오류')).toHaveTextContent('asset')
     expect(screen.getByLabelText('프리뷰 앞면 경로')).toHaveTextContent('fallback')
+  })
+
+  it('URL 변경 즉시 이전 성공을 pending으로 무효화하고 현재 성공만 해제한다', async () => {
+    render(<Harness />)
+    const initialImage = ImageMock.instances.find((image) => image.src === '/profile/pdg-real.webp')
+    initialImage?.onload?.()
+    await waitFor(() => expect(screen.getByLabelText('앞면 오류')).toHaveTextContent('none'))
+
+    fireEvent.click(screen.getByRole('button', { name: '새 경로' }))
+
+    await waitFor(() =>
+      expect(screen.getByLabelText('앞면 오류')).toHaveTextContent('asset-pending'),
+    )
+    fireEvent.click(screen.getByRole('button', { name: 'asset 오류 재적용' }))
+    expect(screen.getByLabelText('앞면 오류')).toHaveTextContent('asset-pending')
+
+    const currentImage = ImageMock.instances.find((image) => image.src === '/profile/new.webp')
+    currentImage?.onload?.()
+    await waitFor(() => expect(screen.getByLabelText('앞면 오류')).toHaveTextContent('none'))
+  })
+
+  it('pending 재적용과 성공 callback이 같은 field의 non-asset error를 보존한다', async () => {
+    render(<Harness />)
+    fireEvent.click(screen.getByRole('button', { name: '새 경로' }))
+    await waitFor(() =>
+      expect(ImageMock.instances.some((image) => image.src === '/profile/new.webp')).toBe(true),
+    )
+    fireEvent.click(screen.getByRole('button', { name: '서버 오류' }))
+    fireEvent.click(screen.getByRole('button', { name: 'asset 오류 재적용' }))
+    expect(screen.getByLabelText('앞면 오류')).toHaveTextContent('server')
+
+    ImageMock.instances.find((image) => image.src === '/profile/new.webp')?.onload?.()
+    expect(screen.getByLabelText('앞면 오류')).toHaveTextContent('server')
   })
 })
