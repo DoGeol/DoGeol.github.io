@@ -1,10 +1,13 @@
 import React from 'react'
 import { cn } from '@/shared/lib/tailwindcss'
-import { SkillCategory, SkillName } from '@/app/(pages)/resume/_components/common/skill'
+import type { SkillCategory } from '@/app/(pages)/resume/_model/resume-schema'
+import type { ResumeRegionRenderer } from '@/app/(pages)/resume/_model/resume-region'
 
 interface Props {
-  skillName: SkillName
+  skillName: string
   category: SkillCategory
+  regionId: string
+  renderRegion: ResumeRegionRenderer
   className?: string
 }
 
@@ -29,18 +32,22 @@ const getSkillColorClasses = (category: SkillCategory) => {
   }
 }
 
-const SkillBadge = ({ skillName, category, className }: Props) => {
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-medium capitalize',
-        getSkillColorClasses(category),
-        className,
-      )}
-    >
-      {skillName}
-    </span>
-  )
-}
+const SkillBadge = ({ skillName, category, regionId, renderRegion, className }: Props) =>
+  renderRegion({
+    id: regionId,
+    type: 'skill-reference',
+    label: skillName,
+    children: (
+      <span
+        className={cn(
+          'inline-flex items-center rounded-md px-1.5 py-0.5 text-xs font-medium capitalize',
+          getSkillColorClasses(category),
+          className,
+        )}
+      >
+        {skillName}
+      </span>
+    ),
+  })
 
 export default SkillBadge

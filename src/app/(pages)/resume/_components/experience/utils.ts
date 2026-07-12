@@ -1,40 +1,40 @@
-import { Experience, IExperience } from '@/app/(pages)/resume/_components/experience/types'
 import dayjs from 'dayjs'
 
-export const getEmploymentStatusText = (
-  status: IExperience['experienceList'][0]['employmentStatus'],
-) => {
+import type { ExperienceSection } from '@/app/(pages)/resume/_model/resume-schema'
+
+export type ExperienceItem = ExperienceSection['data']['items'][number]
+
+export const getEmploymentStatusText = (status: ExperienceItem['employmentStatus']) => {
   switch (status) {
     case 'employed':
       return '재직중'
-    case 'retire':
+    case 'retired':
       return '퇴사'
-    case 'recommended_retire':
+    case 'recommended-retired':
       return '*경영악화로 인한 권고사직 퇴사'
   }
 }
 
-export const calculateTotalExperience = (experience: IExperience) => {
+export const calculateTotalExperience = (section: ExperienceSection) => {
   let totalMonths = 0
-  experience.experienceList.forEach((exp) => {
-    exp.historyList.forEach((history) => {
-      const startDate = dayjs(history.period[0])
-      const endDate = history.period[1] ? dayjs(history.period[1]) : dayjs()
+  section.data.items.forEach((experience) => {
+    experience.histories.forEach((history) => {
+      const startDate = dayjs(history.startDate)
+      const endDate = history.endDate ? dayjs(history.endDate) : dayjs()
       totalMonths += endDate.diff(startDate, 'month') + 1
     })
   })
 
   const years = Math.floor(totalMonths / 12)
   const months = totalMonths % 12
-
   return `총 ${years}년 ${months}개월`
 }
 
-export const calculateExperiencePeriod = (experience: Experience) => {
+export const calculateExperiencePeriod = (experience: ExperienceItem) => {
   let totalMonths = 0
-  experience.historyList.forEach((history) => {
-    const startDate = dayjs(history.period[0])
-    const endDate = history.period[1] ? dayjs(history.period[1]) : dayjs()
+  experience.histories.forEach((history) => {
+    const startDate = dayjs(history.startDate)
+    const endDate = history.endDate ? dayjs(history.endDate) : dayjs()
     totalMonths += endDate.diff(startDate, 'month') + 1
   })
 
@@ -42,42 +42,30 @@ export const calculateExperiencePeriod = (experience: Experience) => {
 
   const years = Math.floor(totalMonths / 12)
   const months = totalMonths % 12
-
   const yearText = years > 0 ? `${years}년` : ''
   const monthText = months > 0 ? `${months}개월` : ''
-
-  return `${[yearText, monthText].filter(Boolean).join(' ')}`
+  return [yearText, monthText].filter(Boolean).join(' ')
 }
 
-export const getCompanyPeriodText = (experience: Experience): string => {
-  if (!experience.historyList || experience.historyList.length === 0) {
-    return ''
-  }
+export const getCompanyPeriodText = (experience: ExperienceItem): string => {
+  if (experience.histories.length === 0) return ''
 
-  const startDates = experience.historyList.map((h) => dayjs(h.period[0]))
+  const startDates = experience.histories.map(({ startDate }) => dayjs(startDate))
   const earliestStartDate = startDates.reduce((earliest, current) =>
     current.isBefore(earliest) ? current : earliest,
   )
+  const endDates = experience.histories
+    .map(({ endDate }) => endDate)
+    .filter((date): date is string => Boolean(date))
+    .map((date) => dayjs(date))
+  const startText = earliestStartDate.format('YYYY.MM')
 
-  const endDates = experience.historyList
-    .map((h) => h.period[1])
-    .filter((d): d is string => !!d)
-    .map((d) => dayjs(d))
-
-  const formatDate = (date: dayjs.Dayjs) => date.format('YYYY.MM')
-  const startText = formatDate(earliestStartDate)
-
-  if (experience.employmentStatus === 'employed') {
-    return `${startText} ~`
-  }
-
-  if (endDates.length === 0) {
+  if (experience.employmentStatus === 'employed' || endDates.length === 0) {
     return `${startText} ~`
   }
 
   const latestEndDate = endDates.reduce((latest, current) =>
     current.isAfter(latest) ? current : latest,
   )
-
-  return `${startText} ~ ${formatDate(latestEndDate)}`
+  return `${startText} ~ ${latestEndDate.format('YYYY.MM')}`
 }

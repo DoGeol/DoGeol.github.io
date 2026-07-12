@@ -1,47 +1,28 @@
-import React from 'react'
-import type { Metadata, NextPage, ResolvingMetadata } from 'next'
-import Information from '@/app/(pages)/resume/_components/infomation'
-import Introduce from '@/app/(pages)/resume/_components/introduce'
-import Experience from '@/app/(pages)/resume/_components/experience'
-import Project from '@/app/(pages)/resume/_components/project'
-import Education from '@/app/(pages)/resume/_components/education'
-import Activity from '@/app/(pages)/resume/_components/activity'
-import License from '@/app/(pages)/resume/_components/license'
+import type { Metadata, ResolvingMetadata } from 'next'
+
+import { canonicalResumeData } from '@/app/(pages)/resume/_model/resume-data'
+import { ResumeDocument } from '@/app/(pages)/resume/_templates/registry'
 
 export async function generateMetadata(
   _: PageProps<'/resume'>,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const previousOpenGraph = (await parent).openGraph || {}
-  const previousTwitter = (await parent).twitter || {}
-
+  const previous = await parent
   return {
-    title: `Resume 편도걸`,
+    title: canonicalResumeData.metadata.title,
     openGraph: {
-      ...previousOpenGraph,
-      title: '프론트엔드 개발자 편도걸 이력서',
-      description: '안녕하세요, 6년차 프론트엔드 개발자 편도걸 입니다.',
+      ...previous.openGraph,
+      title: canonicalResumeData.metadata.socialTitle,
+      description: canonicalResumeData.metadata.description,
     },
     twitter: {
-      ...previousTwitter,
-      title: '프론트엔드 개발자 편도걸 이력서',
-      description: '안녕하세요, 6년차 프론트엔드 개발자 편도걸 입니다.',
+      ...previous.twitter,
+      title: canonicalResumeData.metadata.socialTitle,
+      description: canonicalResumeData.metadata.description,
     },
   }
 }
 
-const Page: NextPage = () => {
-  return (
-    <section className={'mx-auto flex max-w-6xl min-w-xs flex-col space-y-6 py-8'}>
-      <Information />
-      <Introduce />
-      <Experience />
-      <Project />
-      <Education />
-      <Activity />
-      <License />
-    </section>
-  )
+export default function Page() {
+  return <ResumeDocument resume={canonicalResumeData} />
 }
-
-export default Page

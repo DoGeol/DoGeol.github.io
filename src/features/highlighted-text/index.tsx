@@ -12,25 +12,29 @@ export default function HighlightedText({
   className = '',
   useUnderline = false,
 }: HighlightedTextProps) {
-  const parts = text.split(/(\*\*.*?\*\*)/g)
   return (
     <>
-      {parts.map((part, i) =>
-        part.startsWith('**') && part.endsWith('**') ? (
-          <strong
-            key={i}
-            className={cn(
-              'font-semibold text-gray-800 dark:text-gray-200',
-              useUnderline && 'underline underline-offset-2',
-              className,
-            )}
-          >
-            {part.slice(2, -2)}
-          </strong>
-        ) : (
-          part
-        ),
-      )}
+      {text.split('\n').map((line, lineIndex, lines) => (
+        <React.Fragment key={lineIndex}>
+          {line.split(/(\*\*.*?\*\*)/g).map((part, partIndex) =>
+            part.startsWith('**') && part.endsWith('**') ? (
+              <strong
+                key={partIndex}
+                className={cn(
+                  'font-semibold text-gray-800 dark:text-gray-200',
+                  useUnderline && 'underline underline-offset-2',
+                  className,
+                )}
+              >
+                {part.slice(2, -2)}
+              </strong>
+            ) : (
+              part
+            ),
+          )}
+          {lineIndex < lines.length - 1 && <br />}
+        </React.Fragment>
+      ))}
     </>
   )
 }

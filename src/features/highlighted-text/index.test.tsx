@@ -21,4 +21,11 @@ describe('HighlightedText', () => {
 
     expect(screen.getByText('일반 텍스트')).toBeInTheDocument()
   })
+
+  it('newline과 강조를 함께 렌더링한다', () => {
+    const { container } = render(<HighlightedText text={'안녕하세요.\n개발자 **테스트**입니다.'} />)
+
+    expect(screen.getByText('테스트').tagName).toBe('STRONG')
+    expect(container.querySelectorAll('br')).toHaveLength(1)
+  })
 })
