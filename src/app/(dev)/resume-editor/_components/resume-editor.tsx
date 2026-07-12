@@ -2,22 +2,24 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useRef, useState } from 'react'
-import {
-  FormProvider,
-  useForm,
-  useFormContext,
-  useWatch,
-  type FieldErrors,
-  type FieldPath,
-} from 'react-hook-form'
+import { FormProvider, useForm, useWatch, type FieldErrors, type FieldPath } from 'react-hook-form'
 
 import { resumeSchema, type ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 
-import { clearResumeDraft, readResumeDraft, writeResumeDraft } from '../_model/draft-storage'
-import { downloadResumeJson, serializeResumeForExport } from '../_model/export-resume'
-import { EditorTabs, type EditorPane } from './editor-tabs'
-import { EditorToolbar } from './editor-toolbar'
-import { ErrorSummary } from './error-summary'
+import {
+  clearResumeDraft,
+  readResumeDraft,
+  writeResumeDraft,
+} from '@/app/(dev)/resume-editor/_model/draft-storage'
+import {
+  downloadResumeJson,
+  serializeResumeForExport,
+} from '@/app/(dev)/resume-editor/_model/export-resume'
+import { DocumentSettingsEditor } from '@/app/(dev)/resume-editor/_components/document-settings-editor'
+import { EditorTabs, type EditorPane } from '@/app/(dev)/resume-editor/_components/editor-tabs'
+import { EditorToolbar } from '@/app/(dev)/resume-editor/_components/editor-toolbar'
+import { ErrorSummary } from '@/app/(dev)/resume-editor/_components/error-summary'
+import { SectionEditorList } from '@/app/(dev)/resume-editor/_components/section-editors/section-editor-list'
 
 const SAVE_DEBOUNCE_MS = 300
 
@@ -37,42 +39,6 @@ const findFirstErrorPath = (
   return null
 }
 
-type MetadataFieldProps = {
-  name: 'metadata.title' | 'metadata.socialTitle' | 'metadata.description'
-  label: string
-  multiline?: boolean
-}
-
-function MetadataField({ name, label, multiline = false }: MetadataFieldProps) {
-  const { register, formState } = useFormContextForMetadata()
-  const error = formState.errors.metadata?.[name.split('.')[1] as keyof ResumeDraft['metadata']]
-  const field = register(name)
-  const commonProps = {
-    ...field,
-    id: name,
-    'aria-invalid': error === undefined ? ('false' as const) : ('true' as const),
-    'aria-describedby': error === undefined ? undefined : `${name}-error`,
-    className:
-      'mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-950 dark:border-neutral-600 dark:bg-neutral-800 dark:text-neutral-100',
-  }
-
-  return (
-    <div>
-      <label htmlFor={name} className="text-sm font-medium text-slate-800 dark:text-neutral-200">
-        {label}
-      </label>
-      {multiline ? <textarea {...commonProps} rows={4} /> : <input {...commonProps} />}
-      {error?.message !== undefined && (
-        <p id={`${name}-error`} className="mt-1 text-sm text-red-700 dark:text-red-300">
-          {String(error.message)}
-        </p>
-      )}
-    </div>
-  )
-}
-
-const useFormContextForMetadata = () => useFormContext<ResumeDraft>()
-
 type ResumeEditorProps = {
   initialResume: ResumeDraft
 }
@@ -89,6 +55,12 @@ export function ResumeEditor({ initialResume }: ResumeEditorProps) {
   const [savedAt, setSavedAt] = useState<string | null>(null)
   const [activePane, setActivePane] = useState<EditorPane>('editor')
   const [showErrorSummary, setShowErrorSummary] = useState(false)
+  const [selectedRegionId, setSelectedRegionId] = useState<string | null>(
+    initialResume.sections[0]?.id ?? null,
+  )
+  const [openSectionIds, setOpenSectionIds] = useState<Set<string>>(
+    () => new Set(initialResume.sections[0] === undefined ? [] : [initialResume.sections[0].id]),
+  )
   const autosaveBaselineRef = useRef<ResumeDraft | null>(null)
 
   useEffect(() => {
@@ -177,12 +149,16 @@ export function ResumeEditor({ initialResume }: ResumeEditorProps) {
             >
               <div className="mx-auto max-w-2xl space-y-5">
                 <ErrorSummary visible={showErrorSummary} />
-                <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-neutral-700 dark:bg-neutral-900">
-                  <h2 className="text-lg font-semibold dark:text-neutral-50">문서 정보</h2>
-                  <MetadataField name="metadata.title" label="이력서 제목" />
-                  <MetadataField name="metadata.socialTitle" label="소셜 제목" />
-                  <MetadataField name="metadata.description" label="설명" multiline />
-                </div>
+                <DocumentSettingsEditor
+                  selectedRegionId={selectedRegionId}
+                  onSelectedRegionChange={setSelectedRegionId}
+                />
+                <SectionEditorList
+                  selectedRegionId={selectedRegionId}
+                  onSelectedRegionChange={setSelectedRegionId}
+                  openSectionIds={openSectionIds}
+                  onOpenSectionIdsChange={setOpenSectionIds}
+                />
               </div>
             </section>
             <section
