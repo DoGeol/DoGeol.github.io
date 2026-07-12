@@ -104,15 +104,11 @@ describe('ResumeEditor', () => {
     await advance(0)
 
     expect(sessionStorage.getItem(RESUME_DRAFT_STORAGE_KEY)).toBeNull()
-    expect(screen.getByRole('status')).toHaveTextContent(
-      '초안을 복구할 수 없어 원본을 불러왔습니다',
-    )
+    expect(screen.getByText('초안을 복구할 수 없어 원본을 불러왔습니다')).toBeInTheDocument()
     expect(screen.getByRole('textbox', { name: '이력서 제목' })).toHaveValue('Resume 테스트')
 
     await advance(301)
-    expect(screen.getByRole('status')).toHaveTextContent(
-      '초안을 복구할 수 없어 원본을 불러왔습니다',
-    )
+    expect(screen.getByText('초안을 복구할 수 없어 원본을 불러왔습니다')).toBeInTheDocument()
   })
 
   it('keeps a reset canonical value unsaved until a subsequent edit', async () => {

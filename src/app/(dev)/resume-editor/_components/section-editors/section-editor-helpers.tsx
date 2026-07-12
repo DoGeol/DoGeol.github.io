@@ -2,6 +2,8 @@ import { useFieldArray, useFormContext, type FieldArrayPath, type FieldPath } fr
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { createDefaultItem } from '@/app/(dev)/resume-editor/_model/default-items'
+import { SortableHandle } from '@/app/(dev)/resume-editor/_components/sortable/sortable-handle'
+import { SortableItem } from '@/app/(dev)/resume-editor/_components/sortable/sortable-item'
 
 export const cardClassName =
   'space-y-3 rounded-md border border-slate-200 p-3 dark:border-neutral-700'
@@ -94,5 +96,18 @@ export function ItemRegion({ id, label, selected, children }: ItemRegionProps) {
     >
       {children}
     </article>
+  )
+}
+
+export function SortableItemRegion({ id, label, selected, children }: ItemRegionProps) {
+  return (
+    <SortableItem id={id}>
+      <ItemRegion id={id} label={label} selected={selected}>
+        <div className="flex justify-end">
+          <SortableHandle label={label} />
+        </div>
+        {children}
+      </ItemRegion>
+    </SortableItem>
   )
 }

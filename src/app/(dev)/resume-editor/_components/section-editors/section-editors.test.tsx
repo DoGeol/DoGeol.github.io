@@ -6,6 +6,7 @@ import { FormProvider, useForm, type UseFormReturn } from 'react-hook-form'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { resumeSchema, type ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
+import { buildEditorRegionIndex } from '@/app/(dev)/resume-editor/_model/editor-region-index'
 import { createResumeFixture } from '@/test/fixtures/resume'
 
 import { NullableDateField } from '../fields/nullable-date-field'
@@ -141,12 +142,18 @@ describe('SectionEditorList', () => {
   function EditorUnderTest({
     selectedRegionId,
     onSelectedRegionChange,
+    initiallyOpenSectionIds,
   }: {
     selectedRegionId: string
     onSelectedRegionChange: (id: string) => void
+    initiallyOpenSectionIds?: string[]
   }) {
     const [openSectionIds, setOpenSectionIds] = useState<Set<string>>(
-      () => new Set(selectedRegionId.startsWith('section-') ? [selectedRegionId] : []),
+      () =>
+        new Set(
+          initiallyOpenSectionIds ??
+            (selectedRegionId.startsWith('section-') ? [selectedRegionId] : []),
+        ),
     )
     return (
       <>
@@ -167,6 +174,7 @@ describe('SectionEditorList', () => {
   const renderEditor = (
     selectedRegionId = 'section-information',
     draft = createResumeFixture(),
+    initiallyOpenSectionIds?: string[],
   ) => {
     let form: UseFormReturn<ResumeDraft> | undefined
     const onSelectedRegionChange = vi.fn()
@@ -180,6 +188,7 @@ describe('SectionEditorList', () => {
         <EditorUnderTest
           selectedRegionId={selectedRegionId}
           onSelectedRegionChange={onSelectedRegionChange}
+          initiallyOpenSectionIds={initiallyOpenSectionIds}
         />
       </Harness>,
     )
@@ -219,6 +228,258 @@ describe('SectionEditorList', () => {
     if (experience?.type !== 'experience') throw new Error('경력 section이 없습니다')
     expect(experience.data.items).toHaveLength(2)
     await waitFor(() => expect(document.activeElement).toHaveAccessibleName('회사명'))
+  })
+
+  it('section을 keyboard로 이동해도 stable selection을 유지하고 최신 path를 계산한다', async () => {
+    const user = userEvent.setup()
+    const { getDraft, onSelectedRegionChange } = renderEditor('section-experience')
+    await user.click(screen.getByRole('button', { name: '경력' }))
+    onSelectedRegionChange.mockClear()
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (
+      this: HTMLElement,
+    ) {
+      const handle = this.matches('[aria-roledescription="sortable"]')
+        ? this
+        : this.querySelector<HTMLElement>('[aria-roledescription="sortable"]')
+      const handles = Array.from(
+        document.querySelectorAll<HTMLElement>('[aria-roledescription="sortable"]'),
+      )
+      return new DOMRect(0, Math.max(handles.indexOf(handle!), 0) * 50, 100, 40)
+    })
+    const handle = screen.getByRole('button', { name: '경력 순서 변경' })
+    handle.focus()
+
+    await user.keyboard('[Space]')
+    await waitFor(() => expect(handle).toHaveAttribute('aria-pressed', 'true'))
+    await user.keyboard('[ArrowUp][ArrowDown]')
+    await user.keyboard('[Space]')
+
+    expect(getDraft().sections.map(({ type }) => type)).toEqual([
+      'information',
+      'experience',
+      'introduce',
+      'projects',
+      'education',
+      'activity',
+      'licenses',
+    ])
+    expect(onSelectedRegionChange).not.toHaveBeenCalled()
+    expect(buildEditorRegionIndex(getDraft()).get('section-experience')).toBe('sections.1')
+  })
+
+  it('모든 object field array를 부모별 독립 container에서 keyboard로 이동한다', async () => {
+    const draft = createResumeFixture()
+    draft.skillCatalog.push({ id: 'react', label: 'React', category: 'frontend' })
+    const information = draft.sections[0]
+    const introduce = draft.sections[1]
+    const experience = draft.sections[2]
+    const projects = draft.sections[3]
+    const education = draft.sections[4]
+    const activity = draft.sections[5]
+    const licenses = draft.sections[6]
+    if (
+      information?.type !== 'information' ||
+      introduce?.type !== 'introduce' ||
+      experience?.type !== 'experience' ||
+      projects?.type !== 'projects' ||
+      education?.type !== 'education' ||
+      activity?.type !== 'activity' ||
+      licenses?.type !== 'licenses'
+    )
+      throw new Error('fixture section 구성이 올바르지 않습니다')
+
+    information.data.contacts.push({
+      id: 'contact-github',
+      type: 'github',
+      label: 'GitHub',
+      value: 'test',
+      target: '_blank',
+    })
+    introduce.data.paragraphs[0]!.text = '소개 문단 하나'
+    introduce.data.paragraphs.push({ id: 'paragraph-2', text: '두번째 소개' })
+    const company = experience.data.items[0]!
+    company.serviceSummary.push({ id: 'service-summary-2', text: '서비스 둘' })
+    company.experienceSummary.push({ id: 'experience-summary-2', text: '경험 둘' })
+    const history = company.histories[0]!
+    history.works.push({ id: 'history-work-2', text: '업무 둘' })
+    history.skills.push({ id: 'history-skill-2', skillId: 'react' })
+    company.histories.push({
+      ...structuredClone(history),
+      id: 'history-2',
+      department: '플랫폼팀',
+      works: [{ id: 'history-2-work-1', text: '플랫폼 업무' }],
+      skills: [{ id: 'history-2-skill-1', skillId: 'react' }],
+    })
+    experience.data.items.push({
+      ...structuredClone(company),
+      id: 'experience-2',
+      companyName: '회사 둘',
+      serviceSummary: [{ id: 'experience-2-service-1', text: '두번째 서비스' }],
+      experienceSummary: [{ id: 'experience-2-summary-1', text: '두번째 경험' }],
+      histories: [],
+    })
+    const project = projects.data.items[0]!
+    project.title = '프로젝트 하나'
+    const projectWork = project.works[0]!
+    projectWork.details.push({ id: 'project-detail-2', text: '상세 둘' })
+    project.works.push({
+      id: 'project-work-2',
+      title: '역할 둘',
+      details: [{ id: 'project-work-2-detail-1', text: '역할 둘 상세' }],
+    })
+    projects.data.items.push({
+      ...structuredClone(project),
+      id: 'project-2',
+      title: '프로젝트 둘',
+      works: [],
+    })
+    education.data.items.push({
+      ...structuredClone(education.data.items[0]!),
+      id: 'education-2',
+      school: '학교 둘',
+    })
+    activity.data.items.push({
+      ...structuredClone(activity.data.items[0]!),
+      id: 'activity-2',
+      title: '활동 둘',
+    })
+    activity.data.items[0]!.title = '활동 하나'
+    licenses.data.items.push({
+      ...structuredClone(licenses.data.items[0]!),
+      id: 'license-2',
+      title: '자격증 둘',
+    })
+    licenses.data.items[0]!.title = '자격증 하나'
+
+    const { getDraft } = renderEditor(
+      'section-information',
+      draft,
+      draft.sections.map(({ id }) => id),
+    )
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (
+      this: HTMLElement,
+    ) {
+      const ownHandle = this.matches('[aria-roledescription="sortable"]')
+        ? this
+        : this.querySelector<HTMLElement>('[aria-roledescription="sortable"]')
+      const handles = Array.from(
+        document.querySelectorAll<HTMLElement>('[aria-roledescription="sortable"]'),
+      )
+      return new DOMRect(0, Math.max(handles.indexOf(ownHandle!), 0) * 50, 100, 40)
+    })
+    const get = () => getDraft()
+    const getSection = <Type extends ResumeDraft['sections'][number]['type']>(type: Type) => {
+      const section = get().sections.find((candidate) => candidate.type === type)
+      if (section === undefined) throw new Error(`${type} section이 없습니다`)
+      return section as Extract<ResumeDraft['sections'][number], { type: Type }>
+    }
+    const getCompany = () => {
+      const company = getSection('experience').data.items.find(({ id }) => id === 'experience-1')
+      if (company === undefined) throw new Error('experience-1 회사가 없습니다')
+      return company
+    }
+    const getHistory = () => {
+      const history = getCompany().histories.find(({ id }) => id === 'history-1')
+      if (history === undefined) throw new Error('history-1 경력이 없습니다')
+      return history
+    }
+    const getProject = () => {
+      const project = getSection('projects').data.items.find(({ id }) => id === 'project-1')
+      if (project === undefined) throw new Error('project-1 프로젝트가 없습니다')
+      return project
+    }
+    const getProjectWork = () => {
+      const work = getProject().works.find(({ id }) => id === 'project-work-1')
+      if (work === undefined) throw new Error('project-work-1 업무가 없습니다')
+      return work
+    }
+    const snapshot = () => ({
+      skillCatalog: get().skillCatalog.map(({ id }) => id),
+      contacts: getSection('information').data.contacts.map(({ id }) => id),
+      paragraphs: getSection('introduce').data.paragraphs.map(({ id }) => id),
+      serviceSummary: getCompany().serviceSummary.map(({ id }) => id),
+      experienceSummary: getCompany().experienceSummary.map(({ id }) => id),
+      historyWorks: getHistory().works.map(({ id }) => id),
+      historySkills: getHistory().skills.map(({ id }) => id),
+      histories: getCompany().histories.map(({ id }) => id),
+      companies: getSection('experience').data.items.map(({ id }) => id),
+      projectDetails: getProjectWork().details.map(({ id }) => id),
+      projectWorks: getProject().works.map(({ id }) => id),
+      projects: getSection('projects').data.items.map(({ id }) => id),
+      education: getSection('education').data.items.map(({ id }) => id),
+      activity: getSection('activity').data.items.map(({ id }) => id),
+      licenses: getSection('licenses').data.items.map(({ id }) => id),
+    })
+    type SnapshotKey = keyof ReturnType<typeof snapshot>
+    const moves: Array<{ key: SnapshotKey; name: string }> = [
+      { key: 'skillCatalog', name: 'TypeScript 기술 순서 변경' },
+      {
+        key: 'contacts',
+        name: '메일 순서 변경',
+      },
+      {
+        key: 'paragraphs',
+        name: '소개 문단 하나 순서 변경',
+      },
+      {
+        key: 'serviceSummary',
+        name: '서비스 순서 변경',
+      },
+      {
+        key: 'experienceSummary',
+        name: '경험 순서 변경',
+      },
+      {
+        key: 'historyWorks',
+        name: '업무 순서 변경',
+      },
+      {
+        key: 'historySkills',
+        name: 'TypeScript 사용 기술 순서 변경',
+      },
+      {
+        key: 'histories',
+        name: '개발팀 순서 변경',
+      },
+      {
+        key: 'companies',
+        name: '회사 순서 변경',
+      },
+      {
+        key: 'projectDetails',
+        name: '상세 순서 변경',
+      },
+      {
+        key: 'projectWorks',
+        name: '역할 순서 변경',
+      },
+      {
+        key: 'projects',
+        name: '프로젝트 하나 순서 변경',
+      },
+      { key: 'education', name: '학교 순서 변경' },
+      {
+        key: 'activity',
+        name: '활동 하나 순서 변경',
+      },
+      {
+        key: 'licenses',
+        name: '자격증 하나 순서 변경',
+      },
+    ]
+    const user = userEvent.setup()
+    for (const move of moves) {
+      const before = snapshot()
+      expect(before[move.key]).toHaveLength(2)
+      const handle = screen.getByRole('button', { name: move.name })
+      handle.focus()
+      await user.keyboard('[Space][ArrowDown][Space]')
+      const after = snapshot()
+      expect(after[move.key]).toEqual([before[move.key][1], before[move.key][0]])
+      for (const key of Object.keys(before) as SnapshotKey[]) {
+        if (key !== move.key) expect(after[key]).toEqual(before[key])
+      }
+    }
   })
 
   it('각 object array의 추가가 대응 배열만 변경한다', async () => {

@@ -7,10 +7,11 @@ import { createDefaultItem } from '@/app/(dev)/resume-editor/_model/default-item
 
 import {
   focusLastInput,
-  ItemRegion,
+  SortableItemRegion,
   shouldDeleteItem,
   useResumeFieldArray,
 } from '@/app/(dev)/resume-editor/_components/section-editors/section-editor-helpers'
+import { SortableList } from '@/app/(dev)/resume-editor/_components/sortable/sortable-list'
 
 type Props = {
   sectionIndex: number
@@ -25,40 +26,49 @@ export function EducationEditor({ sectionIndex, selectedRegionId, onSelectedRegi
   if (section.type !== 'education') return null
   return (
     <div data-item-list="education" className="space-y-3">
-      {items.fields.map((item, index) => {
-        const base = `${name}.${index}` as const
-        const value = section.data.items[index]!
-        return (
-          <ItemRegion
-            key={item.formKey}
-            id={String(item.id)}
-            label={value.school || '새 학력'}
-            selected={selectedRegionId === item.id}
-          >
-            <TextField name={`${base}.school`} label="학교명" />
-            <TextField name={`${base}.startMonth`} label="입학월" type="month" />
-            <NullableDateField name={`${base}.endMonth`} label="졸업월" inputType="month" />
-            <label className="flex gap-2">
-              <input type="checkbox" {...form.register(`${base}.graduated`)} />
-              졸업
-            </label>
-            <TextField name={`${base}.major`} label="전공" />
-            <TextField name={`${base}.summary`} label="학력 요약" multiline />
-            <button
-              type="button"
-              aria-label={`${value.school || '학력'} 삭제`}
-              onClick={() => {
-                if (!shouldDeleteItem(value, '학력을 삭제할까요?')) return
-                items.remove(index)
-                if (selectedRegionId === item.id) onSelectedRegionChange(section.id)
-              }}
-              className="rounded border px-3 py-2 text-sm"
+      <SortableList
+        containerId={`education-${section.id}`}
+        entries={items.fields.map((item, index) => ({
+          id: String(item.id),
+          label: section.data.items[index]?.school || '새 학력',
+        }))}
+        onMove={items.move}
+      >
+        {items.fields.map((item, index) => {
+          const base = `${name}.${index}` as const
+          const value = section.data.items[index]!
+          return (
+            <SortableItemRegion
+              key={item.formKey}
+              id={String(item.id)}
+              label={value.school || '새 학력'}
+              selected={selectedRegionId === item.id}
             >
-              학력 삭제
-            </button>
-          </ItemRegion>
-        )
-      })}
+              <TextField name={`${base}.school`} label="학교명" />
+              <TextField name={`${base}.startMonth`} label="입학월" type="month" />
+              <NullableDateField name={`${base}.endMonth`} label="졸업월" inputType="month" />
+              <label className="flex gap-2">
+                <input type="checkbox" {...form.register(`${base}.graduated`)} />
+                졸업
+              </label>
+              <TextField name={`${base}.major`} label="전공" />
+              <TextField name={`${base}.summary`} label="학력 요약" multiline />
+              <button
+                type="button"
+                aria-label={`${value.school || '학력'} 삭제`}
+                onClick={() => {
+                  if (!shouldDeleteItem(value, '학력을 삭제할까요?')) return
+                  items.remove(index)
+                  if (selectedRegionId === item.id) onSelectedRegionChange(section.id)
+                }}
+                className="rounded border px-3 py-2 text-sm"
+              >
+                학력 삭제
+              </button>
+            </SortableItemRegion>
+          )
+        })}
+      </SortableList>
       <button
         type="button"
         onClick={() => {

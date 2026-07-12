@@ -13,6 +13,9 @@ import { IntroduceEditor } from '@/app/(dev)/resume-editor/_components/section-e
 import { LicensesEditor } from '@/app/(dev)/resume-editor/_components/section-editors/licenses-editor'
 import { ProjectsEditor } from '@/app/(dev)/resume-editor/_components/section-editors/projects-editor'
 import { SectionCard } from '@/app/(dev)/resume-editor/_components/section-editors/section-card'
+import { SortableHandle } from '@/app/(dev)/resume-editor/_components/sortable/sortable-handle'
+import { SortableItem } from '@/app/(dev)/resume-editor/_components/sortable/sortable-item'
+import { SortableList } from '@/app/(dev)/resume-editor/_components/sortable/sortable-list'
 
 type SectionEditorListProps = {
   selectedRegionId: string | null
@@ -32,7 +35,7 @@ export function SectionEditorList({
   onOpenSectionIdsChange,
 }: SectionEditorListProps) {
   const form = useFormContext<ResumeDraft>()
-  const { fields: sectionFields } = useFieldArray({
+  const { fields: sectionFields, move: moveSection } = useFieldArray({
     control: form.control,
     name: 'sections',
     keyName: 'formKey',
@@ -60,72 +63,88 @@ export function SectionEditorList({
           document.querySelectorAll<HTMLElement>('[data-editor-region-id]'),
         ).find((element) => element.dataset.editorRegionId === selectedRegionId)
         region?.scrollIntoView?.({ block: 'nearest' })
-        region
-          ?.querySelector<HTMLElement>('input:not([type="hidden"]), textarea, select, button')
-          ?.focus()
+        const field = region?.querySelector<HTMLElement>(
+          'input:not([type="hidden"]), textarea, select',
+        )
+        const fallbackButton = region?.querySelector<HTMLElement>(
+          'button:not([aria-roledescription="sortable"])',
+        )
+        ;(field ?? fallbackButton)?.focus()
       })
     })
   }, [form, onOpenSectionIdsChange, openSectionIds, selectedRegionId])
 
   return (
-    <div className="space-y-4">
-      {sections.map((section, sectionIndex) => {
-        const expanded = openSectionIds.has(section.id)
-        const commonProps = {
-          sectionIndex,
-          selectedRegionId,
-          onSelectedRegionChange,
-        }
-        let editor: React.ReactNode
-        switch (section.type) {
-          case 'information':
-            editor = <InformationEditor {...commonProps} />
-            break
-          case 'introduce':
-            editor = <IntroduceEditor {...commonProps} sectionId={section.id} />
-            break
-          case 'experience':
-            editor = <ExperienceEditor {...commonProps} />
-            break
-          case 'projects':
-            editor = <ProjectsEditor {...commonProps} />
-            break
-          case 'education':
-            editor = <EducationEditor {...commonProps} />
-            break
-          case 'activity':
-            editor = <ActivityEditor {...commonProps} />
-            break
-          case 'licenses':
-            editor = <LicensesEditor {...commonProps} />
-            break
-          default:
-            editor = assertNever(section)
-        }
+    <SortableList
+      containerId="resume-sections"
+      entries={sections.map((section) => ({
+        id: section.id,
+        label: getResumeSectionLabel(section.type),
+      }))}
+      onMove={moveSection}
+    >
+      <div className="space-y-4">
+        {sections.map((section, sectionIndex) => {
+          const expanded = openSectionIds.has(section.id)
+          const commonProps = {
+            sectionIndex,
+            selectedRegionId,
+            onSelectedRegionChange,
+          }
+          let editor: React.ReactNode
+          switch (section.type) {
+            case 'information':
+              editor = <InformationEditor {...commonProps} />
+              break
+            case 'introduce':
+              editor = <IntroduceEditor {...commonProps} sectionId={section.id} />
+              break
+            case 'experience':
+              editor = <ExperienceEditor {...commonProps} />
+              break
+            case 'projects':
+              editor = <ProjectsEditor {...commonProps} />
+              break
+            case 'education':
+              editor = <EducationEditor {...commonProps} />
+              break
+            case 'activity':
+              editor = <ActivityEditor {...commonProps} />
+              break
+            case 'licenses':
+              editor = <LicensesEditor {...commonProps} />
+              break
+            default:
+              editor = assertNever(section)
+          }
 
-        return (
-          <SectionCard
-            key={sectionFields[sectionIndex]?.formKey ?? section.id}
-            regionId={section.id}
-            title={getResumeSectionLabel(section.type)}
-            expanded={expanded}
-            selected={selectedRegionId === section.id}
-            visibleName={`sections.${sectionIndex}.visible`}
-            onExpandedChange={(nextExpanded) => {
-              const next = new Set(openSectionIds)
-              if (nextExpanded) next.add(section.id)
-              else next.delete(section.id)
-              onOpenSectionIdsChange(next)
-              onSelectedRegionChange(section.id)
-            }}
-          >
-            {editor}
-          </SectionCard>
-        )
-      })}
-      {new Set(sections.map((section) => section.id)).size !== 7 && (
-        <p role="alert">필수 section 구성이 올바르지 않습니다.</p>
-      )}
-    </div>
+          const label = getResumeSectionLabel(section.type)
+          return (
+            <SortableItem key={sectionFields[sectionIndex]?.formKey ?? section.id} id={section.id}>
+              <SectionCard
+                regionId={section.id}
+                title={label}
+                dragHandle={<SortableHandle label={label} />}
+                expanded={expanded}
+                selected={selectedRegionId === section.id}
+                visibleName={`sections.${sectionIndex}.visible`}
+                onExpandedChange={(nextExpanded) => {
+                  const next = new Set(openSectionIds)
+                  if (nextExpanded) next.add(section.id)
+                  else next.delete(section.id)
+                  onOpenSectionIdsChange(next)
+                  onSelectedRegionChange(section.id)
+                }}
+              >
+                {editor}
+              </SectionCard>
+            </SortableItem>
+          )
+        })}
+        {new Set(sections.map((section) => section.id)).size !== 7 && (
+          <p role="alert">필수 section 구성이 올바르지 않습니다.</p>
+        )}
+      </div>
+    </SortableList>
   )
 }

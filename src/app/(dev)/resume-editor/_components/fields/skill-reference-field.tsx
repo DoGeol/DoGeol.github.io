@@ -8,6 +8,9 @@ import {
 
 import type { ResumeDraft } from '@/app/(pages)/resume/_model/resume-schema'
 import { createSkillReference } from '@/app/(dev)/resume-editor/_model/default-items'
+import { SortableHandle } from '@/app/(dev)/resume-editor/_components/sortable/sortable-handle'
+import { SortableItem } from '@/app/(dev)/resume-editor/_components/sortable/sortable-item'
+import { SortableList } from '@/app/(dev)/resume-editor/_components/sortable/sortable-list'
 
 type SkillReferenceFieldProps = {
   name: FieldPath<ResumeDraft>
@@ -15,6 +18,7 @@ type SkillReferenceFieldProps = {
   selectedRegionId?: string | null
   owningSectionId?: string
   onSelectedRegionChange?: (regionId: string) => void
+  containerId?: string
 }
 
 export function SkillReferenceField({
@@ -23,6 +27,7 @@ export function SkillReferenceField({
   selectedRegionId,
   owningSectionId,
   onSelectedRegionChange,
+  containerId = `skill-references-${name}`,
 }: SkillReferenceFieldProps) {
   const { control, getValues } = useFormContext<ResumeDraft>()
   const catalog = useWatch({ control, name: 'skillCatalog' })
@@ -43,16 +48,38 @@ export function SkillReferenceField({
   return (
     <fieldset className="space-y-2">
       <legend className="text-sm font-semibold">{label}</legend>
+      <SortableList
+        containerId={containerId}
+        entries={fieldArray.fields.map((reference, index) => {
+          const skillId = selected[index]
+          const skill = catalog.find((candidate) => candidate.id === skillId)
+          return { id: String(reference.id), label: `${skill?.label ?? skillId} 사용 기술` }
+        })}
+        onMove={fieldArray.move}
+      >
+        <div className="space-y-2">
+          {fieldArray.fields.map((reference, index) => {
+            const skillId = selected[index]
+            const skill = catalog.find((candidate) => candidate.id === skillId)
+            const itemLabel = `${skill?.label ?? skillId} 사용 기술`
+            return (
+              <SortableItem key={reference.formKey} id={String(reference.id)}>
+                <div
+                  data-editor-region-id={String(reference.id)}
+                  className="flex items-center gap-2"
+                >
+                  <SortableHandle label={itemLabel} />
+                  <span className="text-sm">{skill?.label ?? skillId}</span>
+                </div>
+              </SortableItem>
+            )
+          })}
+        </div>
+      </SortableList>
       {catalog.map((skill) => {
         const selectedIndex = selected.indexOf(skill.id)
         return (
-          <label
-            key={skill.id}
-            data-editor-region-id={
-              selectedIndex >= 0 ? String(fieldArray.fields[selectedIndex]?.id) : undefined
-            }
-            className="flex items-center gap-2 text-sm"
-          >
+          <label key={skill.id} className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
               checked={selectedIndex >= 0}

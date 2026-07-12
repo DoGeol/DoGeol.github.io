@@ -22,6 +22,7 @@ export function IntroduceEditor({
         addLabel="문단 추가"
         selectedRegionId={selectedRegionId}
         owningSectionId={sectionId}
+        containerId={`paragraphs-${sectionId}`}
         onSelectedRegionChange={onSelectedRegionChange}
       />
       <TextField name={`${base}.updatedAt`} label="수정일" type="date" />
