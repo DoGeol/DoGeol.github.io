@@ -10,36 +10,35 @@
 **Interfaces:**
 
 - Consumes: the existing `SourceId` union.
-- Produces: `sourceFiles: Record<SourceId, URL>` with statically scoped URLs.
+- Produces: `sourceReaders: Record<SourceId, () => Promise<string>>` with statically scoped paths.
 - Preserves: `readSource(sourceId): Promise<string>`.
 
 - [ ] **Step 1: Add a failing static-source contract test**
 
-Assert every source ID returns known source text and the registry no longer contains `process.cwd()`:
+Assert every source ID returns known source text and the registry no longer funnels paths through a shared variable:
 
 ```ts
 expect(await readSource('accordion-root')).toContain('export')
 expect(await readSource('input')).toContain('Input')
-expect(registrySource).not.toContain('process.cwd()')
+expect(registrySource).not.toContain('readFile(filePath')
 ```
 
 - [ ] **Step 2: Verify RED**
 
 Run `pnpm vitest run src/features/component-docs/model/source-registry.test.ts`.
 
-Expected: FAIL on the `process.cwd()` assertion.
+Expected: FAIL on the shared `filePath` assertion.
 
-- [ ] **Step 3: Replace root-dynamic paths with static URLs**
+- [ ] **Step 3: Replace the root-dynamic read with static readers**
 
 ```ts
-const sourceFiles: Record<SourceId, URL> = {
-  'accordion-root': new URL('../../../shared/ui/Accordion/Root.tsx', import.meta.url),
-  input: new URL('../../../shared/ui/Input/index.tsx', import.meta.url),
-  'accordion-examples': new URL('../examples/accordion-examples.tsx', import.meta.url),
-  'input-examples': new URL('../examples/input-examples.tsx', import.meta.url),
+const sourceReaders: Record<SourceId, () => Promise<string>> = {
+  'accordion-root': () =>
+    readFile(path.join(process.cwd(), 'src/shared/ui/Accordion/Root.tsx'), 'utf8'),
+  // Each remaining allowlisted source has its own direct readFile call.
 }
 
-export const readSource = (sourceId: SourceId) => readFile(sourceFiles[sourceId], 'utf8')
+export const readSource = (sourceId: SourceId) => sourceReaders[sourceId]()
 ```
 
 - [ ] **Step 4: Verify tests and warning-free build**

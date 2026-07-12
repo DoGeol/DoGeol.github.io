@@ -36,7 +36,7 @@ The resume editor is functionally complete and well tested, but its development 
 
 ESLint explicitly ignores `.worktrees/**` and `.pnpm-store/**`; Git ignores the local pnpm store. Playwright uses `PLAYWRIGHT_PORT` with a deterministic default, binds to `127.0.0.1`, and never reuses an existing server. A port collision must fail visibly rather than validate another checkout.
 
-Component source files are mapped to static `URL` values relative to `source-registry.ts`. `readFile()` consumes those URLs directly, eliminating the project-root `process.cwd()` trace.
+Component source files are mapped to statically scoped reader functions. Each function passes one literal project-relative path directly to `readFile()`, so Turbopack traces the four allowlisted files instead of following a shared dynamic root path.
 
 ### Draft session boundary
 
