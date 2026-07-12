@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest'
 
 import { createResumeFixture } from '@/test/fixtures/resume'
 
-import { buildEditorRegionIndex, findEditorNavigationTarget } from './editor-region-index'
+import {
+  buildEditorRegionIndex,
+  buildPreviewRegionParents,
+  findEditorNavigationTarget,
+} from './editor-region-index'
 
 describe('buildEditorRegionIndex', () => {
   it('maps stable nested IDs to their current field paths', () => {
@@ -65,5 +69,14 @@ describe('buildEditorRegionIndex', () => {
       regionId: null,
       sectionId: null,
     })
+  })
+
+  it('프리뷰 nested region을 소유 section에 연결한다', () => {
+    const parents = buildPreviewRegionParents(createResumeFixture())
+
+    expect(parents.get('section-experience')).toBe('section-experience')
+    expect(parents.get('history-work-1')).toBe('section-experience')
+    expect(parents.get('project-detail-1')).toBe('section-projects')
+    expect(parents.get('typescript')).toBeUndefined()
   })
 })

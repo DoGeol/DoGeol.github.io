@@ -83,6 +83,22 @@ export const buildEditorRegionIndex = (draft: ResumeDraft): EditorRegionIndex =>
   return index
 }
 
+export const buildPreviewRegionParents = (draft: ResumeDraft): ReadonlyMap<string, string> => {
+  const parents = new Map<string, string>()
+  const index = buildEditorRegionIndex(draft)
+
+  draft.sections.forEach((section, sectionIndex) => {
+    const sectionPath = `sections.${sectionIndex}`
+    index.forEach((fieldPath, regionId) => {
+      if (fieldPath === sectionPath || fieldPath.startsWith(`${sectionPath}.`)) {
+        parents.set(regionId, section.id)
+      }
+    })
+  })
+
+  return parents
+}
+
 export const findEditorNavigationTarget = (
   draft: ResumeDraft,
   fieldPath: FieldPath<ResumeDraft>,
