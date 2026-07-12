@@ -114,6 +114,20 @@ describe('useResumeDraftSession', () => {
     })
   })
 
+  it('초기 canonical draft도 hydration 300ms 뒤 저장 상태로 표시한다', async () => {
+    render(<SessionHarness initialResume={createResumeFixture()} />)
+    await flushHydration()
+
+    await advance(299)
+    expect(sessionStorage.getItem(RESUME_DRAFT_STORAGE_KEY)).toBeNull()
+
+    await advance(1)
+    expect(JSON.parse(sessionStorage.getItem(RESUME_DRAFT_STORAGE_KEY) ?? '{}')).toMatchObject({
+      draft: { metadata: { title: 'Resume 테스트' } },
+    })
+    expect(screen.getByTestId('saved-at')).not.toBeEmptyDOMElement()
+  })
+
   it('invalid transient가 생기면 이전 저장 예약을 취소한다', async () => {
     render(<SessionHarness initialResume={createResumeFixture()} />)
     await flushHydration()

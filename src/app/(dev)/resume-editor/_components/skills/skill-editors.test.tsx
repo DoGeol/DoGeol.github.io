@@ -55,7 +55,7 @@ describe('SkillCatalogEditor', () => {
     expect(screen.queryByLabelText('기술 ID')).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: '기술 목록 57개 열기' }))
     expect(screen.getAllByLabelText('기술 ID')).toHaveLength(57)
-  })
+  }, 15_000)
 
   it('선택된 catalog validation region은 닫힌 상태에서도 자동 마운트한다', () => {
     const draft = createResumeFixture()

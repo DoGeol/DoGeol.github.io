@@ -10,6 +10,7 @@ const nodeVersion = readFileSync(path.join(root, '.nvmrc'), 'utf8').trim()
 const gitignore = readFileSync(path.join(root, '.gitignore'), 'utf8')
 const eslintConfig = readFileSync(path.join(root, 'eslint.config.mjs'), 'utf8')
 const playwrightConfig = readFileSync(path.join(root, 'playwright.config.ts'), 'utf8')
+const vitestConfig = readFileSync(path.join(root, 'vitest.config.ts'), 'utf8')
 
 describe('CI contract', () => {
   it('Linux CI에서는 visual screenshot test만 제외한다', () => {
@@ -54,5 +55,14 @@ describe('CI contract', () => {
     expect(playwrightConfig).toContain("process.env.PLAYWRIGHT_PORT ?? '3100'")
     expect(playwrightConfig).toContain('reuseExistingServer: false')
     expect(playwrightConfig).toContain('127.0.0.1')
+  })
+
+  it('unit coverage 명령과 최소 품질 기준을 고정한다', () => {
+    expect(packageJson.scripts['test:coverage']).toBe('vitest run --coverage')
+    expect(vitestConfig).toContain("provider: 'v8'")
+    expect(vitestConfig).toContain('statements: 85')
+    expect(vitestConfig).toContain('branches: 75')
+    expect(vitestConfig).toContain('functions: 90')
+    expect(vitestConfig).toContain('lines: 88')
   })
 })

@@ -41,27 +41,31 @@ export function useResumeDraftSession(
     const result = readResumeDraft(sessionStorage)
     if (result.status === 'restored') form.reset(result.draft)
 
+    const scheduleSave = (values: ResumeDraft) => {
+      clearPendingSave()
+
+      const parsedDraft = resumeDraftSchema.safeParse(values)
+      if (!parsedDraft.success) return
+
+      const signature = JSON.stringify(parsedDraft.data)
+      if (signature === suppressedSignatureRef.current) {
+        suppressedSignatureRef.current = null
+        return
+      }
+      suppressedSignatureRef.current = null
+
+      saveTimeoutRef.current = window.setTimeout(() => {
+        const nextSavedAt = writeResumeDraft(sessionStorage, parsedDraft.data)
+        saveTimeoutRef.current = null
+        setSavedAt(nextSavedAt)
+      }, SAVE_DEBOUNCE_MS)
+    }
+
     const unsubscribe = form.subscribe({
       formState: { values: true },
       callback: ({ values }) => {
         if (!hydratedRef.current) return
-        clearPendingSave()
-
-        const parsedDraft = resumeDraftSchema.safeParse(values)
-        if (!parsedDraft.success) return
-
-        const signature = JSON.stringify(parsedDraft.data)
-        if (signature === suppressedSignatureRef.current) {
-          suppressedSignatureRef.current = null
-          return
-        }
-        suppressedSignatureRef.current = null
-
-        saveTimeoutRef.current = window.setTimeout(() => {
-          const nextSavedAt = writeResumeDraft(sessionStorage, parsedDraft.data)
-          saveTimeoutRef.current = null
-          setSavedAt(nextSavedAt)
-        }, SAVE_DEBOUNCE_MS)
+        scheduleSave(values)
       },
     })
 
@@ -72,6 +76,7 @@ export function useResumeDraftSession(
         setNotice('초안을 복구할 수 없어 원본을 불러왔습니다')
       }
       hydratedRef.current = true
+      scheduleSave(form.getValues())
     })
 
     return () => {

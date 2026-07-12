@@ -1,6 +1,6 @@
 ---
 status: active
-lastReviewed: 2026-07-12
+lastReviewed: 2026-07-13
 sourceOfTruth:
   - ../../src/app
   - ../../next.config.mjs
@@ -31,16 +31,21 @@ App Router의 Server Component를 기본으로 사용한다. 테마, navigation,
 
 ## 이력서 편집 경계
 
-`(pages)/resume`은 schema, canonical data와 template registry를 소유한다. `(dev)/resume-editor`는 React Hook Form이 소유한 draft를 deferred preview와 현재 tab의 versioned `sessionStorage`에 전달한다. 별도 `(dev)/resume-preview` iframe은 same-origin 검증된 message protocol만 받고, 선택 모드의 region click만 editor로 돌려준다.
+`(pages)/resume`은 schema, canonical data와 template registry를 소유한다. `(dev)/resume-editor`는 하나의 React Hook Form 인스턴스를 소유하고, field와 열린 section은 필요한 path만 구독한다. render와 분리된 draft session subscription이 현재 tab의 versioned `sessionStorage`를 갱신하고, `PreviewDraftBridge`만 전체 draft를 watch해 current asset 검증과 deferred preview를 만든다. 기술 카탈로그와 선택 picker의 대량 입력은 disclosure를 열 때만 마운트한다.
+
+별도 `(dev)/resume-preview` iframe은 same-origin 검증된 message protocol만 받고, 선택 모드의 region click만 editor로 돌려준다. 브리지가 deferred region의 소유 section도 함께 계산하므로 편집 중 항목이 사라져도 안정 ID 기반 fallback을 유지한다.
 
 ```mermaid
 flowchart LR
   JSON["canonical resume.json"] --> Schema["Zod schema"]
   Schema --> Public["public /resume renderer"]
   Schema --> Form["dev editor RHF draft"]
-  Form -->|"deferred RENDER_DRAFT"| Frame["preview iframe"]
+  Form --> Local["path-local field and section subscriptions"]
+  Form --> Session["subscription autosave"]
+  Form --> Bridge["PreviewDraftBridge full watch"]
+  Bridge -->|"deferred RENDER_DRAFT"| Frame["preview iframe"]
   Frame -->|"SELECT_REGION"| Form
-  Form --> Session["versioned sessionStorage"]
+  Session --> Storage["versioned sessionStorage"]
   Form --> Download["downloaded resume.json"]
 ```
 

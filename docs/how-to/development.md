@@ -1,6 +1,6 @@
 ---
 status: active
-lastReviewed: 2026-07-12
+lastReviewed: 2026-07-13
 sourceOfTruth:
   - ../../package.json
   - ../../.nvmrc
@@ -34,7 +34,7 @@ pnpm dev
 4. 내려받은 내용을 검토한 뒤 `src/app/(pages)/resume/_data/resume.json`에 수동으로 교체한다.
 5. `pnpm check`와 `pnpm test:e2e`를 실행한다.
 
-편집기는 현재 tab의 versioned `sessionStorage`에 초안을 자동 저장하지만 canonical JSON을 직접 덮어쓰지 않는다. production build에는 편집 route와 초안이 포함되지 않는다.
+편집기는 React Hook Form의 render와 분리된 subscription으로 현재 tab의 versioned `sessionStorage`에 초안을 자동 저장하지만 canonical JSON을 직접 덮어쓰지 않는다. 기술 카탈로그와 기술 선택기는 닫힌 상태에서 대량 입력을 마운트하지 않으므로 필요할 때 열어 편집한다. production build에는 편집 route와 초안이 포함되지 않는다.
 
 ## 컴포넌트 문서
 
@@ -46,12 +46,19 @@ pnpm dev
 pnpm typecheck
 pnpm lint
 pnpm test
+pnpm test:coverage
 pnpm format:check
 pnpm build
 ```
 
 전체 검증은 `pnpm check`, route와 screenshot 검증은 `pnpm test:e2e`, 문서 검증은 `pnpm docs:check`를 사용한다.
 
-`pnpm test:e2e:ci`는 Linux CI에서 macOS screenshot을 제외한 route 10개를 검증한다. 현행 디자인 기준선까지 확인하려면 macOS에서 `pnpm test:e2e`를 실행한다.
+Playwright는 기본적으로 `127.0.0.1:3100`에 전용 개발 서버를 시작하고 기존 서버를 재사용하지 않는다. 병렬 작업이나 다른 worktree에서는 충돌하지 않는 포트를 지정한다.
+
+```bash
+PLAYWRIGHT_PORT=3117 pnpm test:e2e
+```
+
+`pnpm test:e2e:ci`는 Linux CI에서 macOS screenshot만 제외하고 route와 workflow를 검증한다. 현행 디자인 기준선까지 확인하려면 macOS에서 `pnpm test:e2e`를 실행한다.
 
 시각 기준선을 의도적으로 바꿀 때만 `pnpm test:e2e --update-snapshots`를 실행하고 생성된 차이를 검토한다.
