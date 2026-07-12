@@ -10,5 +10,13 @@ export default defineConfig([
       '@next/next/no-img-element': 'off',
     },
   },
-  globalIgnores(['.next/**', 'out/**', 'coverage/**', '.superpowers/**', 'next-env.d.ts']),
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'coverage/**',
+    '.superpowers/**',
+    '.worktrees/**',
+    '.pnpm-store/**',
+    'next-env.d.ts',
+  ]),
 ])

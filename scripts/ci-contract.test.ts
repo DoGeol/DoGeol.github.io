@@ -7,6 +7,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const packageJson = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'))
 const routesSpec = readFileSync(path.join(root, 'tests/e2e/routes.spec.ts'), 'utf8')
 const nodeVersion = readFileSync(path.join(root, '.nvmrc'), 'utf8').trim()
+const gitignore = readFileSync(path.join(root, '.gitignore'), 'utf8')
+const eslintConfig = readFileSync(path.join(root, 'eslint.config.mjs'), 'utf8')
+const playwrightConfig = readFileSync(path.join(root, 'playwright.config.ts'), 'utf8')
 
 describe('CI contract', () => {
   it('Linux CI에서는 visual screenshot test만 제외한다', () => {
@@ -42,5 +45,14 @@ describe('CI contract', () => {
 
   it('setup-node가 설치 가능한 Node 버전을 사용한다', () => {
     expect(nodeVersion).toBe('22.16.0')
+  })
+
+  it('로컬 저장소와 Playwright 서버를 다른 작업 환경에서 격리한다', () => {
+    expect(gitignore).toContain('/.pnpm-store/')
+    expect(eslintConfig).toContain("'.worktrees/**'")
+    expect(eslintConfig).toContain("'.pnpm-store/**'")
+    expect(playwrightConfig).toContain("process.env.PLAYWRIGHT_PORT ?? '3100'")
+    expect(playwrightConfig).toContain('reuseExistingServer: false')
+    expect(playwrightConfig).toContain('127.0.0.1')
   })
 })
