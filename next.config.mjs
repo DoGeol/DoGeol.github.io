@@ -1,11 +1,17 @@
 import createMDX from '@next/mdx'
+import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  output: 'export',
-  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
-}
-
+const basePageExtensions = ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx']
 const withMDX = createMDX()
 
-export default withMDX(nextConfig)
+const nextConfig = (phase) =>
+  withMDX({
+    output: 'export',
+    pageExtensions:
+      phase === PHASE_DEVELOPMENT_SERVER ? ['dev.tsx', ...basePageExtensions] : basePageExtensions,
+    turbopack: {
+      root: import.meta.dirname,
+    },
+  })
+
+export default nextConfig
