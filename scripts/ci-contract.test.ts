@@ -14,8 +14,12 @@ const vitestConfig = readFileSync(path.join(root, 'vitest.config.ts'), 'utf8')
 
 describe('CI contract', () => {
   it('Linux CI에서는 visual screenshot test만 제외한다', () => {
-    expect(packageJson.scripts['test:e2e:ci']).toBe('playwright test --grep-invert @visual')
-    expect(routesSpec).toContain("test('/resume 현행 디자인을 유지한다 @visual'")
+    expect(packageJson.scripts['test:e2e:ci']).toBe(
+      'pnpm test:e2e:public:ci && pnpm test:e2e:editor:ci',
+    )
+    expect(packageJson.scripts['test:e2e:public:ci']).toContain('--grep-invert @visual')
+    expect(packageJson.scripts['test:e2e:editor:ci']).toContain('@public|@visual')
+    expect(routesSpec).toContain("test('/resume 현행 디자인을 유지한다 @visual @public'")
   })
 
   it('legacy gh-pages 배포 계약을 사용하지 않는다', () => {
@@ -39,6 +43,9 @@ describe('CI contract', () => {
     expect(workflow).toContain('id-token: write')
     expect(workflow).toContain('path: ./out')
     expect(workflow).toContain('out/components.html')
+    expect(workflow).toContain('out/blog/react-server-components.html')
+    expect(workflow).toContain('out/blog/rss.xml')
+    expect(workflow).toContain('out/sitemap.xml')
     expect(workflow).toContain('out/components/accordion.html')
     expect(workflow).toContain('out/components/input.html')
     expect(workflow).not.toMatch(/uses: [^\n]+@v\d/)
@@ -57,6 +64,18 @@ describe('CI contract', () => {
     expect(playwrightConfig).toContain('127.0.0.1')
   })
 
+  it('public E2E는 배포 static export를, editor E2E는 development server를 사용한다', () => {
+    const publicPlaywrightConfig = readFileSync(
+      path.join(root, 'playwright.public.config.ts'),
+      'utf8',
+    )
+
+    expect(packageJson.scripts['test:e2e']).toBe('pnpm test:e2e:public && pnpm test:e2e:editor')
+    expect(packageJson.scripts['test:e2e:public']).toContain('pnpm build')
+    expect(publicPlaywrightConfig).toContain('serve-static-export.mjs')
+    expect(packageJson.scripts['test:e2e:editor']).toContain('--grep-invert @public')
+  })
+
   it('unit coverage 명령과 최소 품질 기준을 고정한다', () => {
     expect(packageJson.scripts['test:coverage']).toBe('vitest run --coverage')
     expect(vitestConfig).toContain("provider: 'v8'")
@@ -64,5 +83,16 @@ describe('CI contract', () => {
     expect(vitestConfig).toContain('branches: 75')
     expect(vitestConfig).toContain('functions: 90')
     expect(vitestConfig).toContain('lines: 88')
+  })
+
+  it('BlockNote와 Shiki가 포함된 app graph는 안정적인 webpack compiler를 사용한다', () => {
+    expect(packageJson.scripts.dev).toBe('next dev --webpack')
+    expect(packageJson.scripts.build).toContain('next build --webpack')
+  })
+
+  it('production typegen은 development route type cache와 격리한다', () => {
+    expect(packageJson.scripts.typecheck).toBe(
+      'next typegen && tsc --noEmit --project tsconfig.typecheck.json',
+    )
   })
 })

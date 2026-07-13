@@ -10,7 +10,7 @@ sourceOfTruth:
 
 ## 목적
 
-개인 포트폴리오와 이력서를 GitHub Pages에서 제공하는 Next.js 애플리케이션이다. 서버 런타임 없이 정적 export로 배포하며 페이지 콘텐츠는 저장소의 TypeScript 상수에서 관리한다.
+개인 포트폴리오, 이력서와 기술 블로그를 GitHub Pages에서 제공하는 Next.js 애플리케이션이다. 서버 런타임 없이 정적 export로 배포하며 주요 콘텐츠는 저장소의 versioned JSON으로 관리한다.
 
 ## 렌더링 경계
 
@@ -27,7 +27,25 @@ App Router의 Server Component를 기본으로 사용한다. 테마, navigation,
 
 ## 데이터 흐름
 
-`/resume`은 Zod schema로 검증한 `_data/resume.json`을 template registry의 `classic` renderer에 전달한다. JSON이 canonical source이며 section과 item의 stable ID가 public renderer와 개발 편집기의 연결 경계다. 외부 API, 원격 cache와 전역 store는 사용하지 않는다.
+`/resume`은 Zod schema로 검증한 `_data/resume.json`을 template registry의 `classic` renderer에 전달한다. `/blog`는 `_data/posts/*.json`을 검증해 목록, 정적 글 상세, RSS와 sitemap에 전달한다. JSON이 canonical source이며 stable ID가 public renderer와 개발 편집기의 연결 경계다. 외부 API, 원격 cache와 전역 store는 사용하지 않는다.
+
+## 블로그 경계
+
+`(pages)/blog`는 post schema, file loader, 정적 renderer와 feed를 소유한다. 공개 renderer는 BlockNote package를 client에 싣지 않고 승인된 BlockNote JSON을 React HTML로 변환한다. `(dev)/blog-editor`만 BlockNote runtime을 사용해 editable surface와 같은 schema의 read-only preview를 렌더링한다.
+
+편집 초안은 현재 tab의 `sessionStorage`에 versioned envelope로 저장한다. strict schema와 `AssetProvider` 검증을 통과한 JSON만 download할 수 있으며 canonical file 교체는 수동이다. 현재 file loader와 JSON export helper는 향후 API read/write adapter의 교체 경계이고, `LocalPublicAssetProvider`는 향후 S3 provider를 추가하는 asset 경계다.
+
+```mermaid
+flowchart LR
+  Posts["canonical post JSON"] --> Loader["file loader + Zod"]
+  Loader --> Blog["static list + detail"]
+  Loader --> SEO["metadata + RSS + sitemap"]
+  Loader --> Editor["dev BlockNote editor"]
+  Editor --> Session["versioned sessionStorage"]
+  Editor --> Preview["read-only BlockNote"]
+  Editor --> Assets["AssetProvider"]
+  Editor --> Download["validated JSON"]
+```
 
 ## 이력서 편집 경계
 
@@ -49,8 +67,8 @@ flowchart LR
   Form --> Download["downloaded resume.json"]
 ```
 
-편집 route와 protocol은 production compile에서 제외되고 static export에 나타나지 않는다. 내려받은 JSON을 검토해 canonical file로 교체하는 단계는 의도적으로 수동이다.
+이력서와 블로그 편집 route, preview protocol과 session token은 production compile에서 제외되고 static export에 나타나지 않는다. 내려받은 JSON을 검토해 canonical file로 교체하는 단계는 의도적으로 수동이다.
 
 ## 배포
 
-`next.config.mjs`의 `output: 'export'`가 `out/`을 생성한다. `gh-pages`가 `.nojekyll`과 함께 결과를 GitHub Pages에 게시한다. 배포 절차는 [GitHub Pages 가이드](../how-to/github-pages-deployment.md)를 따른다.
+`next.config.mjs`의 `output: 'export'`가 `out/`을 생성한다. GitHub Pages 공식 Actions가 결과를 게시한다. BlockNote와 Shiki가 포함된 graph의 일관된 compile을 위해 개발·build는 webpack compiler를 명시한다. 배포 절차는 [GitHub Pages 가이드](../how-to/github-pages-deployment.md)를 따른다.

@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test'
 
 const routes = [
   { path: '/', text: '메인페이지 계획중' },
-  { path: '/blog', text: '블로그 페이지' },
+  { path: '/blog', text: '기술과 일에 관한 기록' },
+  { path: '/blog/react-server-components', text: 'React Server Components를 이해하는 방법' },
   { path: '/resume', text: 'Experience' },
   { path: '/old-resume', text: '편도걸' },
   { path: '/components', text: 'Components' },
@@ -12,7 +13,7 @@ const routes = [
 ] as const
 
 for (const route of routes) {
-  test(`${route.path} route를 렌더링한다`, async ({ page }) => {
+  test(`${route.path} route를 렌더링한다 @public`, async ({ page }) => {
     await page.goto(route.path)
 
     if (route.path.startsWith('/components/')) {
@@ -23,7 +24,7 @@ for (const route of routes) {
   })
 }
 
-test('/resume 현행 디자인을 유지한다 @visual', async ({ page }) => {
+test('/resume 현행 디자인을 유지한다 @visual @public', async ({ page }) => {
   await page.goto('/resume')
   await page.evaluate(() => document.fonts.ready)
 
@@ -32,7 +33,7 @@ test('/resume 현행 디자인을 유지한다 @visual', async ({ page }) => {
   })
 })
 
-test('컴포넌트 문서를 탐색한다', async ({ page }) => {
+test('컴포넌트 문서를 탐색한다 @public', async ({ page }) => {
   await page.goto('/components/accordion')
   if ((page.viewportSize()?.width ?? 1280) < 768) {
     await page.getByRole('button', { name: '메뉴 열기' }).click()
@@ -44,7 +45,7 @@ test('컴포넌트 문서를 탐색한다', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Input', level: 1 })).toBeVisible()
 })
 
-test('모바일 컴포넌트 메뉴를 연다', async ({ page }) => {
+test('모바일 컴포넌트 메뉴를 연다 @public', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   await page.goto('/components/accordion')
   await page.getByRole('button', { name: '메뉴 열기' }).click()
@@ -56,7 +57,7 @@ test('모바일 컴포넌트 메뉴를 연다', async ({ page }) => {
   expect(await dialog.boundingBox()).toEqual({ x: 0, y: 0, width: 390, height: 844 })
 })
 
-test('모바일 컴포넌트 메뉴 배경을 유지한다 @visual', async ({ page }, testInfo) => {
+test('모바일 컴포넌트 메뉴 배경을 유지한다 @visual @public', async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.startsWith('mobile'), 'mobile 전용 시각 기준선')
   await page.addInitScript(() => window.localStorage.setItem('theme', 'dark'))
   await page.goto('/components/accordion')
@@ -66,7 +67,7 @@ test('모바일 컴포넌트 메뉴 배경을 유지한다 @visual', async ({ pa
   await expect(page).toHaveScreenshot('component-mobile-menu.png')
 })
 
-test('/components/accordion 현행 디자인을 유지한다 @visual', async ({ page }) => {
+test('/components/accordion 현행 디자인을 유지한다 @visual @public', async ({ page }) => {
   await page.goto('/components/accordion')
   await page.evaluate(() => document.fonts.ready)
   await expect(page).toHaveScreenshot('component-accordion.png', { fullPage: true })

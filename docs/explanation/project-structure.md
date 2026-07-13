@@ -1,6 +1,6 @@
 ---
 status: active
-lastReviewed: 2026-07-12
+lastReviewed: 2026-07-13
 sourceOfTruth:
   - ../../src
   - ../../public
@@ -25,18 +25,24 @@ sourceOfTruth:
 `src/app/layout.tsx`는 Pretendard local font, metadata, theme provider를 제공한다. `src/app/(pages)` route group은 URL에 segment를 추가하지 않고 페이지를 구분한다.
 
 - `(main)`: `/` placeholder 화면
-- `blog`: `/blog` placeholder 화면
+- `blog`: 공개 목록·정적 글 상세, canonical post JSON, renderer, RSS와 blog 전용 UI
 - `resume`: 현재 이력서
 - `old-resume`: Accordion 기반 이전 이력서
 - `components`: 정적 MDX 컴포넌트 카탈로그와 동적 slug route
 - `not-found.tsx`: 정적 404 화면
-- `(dev)`: development compile에서만 제공하는 이력서 editor, iframe preview와 message protocol
+- `(dev)`: development compile에서만 제공하는 이력서 editor/iframe preview와 블로그 editor
 
 ## Resume
 
 `resume/_data/resume.json`은 canonical 이력서다. `_model`은 Zod schema, loader와 region interface를, `_templates`는 template registry와 renderer를 소유한다. `_components`는 section별 표현과 기간 계산을 담당한다. 페이지 전용 코드이므로 `src/shared`로 이동하지 않는다.
 
 `(dev)/resume-editor/_components`는 form, sortable editor와 preview shell을, `_model`은 draft storage, export, asset과 이동 규칙을 소유한다. `(dev)/resume-preview`는 iframe runtime을, `(dev)/_shared`는 양방향 message schema를 소유한다. schema·asset·static export script test는 소스 가까이에 두고 전체 workflow와 세 editor screenshot은 `tests/e2e/resume-editor.spec.ts`가 소유한다.
+
+## Blog
+
+`blog/_data/posts`는 한 글당 하나의 canonical BlockNote JSON을 둔다. `_model`은 post/block schema, slug, loader, 목차와 feed를, `_components`는 목록 filter, 정적 본문 renderer, 목차·코드 enhancement와 blog header를 소유한다. `[slug]`가 build-time static params와 글별 metadata를 만들고 `rss.xml`과 root `sitemap.ts`가 검색·구독 출력을 만든다.
+
+`(dev)/blog-editor/_components`는 관리 화면, metadata form, 40:60 editor shell과 editable/read-only BlockNote surface를 소유한다. `_model`은 제한 schema, session draft, export와 `AssetProvider`를 소유한다. 개발 상세 route는 dynamic segment 대신 `/blog-editor/edit?postId=…` client resolver를 사용해 `output: export` 제약을 지킨다. workflow와 두 blog screenshot은 `tests/e2e/blog.spec.ts`가 소유한다.
 
 ## Features와 Shared
 
@@ -48,4 +54,4 @@ sourceOfTruth:
 
 ## Static assets
 
-`public/profile`과 `public/company/logo`는 이력서 이미지다. `robots.txt`와 `sitemap.xml`은 현재 수동 관리한다. 이미지 최적화와 동적 metadata 파일 전환은 별도 작업이다.
+`public/profile`과 `public/company/logo`는 이력서 이미지다. 블로그 local asset은 `public/blog` 아래에 둔다. `robots.txt`는 정적이고 `sitemap.xml`은 `src/app/sitemap.ts`에서 생성한다. 이미지 최적화와 S3 provider 전환은 별도 작업이다.

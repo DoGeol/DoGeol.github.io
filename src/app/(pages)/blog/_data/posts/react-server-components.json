@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2100",
+  "title": "React Server Components를 이해하는 방법",
+  "slug": "react-server-components",
+  "summary": "React Server Components의 렌더링 경계와 데이터 흐름을 작은 예제로 정리합니다.",
+  "status": "published",
+  "publishedAt": "2026-07-13",
+  "updatedAt": "2026-07-13",
+  "tags": ["React", "Next.js", "Architecture"],
+  "coverImage": null,
+  "blocks": [
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2101",
+      "type": "heading",
+      "props": { "level": 2 },
+      "content": [{ "type": "text", "text": "React Server Components란?", "styles": {} }],
+      "children": []
+    },
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2102",
+      "type": "paragraph",
+      "props": {},
+      "content": [
+        {
+          "type": "text",
+          "text": "Server Component는 서버에서 렌더링되고 결과만 클라이언트로 전달되는 컴포넌트입니다. 데이터 접근과 화면 표현의 경계를 명확히 나누면 브라우저로 보내는 JavaScript를 줄일 수 있습니다.",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2103",
+      "type": "heading",
+      "props": { "level": 2 },
+      "content": [{ "type": "text", "text": "기존 Client Component와의 차이", "styles": {} }],
+      "children": []
+    },
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2104",
+      "type": "bulletListItem",
+      "props": {},
+      "content": [
+        {
+          "type": "text",
+          "text": "Server Component는 데이터 소스에 직접 접근할 수 있습니다.",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2105",
+      "type": "bulletListItem",
+      "props": {},
+      "content": [
+        {
+          "type": "text",
+          "text": "Client Component는 상태와 이벤트처럼 상호작용이 필요한 경계에 둡니다.",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2106",
+      "type": "heading",
+      "props": { "level": 3 },
+      "content": [{ "type": "text", "text": "경계를 나누는 기준", "styles": {} }],
+      "children": []
+    },
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2107",
+      "type": "paragraph",
+      "props": {},
+      "content": [
+        {
+          "type": "text",
+          "text": "페이지 전체를 Client Component로 전환하기보다 상호작용이 시작되는 가장 작은 지점을 경계로 선택합니다.",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2108",
+      "type": "heading",
+      "props": { "level": 2 },
+      "content": [{ "type": "text", "text": "작은 예제", "styles": {} }],
+      "children": []
+    },
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2109",
+      "type": "codeBlock",
+      "props": { "language": "typescript" },
+      "content": [
+        {
+          "type": "text",
+          "text": "export default async function Page() {\n  const posts = await getPosts()\n  return <PostList posts={posts} />\n}",
+          "styles": {}
+        }
+      ],
+      "children": []
+    },
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2110",
+      "type": "heading",
+      "props": { "level": 2 },
+      "content": [{ "type": "text", "text": "정리", "styles": {} }],
+      "children": []
+    },
+    {
+      "id": "018f6f4d-9751-7df0-a5fb-8f13f57a2111",
+      "type": "paragraph",
+      "props": {},
+      "content": [
+        {
+          "type": "text",
+          "text": "Server Component를 기본값으로 두고 브라우저 API와 상호작용이 필요한 곳만 Client Component로 분리하면 데이터 흐름과 번들 경계를 함께 관리할 수 있습니다.",
+          "styles": {}
+        }
+      ],
+      "children": []
+    }
+  ]
+}

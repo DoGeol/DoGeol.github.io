@@ -1,6 +1,6 @@
 ---
 status: active
-lastReviewed: 2026-07-12
+lastReviewed: 2026-07-13
 sourceOfTruth:
   - ../../package.json
   - ../../pnpm-lock.yaml
@@ -26,6 +26,8 @@ sourceOfTruth:
 | @dnd-kit/core 6.3.1       | adopted  | pointer, touch, keyboard DnD와 접근성                     |
 | @dnd-kit/sortable 10.0.0  | adopted  | 배열 내부 sortable 전략                                   |
 | @dnd-kit/utilities 3.2.2  | adopted  | drag transform 직렬화                                     |
+| BlockNote 0.51.4          | adopted  | 로컬 기술 블로그 block 편집과 read-only preview           |
+| Shiki 4.3.1               | adopted  | 공개 글과 컴포넌트 문서의 build-time code highlight       |
 | ESLint 9, Prettier        | adopted  | Next.js plugin peer 범위와 호환되는 정적 분석·format 검증 |
 | Immer                     | removed  | 사용처 없음                                               |
 | Zustand                   | deferred | 공유 UI 상태 없음                                         |
@@ -33,6 +35,6 @@ sourceOfTruth:
 | TanStack Query, nuqs      | deferred | 원격·URL 상태 없음                                        |
 | es-toolkit                | deferred | 현재 native JavaScript로 충분                             |
 | MSW                       | deferred | API 요청 없음                                             |
-| Table, Virtual, Recharts  | deferred | 해당 UI 요구 없음                                         |
+| Virtual, Recharts         | deferred | 해당 UI 요구 없음                                         |
 
 상태 의미는 adopted(현재 사용), deferred(요구 발생 시), removed(제거 결정)다.

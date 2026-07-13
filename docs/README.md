@@ -29,6 +29,7 @@ sourceOfTruth:
 - [GitHub Pages 배포](how-to/github-pages-deployment.md)
 - [의존성 업데이트](how-to/dependency-upgrade.md)
 - [컴포넌트 문서 추가](how-to/development.md#컴포넌트-문서)
+- [기술 블로그 편집](how-to/development.md#기술-블로그-편집)
 
 ## 문서 원칙
 

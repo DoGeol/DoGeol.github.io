@@ -1,6 +1,6 @@
 ---
 status: active
-lastReviewed: 2026-07-11
+lastReviewed: 2026-07-13
 sourceOfTruth:
   - ../../../package.json
   - ../../../next.config.mjs
@@ -13,6 +13,8 @@ sourceOfTruth:
 Next.js App Router와 React를 사용한다. Server Component를 기본으로 하고 Hook, browser API, local interaction이 필요한 경계만 Client Component로 둔다. 이 프로젝트는 `output: 'export'`를 유지하므로 서버 전용 runtime 기능을 추가하지 않는다.
 
 현재 runtime은 Next.js 16.2.10과 React/React DOM 19.2.7이다. Node는 Next.js와 ESLint 조건을 모두 만족하는 22.13 이상을 사용한다.
+
+BlockNote는 development-only 기술 블로그 편집기에서만 client runtime으로 사용한다. 공개 글은 같은 JSON schema를 별도 React renderer로 정적 변환한다. BlockNote와 Shiki가 포함된 graph에서 development와 production compiler 차이를 없애기 위해 `next dev --webpack`, `next build --webpack`을 사용한다.
 
 ## Styling
 

@@ -1,6 +1,6 @@
 ---
 status: active
-lastReviewed: 2026-07-11
+lastReviewed: 2026-07-13
 sourceOfTruth:
   - ../../../package.json
 ---
@@ -16,5 +16,7 @@ sourceOfTruth:
 - [폼과 유틸리티](forms-utilities.md): React Hook Form, Zod, es-toolkit, Day.js
 - [테스트](testing.md): Vitest, Testing Library, Playwright, MSW
 - [선택 기능](optional.md): drag, table, virtual list, chart
+
+로컬 기술 블로그 편집에는 BlockNote를, 공개 코드 highlight에는 Shiki를 사용한다. 둘은 [도입 상태표](../adoption-matrix.md)의 고정 버전을 기준으로 한다.
 
 빠른 판단은 [도입 상태표](../adoption-matrix.md)를 사용한다. 설치 전 공식 문서, peer dependency, Node 지원 범위를 다시 확인한다.

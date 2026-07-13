@@ -11,6 +11,7 @@ const rootFont = localFont({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://dogeol.github.io'),
   title: {
     template: '%s',
     default: 'Playground',
